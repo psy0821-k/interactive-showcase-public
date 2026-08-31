@@ -57,9 +57,25 @@ interface Props {
   label: string;
 }
 
-function CanvasFallback({ message }: { message: string }) {
+/**
+ * 캔버스 자리를 대체하는 안내 메시지.
+ *
+ * 캔버스는 WebGL 렌더라 접근성 트리에 없으므로, 이 폴백이 스크린리더에
+ * 전달되도록 role을 준다 (accessible-3d). 오류 상황(Scene 로드 실패·렌더
+ * 예외)은 `alert`로 즉시, WebGL 미지원처럼 오류가 아닌 상태는 `status`로.
+ */
+function CanvasFallback({
+  message,
+  role = "status",
+}: {
+  message: string;
+  role?: "alert" | "status";
+}) {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-neutral-900 text-sm text-neutral-400">
+    <div
+      role={role}
+      className="flex h-full w-full items-center justify-center bg-neutral-900 text-sm text-neutral-400"
+    >
       {message}
     </div>
   );
@@ -89,18 +105,32 @@ export function ShowcaseCanvas({ slug, label }: Props) {
   const controlsMode = meta?.controlsMode ?? "orbit";
 
   if (!SceneComponent) {
-    return <CanvasFallback message="이 데모를 불러올 수 없습니다." />;
+    return (
+      <CanvasFallback role="alert" message="이 데모를 불러올 수 없습니다." />
+    );
   }
 
   return (
     <SceneErrorBoundary
-      fallback={<CanvasFallback message="이 데모를 불러올 수 없습니다." />}
+      fallback={
+        <CanvasFallback role="alert" message="이 데모를 불러올 수 없습니다." />
+      }
     >
+      {/*
+        role·aria-label은 R3F가 `{...props}`로 캔버스 래퍼 div에 전달한다
+        (fiber/src/web/Canvas.tsx). role 없는 div에 aria-label만 두면
+        axe `aria-prohibited-attr` 위반이므로 role="img"을 함께 준다 —
+        3D 씬은 이미지에 준하는 임베디드 콘텐츠, label이 대체 텍스트다.
+        (accessible-3d 6단계)
+      */}
       <Canvas
         shadows
         frameloop={frameloop}
+        role="img"
         aria-label={label}
-        fallback={<CanvasFallback message="이 데모를 보려면 WebGL이 필요합니다." />}
+        fallback={
+          <CanvasFallback message="이 데모를 보려면 WebGL이 필요합니다." />
+        }
       >
         <Suspense fallback={null}>
           <SceneComponent />
