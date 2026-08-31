@@ -1,0 +1,12 @@
+<!--
+  decal-and-projection(ISSUE-40) 예제 데칼: 브랜드 마크.
+  build-decal-webp.mjs가 이 SVG를 256x256 WebP(알파)로 변환한다.
+  배경 투명, 마크만 불투명 — 데칼 1(권장)·데칼 3(안티패턴)에 공유.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <circle cx="128" cy="128" r="92" fill="none" stroke="#1b2a4a" stroke-width="14"/>
+  <path d="M128 58 L188 92 L188 164 L128 198 L68 164 L68 92 Z"
+        fill="#1b2a4a"/>
+  <path d="M128 96 L158 113 L158 147 L128 164 L98 147 L98 113 Z"
+        fill="#ffffff"/>
+</svg>
