@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import dynamic from "next/dynamic";
 import { TOUCH } from "three";
@@ -13,6 +13,7 @@ import {
 } from "@/showcases/registry";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { SceneErrorBoundary } from "./scene-error-boundary";
+import { SceneLoading } from "./scene-loading";
 
 /**
  * 터치 제스처 매핑 (gesture-orbit-inertia, ISSUE-44).
@@ -71,6 +72,28 @@ interface Props {
 }
 
 /**
+ * Scene이 마운트되면(= dynamic 청크 로드 + Suspense 해소 완료) `onReady`를
+ * 부른다. 셸은 이 신호로 캔버스 위 로딩 오버레이를 걷는다.
+ *
+ * Scene을 감싸는 이 래퍼는 `<Suspense>` **자식**이므로, Scene이 던지는
+ * 동안에는 렌더되지 않는다 → effect도 안 돈다. Scene이 실제로 그려질 때만
+ * effect가 한 번 돌아 `onReady`를 부른다. R3F 노드가 아니라 Fragment만
+ * 반환하므로 씬 그래프에 아무것도 더하지 않는다.
+ */
+function SceneReadySignal({
+  Scene,
+  onReady,
+}: {
+  Scene: ComponentType;
+  onReady: () => void;
+}) {
+  useEffect(() => {
+    onReady();
+  }, [onReady]);
+  return <Scene />;
+}
+
+/**
  * 캔버스 자리를 대체하는 안내 메시지.
  *
  * 캔버스는 WebGL 렌더라 접근성 트리에 없으므로, 이 폴백이 스크린리더에
@@ -110,6 +133,11 @@ export function ShowcaseCanvas({ slug, label }: Props) {
   // 훅은 조건부 return 위에서 항상 호출한다.
   const reducedMotion = useReducedMotion();
 
+  // Scene 청크·에셋 로딩이 끝나면 false로 바뀌어 로딩 오버레이가 사라진다.
+  // 다른 상세로 이동하면 라우트가 이 컴포넌트를 key={slug}로 재마운트하므로
+  // (showcase-detail.tsx) 상태를 slug 변경에 맞춰 되돌릴 필요가 없다.
+  const [sceneLoading, setSceneLoading] = useState(true);
+
   const SceneComponent = SCENE_COMPONENTS[slug] ?? null;
 
   // 렌더 모드·컨트롤 모드는 쇼케이스 meta에서 옵트인한다. 생략 시 기본값.
@@ -130,13 +158,24 @@ export function ShowcaseCanvas({ slug, label }: Props) {
       }
     >
       {/*
+        <Canvas>는 DOM을 못 담으므로 로딩 표시는 캔버스 밖 형제로 얹는다.
+        컨테이너는 부모(showcase-detail.tsx)가 h-[60vh]를 주므로 여기선
+        relative + h-full 만 맞춘다.
+      */}
+      <div className="relative h-full w-full">
+        {sceneLoading && (
+          <div className="absolute inset-0 z-10">
+            <SceneLoading />
+          </div>
+        )}
+        {/*
         role·aria-label은 R3F가 `{...props}`로 캔버스 래퍼 div에 전달한다
         (fiber/src/web/Canvas.tsx). role 없는 div에 aria-label만 두면
         axe `aria-prohibited-attr` 위반이므로 role="img"을 함께 준다 —
         3D 씬은 이미지에 준하는 임베디드 콘텐츠, label이 대체 텍스트다.
         (accessible-3d 6단계)
       */}
-      <Canvas
+        <Canvas
         shadows
         frameloop={frameloop}
         gl={CAPTURE_GL}
@@ -156,10 +195,13 @@ export function ShowcaseCanvas({ slug, label }: Props) {
           <CanvasFallback message="이 데모를 보려면 WebGL이 필요합니다." />
         }
       >
-        <Suspense fallback={null}>
-          <SceneComponent />
-        </Suspense>
-        {/*
+          <Suspense fallback={null}>
+            <SceneReadySignal
+              Scene={SceneComponent}
+              onReady={() => setSceneLoading(false)}
+            />
+          </Suspense>
+          {/*
           카메라 컨트롤은 쇼케이스가 아니라 이곳이 공통 제공한다.
           카메라를 코드로 모는 쇼케이스는 meta.controlsMode="none"으로 이를 끈다.
 
@@ -167,14 +209,15 @@ export function ShowcaseCanvas({ slug, label }: Props) {
           enableDamping: 관성. prefers-reduced-motion이면 끈다.
           (gesture-orbit-inertia, ISSUE-44)
         */}
-        {controlsMode === "orbit" && (
-          <OrbitControls
-            makeDefault
-            enableDamping={!reducedMotion}
-            touches={ORBIT_TOUCHES}
-          />
-        )}
-      </Canvas>
+          {controlsMode === "orbit" && (
+            <OrbitControls
+              makeDefault
+              enableDamping={!reducedMotion}
+              touches={ORBIT_TOUCHES}
+            />
+          )}
+        </Canvas>
+      </div>
     </SceneErrorBoundary>
   );
 }

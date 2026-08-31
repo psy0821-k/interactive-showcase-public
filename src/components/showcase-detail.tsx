@@ -68,7 +68,13 @@ export function ShowcaseDetail({ slug }: Props) {
         (showcase-canvas.tsx) 씬 조작과 경합하지 않는다. (ISSUE-44)
       */}
       <div className="h-[60vh] w-full touch-pan-y overflow-hidden rounded-lg bg-neutral-900 lg:h-[70vh]">
-        <ShowcaseCanvas slug={slug} label={`${meta.title} — ${meta.description}`} />
+        {/* key={slug}: 다른 상세로 이동 시 캔버스를 재마운트해 로딩 상태를
+            깨끗이 되돌린다 (showcase-canvas.tsx의 sceneLoading). */}
+        <ShowcaseCanvas
+          key={slug}
+          slug={slug}
+          label={`${meta.title} — ${meta.description}`}
+        />
       </div>
     </div>
   );
