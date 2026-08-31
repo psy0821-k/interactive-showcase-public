@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -132,19 +133,32 @@ function FilterChip({
   );
 }
 
-/** 갤러리 카드. 라이브 캔버스 없이 정적 정보만 보여준다 (PRD 13절). */
+/** 갤러리 카드. 라이브 캔버스 없이 정적 썸네일만 보여준다 (PRD 13절). */
 function ShowcaseCard({ entry }: { entry: ShowcaseEntry }) {
-  const { slug, meta } = entry;
+  const { slug, meta, thumbnail } = entry;
+
+  // 썸네일 로드 실패 시 제목 이니셜 플레이스홀더로 대체한다 (PRD 16절).
+  const [thumbFailed, setThumbFailed] = useState(false);
 
   return (
     <li>
       <Link
         href={`/showcase/${slug}`}
-        className="group flex h-full flex-col gap-3 rounded-lg border border-neutral-200 p-4 transition-colors hover:border-neutral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-neutral-800 dark:hover:border-neutral-600"
+        className="group flex h-full flex-col gap-3 rounded-lg border border-neutral-200 p-4 transition-colors hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-neutral-800 dark:hover:border-neutral-600"
       >
-        <div className="flex aspect-video items-center justify-center overflow-hidden rounded-md bg-neutral-100 text-2xl font-semibold text-neutral-400 dark:bg-neutral-900">
-          {/* 썸네일이 없으면 제목 이니셜로 플레이스홀더를 만든다 (PRD 16절). */}
-          {meta.title.slice(0, 1)}
+        <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-md bg-neutral-100 text-2xl font-semibold text-neutral-400 dark:bg-neutral-900">
+          {thumbFailed ? (
+            meta.title.slice(0, 1)
+          ) : (
+            <Image
+              src={thumbnail}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              onError={() => setThumbFailed(true)}
+            />
+          )}
         </div>
 
         <div className="flex flex-col gap-2">

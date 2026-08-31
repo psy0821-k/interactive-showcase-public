@@ -139,7 +139,11 @@ function buildRegistry(): ShowcaseEntry[] {
     }
     seenSlugs.set(slug, path);
 
-    entries.push({ slug, meta });
+    // 썸네일은 slug로 유도한다. meta.thumbnail이 명시돼 있으면 그것을 쓴다.
+    // 파일 존재 여부는 런타임에 <img onError>가 처리한다.
+    const thumbnail = meta.thumbnail ?? `/thumbnails/${slug}.webp`;
+
+    entries.push({ slug, meta, thumbnail });
   }
 
   return entries.sort((a, b) => a.meta.title.localeCompare(b.meta.title, "ko"));

@@ -51,6 +51,14 @@ export interface ShowcaseEntry {
   /** 디렉토리명에서 유도한 kebab-case 식별자. 라우팅 키. */
   slug: string;
   meta: ShowcaseMeta;
+  /**
+   * 갤러리 카드에 쓰는 썸네일 경로. registry가 slug로 유도한다
+   * (`/thumbnails/{slug}.webp`). `meta.thumbnail`이 명시돼 있으면 그 값을
+   * 우선한다. 파일은 `scripts/thumbnails-from-png.mjs`로 생성한다 —
+   * `public/thumbnails/`에 800x450 webp. 파일이 없으면 카드가 제목
+   * 이니셜 플레이스홀더로 대체한다(`onError`).
+   */
+  thumbnail: string;
 }
 
 /** meta 검증 실패 사유. 빌드를 멈추는 에러 메시지에 쓴다. */

@@ -21,11 +21,11 @@
 
 ## 핵심 기법 3개 (이 프로젝트의 스위트스팟)
 
-| 기법 | 문제 | 해결 |
-|------|------|------|
-| **모바일 터치 + 스크롤 조화**<br>(`gesture-orbit-inertia`) | 3D 캔버스가 두 손가락 회전을 인식하며 한 손가락 스크롤을 가로막음 | `touch-action: pan-y` + OrbitControls `touches` 조정. 한 손가락=스크롤, 두 손가락=회전·줌 |
-| **DoF + 색보정 연쇄**<br>(`depth-of-field-focus` + `color-grading-lut`) | 함께 쓰면 계산량 폭증, 초기 프레임이 검게 나옴 | 포스트프로세싱 체인 순서(Bloom→DoF→ToneMapping)와 초기화 시점 조정 |
-| **물리 엔진 인터랙션**<br>(`physics-rigidbody`) | 강체마다 클릭 이벤트를 다는 건 성능 낭비 | 카메라·씬 사이 투명 평면 1개로 클릭 방향 계산 |
+| 기법                                                                    | 문제                                                              | 해결                                                                                      |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **모바일 터치 + 스크롤 조화**<br>(`gesture-orbit-inertia`)              | 3D 캔버스가 두 손가락 회전을 인식하며 한 손가락 스크롤을 가로막음 | `touch-action: pan-y` + OrbitControls `touches` 조정. 한 손가락=스크롤, 두 손가락=회전·줌 |
+| **DoF + 색보정 연쇄**<br>(`depth-of-field-focus` + `color-grading-lut`) | 함께 쓰면 계산량 폭증, 초기 프레임이 검게 나옴                    | 포스트프로세싱 체인 순서(Bloom→DoF→ToneMapping)와 초기화 시점 조정                        |
+| **물리 엔진 인터랙션**<br>(`physics-rigidbody`)                         | 강체마다 클릭 이벤트를 다는 건 성능 낭비                          | 카메라·씬 사이 투명 평면 1개로 클릭 방향 계산                                             |
 
 세부 구현·성능 수치는 [`docs/TECHNICAL-HIGHLIGHTS.md`](docs/TECHNICAL-HIGHLIGHTS.md) 참조.
 
@@ -37,7 +37,11 @@
 
 ```tsx
 export function Scene() {
-  return <group><mesh>...</mesh></group>;
+  return (
+    <group>
+      <mesh>...</mesh>
+    </group>
+  );
 }
 
 export const meta = {
@@ -102,12 +106,12 @@ Next.js 16.3 (React 19) · React Three Fiber v9 · three.js 0.185 · drei · @re
 
 ## 다음 계획
 
-| 항목 | 상태 |
-| --- | --- |
-| 38개 쇼케이스 + 셸 Contract | ✅ 완료 |
-| Vercel 배포 | ✅ 완료 |
-| axe 접근성 스캔 (대표 4페이지) | ✅ violations 0 |
-| 실측 성능 3씬 · E2E · CI · 실기기 확인 | ⏳ 진행 중 |
+| 항목                                   | 상태            |
+| -------------------------------------- | --------------- |
+| 38개 쇼케이스 + 셸 Contract            | ✅ 완료         |
+| Vercel 배포                            | ✅ 완료         |
+| axe 접근성 스캔 (대표 4페이지)         | ✅ violations 0 |
+| 실측 성능 3씬 · E2E · CI · 실기기 확인 | ⏳ 진행 중      |
 
 애니메이션 타임라인(GSAP), 다중 뷰포트, 3D 변환 툴, 데이터 바인딩은 아직 없습니다.
 

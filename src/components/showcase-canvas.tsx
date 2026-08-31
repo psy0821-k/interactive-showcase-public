@@ -32,6 +32,19 @@ import { SceneErrorBoundary } from "./scene-error-boundary";
 const ORBIT_TOUCHES = { TWO: TOUCH.DOLLY_ROTATE } as const;
 
 /**
+ * 썸네일 캡처용 gl 설정.
+ *
+ * `NEXT_PUBLIC_CAPTURE=1`일 때만 `preserveDrawingBuffer`를 켠다 —
+ * 이걸 켜야 `canvas.toDataURL()`이 빈 이미지 대신 실제 렌더를 돌려준다.
+ * 평소(프로덕션·개발)엔 `undefined`라 R3F 기본값을 쓴다. 더블버퍼를 상시
+ * 유지하는 부담이 없다. 캡처 절차는 `scripts/capture-thumbnails.md` 참조.
+ */
+const CAPTURE_GL =
+  process.env.NEXT_PUBLIC_CAPTURE === "1"
+    ? ({ preserveDrawingBuffer: true } as const)
+    : undefined;
+
+/**
  * slug → 동적 Scene 컴포넌트 맵. **모듈 로드 시 한 번만** 만든다.
  *
  * `dynamic()`을 렌더 중에 부르면 매 렌더 새 컴포넌트가 생겨 상태가 초기화된다
@@ -126,6 +139,17 @@ export function ShowcaseCanvas({ slug, label }: Props) {
       <Canvas
         shadows
         frameloop={frameloop}
+        gl={CAPTURE_GL}
+        onCreated={
+          CAPTURE_GL
+            ? ({ gl }) => {
+                // 캡처 모드: toDataURL이 투명 영역을 흰색으로 채우므로
+                // 셸 컨테이너와 같은 어두운 색(#171717 = neutral-900)으로
+                // 클리어해 썸네일 여백이 흰색으로 뜨지 않게 한다.
+                gl.setClearColor(0x171717, 1);
+              }
+            : undefined
+        }
         role="img"
         aria-label={label}
         fallback={
