@@ -105,8 +105,14 @@ export function GalleryBrowser() {
           <EmptyState hasFilter={category !== ALL || query !== ""} />
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {visible.map((entry) => (
-              <ShowcaseCard key={entry.slug} entry={entry} />
+            {visible.map((entry, index) => (
+              // lg 3열 기준 첫 두 줄(6장)은 above-the-fold이므로 즉시 로드해
+              // LCP를 늦추지 않는다. 나머지는 lazy.
+              <ShowcaseCard
+                key={entry.slug}
+                entry={entry}
+                eager={index < 6}
+              />
             ))}
           </ul>
         )}
@@ -141,7 +147,14 @@ function FilterChip({
 }
 
 /** 갤러리 카드. 라이브 캔버스 없이 정적 썸네일만 보여준다 (PRD 13절). */
-function ShowcaseCard({ entry }: { entry: ShowcaseEntry }) {
+function ShowcaseCard({
+  entry,
+  eager = false,
+}: {
+  entry: ShowcaseEntry;
+  /** above-the-fold 카드는 true — 썸네일을 즉시 로드해 LCP를 늦추지 않는다. */
+  eager?: boolean;
+}) {
   const { slug, meta, thumbnail } = entry;
 
   // 썸네일 상태: 로딩 중(스켈레톤) → 로드됨 / 실패(이니셜 플레이스홀더, PRD 16절).
@@ -168,14 +181,16 @@ function ShowcaseCard({ entry }: { entry: ShowcaseEntry }) {
               )}
               {/*
                 썸네일은 이미 800x450 최적 크기 webp라 next/image 리사이징
-                이득이 없고, 정적 자산이라 네이티브 loading="lazy"가 더
-                단순하고 예측 가능하다.
+                이득이 없고, 정적 자산이라 네이티브 img가 더 단순하고
+                예측 가능하다. above-the-fold 카드(eager)는 즉시 + 높은
+                우선순위로 받아 LCP를 늦추지 않는다.
               */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={thumbnail}
                 alt=""
-                loading="lazy"
+                loading={eager ? "eager" : "lazy"}
+                fetchPriority={eager ? "high" : "auto"}
                 decoding="async"
                 width={800}
                 height={450}
