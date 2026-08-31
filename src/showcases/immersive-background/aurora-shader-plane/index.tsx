@@ -1,5 +1,7 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useRef } from "react";
 import * as THREE from "three";
 import {
@@ -9,16 +11,7 @@ import {
   type ThreeElement,
 } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-export const meta: ShowcaseMeta = {
-  title: "오로라 셰이더 배경",
-  category: "immersive-background",
-  usedSkills: ["standard-scene-setup", "fullscreen-shader-plane"],
-  description:
-    "화면을 채우는 평면에 프래그먼트 셰이더로 그린 오로라. 포인터를 따라 빛무리가 움직인다.",
-};
 
 /** 평면의 z 위치. 멀수록 카메라 회전에 강하다. */
 const PLANE_Z = -8;

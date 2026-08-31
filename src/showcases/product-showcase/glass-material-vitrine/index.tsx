@@ -1,4 +1,7 @@
 "use client";
+
+export { meta } from "./meta";
+
 // cspell:ignore nior -- 라벨 문자열의 "\n" + "ior"(굴절률)가 합쳐져 보이는 것
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
@@ -10,21 +13,8 @@ import {
   MeshTransmissionMaterial,
   PerspectiveCamera,
 } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { SceneLabel, SceneReadout } from "@/components/scene-label";
-
-export const meta: ShowcaseMeta = {
-  title: "유리 재질 진열대",
-  category: "product-showcase",
-  usedSkills: [
-    "standard-scene-setup",
-    "hdri-environment",
-    "transmission-glass-material",
-  ],
-  description:
-    "같은 구 6개를 서로 다른 투과 재질로 놓고 비교한다 — 맑은 유리(MeshPhysicalMaterial), 맑은 유리(MeshTransmissionMaterial, 배경 씬 굴절), 간유리(roughness 상승), 색유리(attenuationColor로 두께 비례 흡수), 액체(ior 1.33), 색수차(dispersion). 뒤 격자 배경이 굴절·프로스팅으로 왜곡되는 걸 드러낸다. MTM 셀들은 transmissionSampler로 버퍼를 공유하고, 계기판에 gl.info.render.calls를 표시해 그 효과를 확인시킨다. IBL은 Lightformer 절차적 생성(preset 금지).",
-};
 
 /** 셀 하나의 재질 정의. */
 interface GlassCell {

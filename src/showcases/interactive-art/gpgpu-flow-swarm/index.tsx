@@ -1,5 +1,7 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import {
@@ -10,20 +12,7 @@ import {
   type ThreeElement,
 } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-export const meta: ShowcaseMeta = {
-  title: "GPGPU 유동 군집",
-  category: "interactive-art",
-  usedSkills: [
-    "standard-scene-setup",
-    "points-particle-field",
-    "gpgpu-simulation",
-  ],
-  description:
-    "65,536개 파티클의 위치와 속도를 부동소수 텍스처에 담고, FBO 핑퐁으로 매 프레임 GPU에서 물리를 갱신한다. 포인터를 따라 끌려오며 흐르지만 CPU는 uniform 몇 개만 쓴다.",
-};
 
 /**
  * 시뮬레이션 텍스처 한 변의 크기.

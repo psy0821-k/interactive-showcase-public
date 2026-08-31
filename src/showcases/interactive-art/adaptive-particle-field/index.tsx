@@ -1,18 +1,11 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import type { Points } from "three";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-export const meta: ShowcaseMeta = {
-  title: "적응형 파티클 필드",
-  category: "interactive-art",
-  usedSkills: ["standard-scene-setup", "responsive-canvas"],
-  description:
-    "화면 폭에 따라 파티클 개수를 낮춘다. 좁은 화면에서는 1/4로 줄어 저사양 기기의 프레임을 지킨다.",
-};
 
 /** 좁은 화면 기준선. Tailwind md 브레이크포인트와 맞춘다. */
 const NARROW_BREAKPOINT = 768;

@@ -1,5 +1,7 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import {
@@ -9,20 +11,7 @@ import {
   type ThreeElement,
 } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-export const meta: ShowcaseMeta = {
-  title: "표류하는 별먼지 필드",
-  category: "immersive-background",
-  usedSkills: [
-    "standard-scene-setup",
-    "fullscreen-shader-plane",
-    "points-particle-field",
-  ],
-  description:
-    "포인트 셰이더로 그린 12,000개의 별먼지. 깊이 방향으로 길게 뻗어 있어 카메라를 앞뒤로 움직이면 sizeAttenuation에 따라 가까운 입자는 커지고 먼 입자는 작아진다.",
-};
 
 /** 파티클 개수. 점 하나당 정점 하나뿐이라 이 정도는 드로우콜 1개로 감당된다. */
 const PARTICLE_COUNT = 12_000;

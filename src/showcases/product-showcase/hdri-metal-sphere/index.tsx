@@ -1,19 +1,12 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import type { Group } from "three";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-export const meta: ShowcaseMeta = {
-  title: "HDRI 환경 조명",
-  category: "product-showcase",
-  usedSkills: ["standard-scene-setup", "hdri-environment"],
-  description:
-    "Lightformer로 만든 환경맵이 금속 표면에 반사된다. 외부 CDN 없이 이미지 기반 조명(IBL)을 구성한 예제.",
-};
 
 /** 회전 속도(라디안/초). 반사가 흐르는 것을 보여주기 위해 느리게 돈다. */
 const ROTATION_SPEED = 0.25;

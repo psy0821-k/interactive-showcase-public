@@ -1,19 +1,12 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-export const meta: ShowcaseMeta = {
-  title: "인스턴스 큐브 군집",
-  category: "interactive-art",
-  usedSkills: ["standard-scene-setup", "instanced-particles", "responsive-canvas"],
-  description:
-    "4000개의 큐브가 InstancedMesh 하나로 그려진다. 인스턴스마다 다른 궤도·회전·색을 갖지만 드로우콜은 1이다. 더미 Object3D로 행렬을 만들고 매 프레임 instanceMatrix.needsUpdate를 세우는 것이 전부다.",
-};
 
 /** 넓은 화면 기준 인스턴스 수. 이 값이 곧 args의 count가 되며 런타임에 늘릴 수 없다. */
 const INSTANCE_COUNT_WIDE = 4_000;

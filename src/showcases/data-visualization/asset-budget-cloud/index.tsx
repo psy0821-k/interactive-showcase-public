@@ -1,5 +1,7 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { Suspense, useCallback, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -9,17 +11,8 @@ import {
   PerspectiveCamera,
   useGLTF,
 } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { SceneReadout } from "@/components/scene-label";
-
-export const meta: ShowcaseMeta = {
-  title: "에셋 예산: 구름",
-  category: "data-visualization",
-  usedSkills: ["asset-optimization", "gltf-model-loading", "hdri-environment"],
-  description:
-    "asset-optimization 파이프라인이 실제로 먹었는지를 씬이 숫자로 보여준다. cloud.glb 71.3MB → cloud-opt.glb 5.4MB(Draco + 1024/WebP), classroom.hdr 93.7MB → classroom-1k.hdr 2.0MB(RGBELoader 다운샘플). 계기판은 원본/최적화 크기를 나란히 두고, gl.info.memory의 geometries·textures와 gl.info.render의 삼각형·드로우콜을 실시간으로 갱신한다. Draco 디코더는 public/draco/ 자체 호스팅 — useGLTF의 두 번째 인자로 경로를 준다(gltf-model-loading 6절).",
-};
 
 /** public/ 기준 절대 경로. optimize-assets.mjs 산출물. */
 const CLOUD_URL = "/models/cloud-opt.glb";
@@ -36,7 +29,6 @@ const OPTIMIZED_LABEL = "최적화  cloud-opt.glb 5.4 MB · classroom-1k.hdr 2.0
 const TARGET_SIZE = 3.2;
 /** 아주 느린 회전 각속도. reduced-motion이면 0. */
 const SPIN_SPEED = 0.06;
-
 
 /**
  * 모델 바운딩 박스를 재서 "최대 변이 TARGET_SIZE, 중심이 원점"이 되는

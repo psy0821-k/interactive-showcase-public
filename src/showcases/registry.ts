@@ -1,30 +1,28 @@
 "use client";
 
-import type { ComponentType } from "react";
 import type { ShowcaseEntry, ShowcaseMeta } from "@/domain/showcase";
 import { isTechniqueCategory } from "@/domain/technique-category";
 
-/** 쇼케이스 모듈이 반드시 named export 해야 하는 형태. */
-interface ShowcaseModule {
-  Scene: ComponentType;
-}
-
 /**
- * 갤러리는 meta만 필요하므로 eager로 걷는다.
- * `import: "meta"`가 named export 하나만 정적 import 하므로 Scene 코드는
- * 트리셰이킹되어 갤러리 번들에 포함되지 않는다.
+ * meta는 `meta.ts`에서 eager로 걷는다 — `index.tsx`가 아니다.
+ *
+ * `import.meta.glob(..., { import: "meta" })`의 트리셰이킹은 Turbopack에서
+ * 신뢰할 수 없다. `index.tsx`를 대상으로 하면 그 파일이 정적 import 하는
+ * three/drei/rapier가 갤러리 홈 번들 그래프에 전부 연결돼 ~4MB가 preload된다.
+ * `meta.ts`는 순수 객체만 담아 홈이 그것만 로드한다
+ * (scripts/split-showcase-meta.mjs).
+ *
+ * Scene 로더(`index.tsx` glob)는 이 파일이 아니라 `scene-registry.ts`에 있다.
+ * 갤러리 홈이 이 파일을 import 할 때 `index.tsx` glob이 딸려오지 않게 하려는
+ * 분리다.
  *
  * Turbopack의 glob 타입은 제네릭을 받지 않고 `unknown`을 돌려주므로
  * (node_modules/next/types/global.d.ts), 값은 아래 타입 가드로 좁힌다.
  */
-const metaModules: Record<string, unknown> = import.meta.glob(
-  "./*/*/index.tsx",
-  { eager: true, import: "meta" },
-);
-
-/** Scene은 상세 진입 시에만 필요하므로 lazy. 각 항목이 개별 청크가 된다. */
-const sceneModules: Record<string, () => Promise<unknown>> =
-  import.meta.glob("./*/*/index.tsx");
+const metaModules: Record<string, unknown> = import.meta.glob("./*/*/meta.ts", {
+  eager: true,
+  import: "meta",
+});
 
 /** eager glob이 돌려준 값이 ShowcaseMeta 형태인지 확인한다. */
 function isShowcaseMeta(value: unknown): value is ShowcaseMeta {
@@ -38,8 +36,8 @@ function isShowcaseMeta(value: unknown): value is ShowcaseMeta {
   );
 }
 
-/** './{category}/{slug}/index.tsx' 에서 두 세그먼트를 뽑는다. */
-const PATH_PATTERN = /^\.\/([^/]+)\/([^/]+)\/index\.tsx$/;
+/** './{category}/{slug}/{meta.ts|index.tsx}' 에서 category·slug를 뽑는다. */
+const PATH_PATTERN = /^\.\/([^/]+)\/([^/]+)\/(?:meta\.ts|index\.tsx)$/;
 
 /**
  * meta 자체의 유효성을 본다. 경로와의 대조는 호출부가 담당한다.
@@ -97,7 +95,7 @@ function buildRegistry(): ShowcaseEntry[] {
     if (!matched) {
       throw new Error(
         `[showcase] 경로 규칙 위반: ${path}\n` +
-          "  src/showcases/{기법-카테고리}/{slug}/index.tsx 형태여야 한다.",
+          "  src/showcases/{기법-카테고리}/{slug}/meta.ts 형태여야 한다.",
       );
     }
 
@@ -155,31 +153,4 @@ export const SHOWCASE_ENTRIES: ShowcaseEntry[] = buildRegistry();
 /** slug로 항목을 찾는다. 없으면 undefined — 호출부가 404를 결정한다. */
 export function findShowcase(slug: string): ShowcaseEntry | undefined {
   return SHOWCASE_ENTRIES.find((entry) => entry.slug === slug);
-}
-
-/**
- * slug에 해당하는 Scene 로더를 돌려준다.
- *
- * 반환값이 함수이므로 Server -> Client prop으로 넘기면 안 된다.
- * 반드시 클라이언트 컴포넌트 내부에서 호출해 소비한다.
- */
-export function getSceneLoader(
-  slug: string,
-): (() => Promise<ShowcaseModule>) | undefined {
-  const path = Object.keys(sceneModules).find(
-    (candidate) => PATH_PATTERN.exec(candidate)?.[2] === slug,
-  );
-  if (!path) return undefined;
-
-  const load = sceneModules[path];
-  return async () => {
-    const loaded = await load();
-    const scene = (loaded as Partial<ShowcaseModule>).Scene;
-    if (typeof scene !== "function") {
-      throw new Error(
-        `[showcase] ${path}\n  - Scene을 named export 하지 않았다 (export function Scene).`,
-      );
-    }
-    return { Scene: scene };
-  };
 }

@@ -1,18 +1,11 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Mesh } from "three";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-export const meta: ShowcaseMeta = {
-  title: "기본 씬 셋업",
-  category: "product-showcase",
-  usedSkills: ["standard-scene-setup"],
-  description:
-    "3점 조명(key/fill/rim)과 표준 카메라 스케일을 적용한 기본 씬. 그림자는 key 라이트 하나만 드리운다.",
-};
 
 /** 회전 속도(라디안/초). prefers-reduced-motion이면 정지한다. */
 const ROTATION_SPEED = 0.4;

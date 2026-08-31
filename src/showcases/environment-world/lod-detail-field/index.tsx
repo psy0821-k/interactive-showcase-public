@@ -1,24 +1,12 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useCallback, useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { Detailed, PerspectiveCamera } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { SceneReadout } from "@/components/scene-label";
-
-export const meta: ShowcaseMeta = {
-  title: "LOD 디테일 필드",
-  category: "environment-world",
-  usedSkills: [
-    "standard-scene-setup",
-    "camera-rig",
-    "procedural-geometry",
-    "lod-and-frustum",
-  ],
-  description:
-    "같은 자리에 놓인 기둥 60개가 카메라 거리에 따라 고·중·저 디테일로 갈아탄다. 단계마다 색이 달라 전환 순간이 눈에 보이고, 화면 위 계기가 드로우콜과 삼각형 수를 실시간으로 보여준다. 줌아웃하면 삼각형이 줄고, 카메라를 돌려 오브젝트가 화면 밖으로 나가면 프러스텀 컬링이 드로우콜까지 깎아낸다.",
-};
 
 /** 필드 한 변의 기둥 개수. 총 기둥은 FIELD_SIZE^2 개다. */
 const FIELD_SIZE = 8;

@@ -1,20 +1,13 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { useThree } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { SceneLabel, SceneReadout } from "@/components/scene-label";
-
-export const meta: ShowcaseMeta = {
-  title: "병합된 도시 블록",
-  category: "environment-world",
-  usedSkills: ["standard-scene-setup", "merge-draw-calls", "instanced-particles"],
-  description:
-    "똑같은 정적 건물 140동을 세 가지 방식으로 그린다. 실측 드로우콜은 개별 메시 283개, 종류별 인스턴싱 11개, mergeGeometries로 합친 지오메트리 5개다. 삼각형 수는 셋 다 약 5,100개로 같다 — 화면도 형상도 그대로인데 CPU가 GPU에 거는 호출 횟수만 달라진다는 것이 이 쇼케이스의 논점이다.",
-};
 
 /** 블록 한 변에 놓는 건물 수. 총 개수는 이 값의 제곱이 아니라 아래 buildLots가 정한다. */
 const GRID_SIZE = 12;

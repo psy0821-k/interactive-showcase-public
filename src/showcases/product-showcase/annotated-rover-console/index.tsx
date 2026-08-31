@@ -1,19 +1,12 @@
 "use client";
 
+export { meta } from "./meta";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { Html, PerspectiveCamera } from "@react-three/drei";
-import type { ShowcaseMeta } from "@/domain/showcase";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-
-export const meta: ShowcaseMeta = {
-  title: "주석 달린 로버 콘솔",
-  category: "product-showcase",
-  usedSkills: ["standard-scene-setup", "camera-rig", "pointer-raycast-hover", "html-3d-sync"],
-  description:
-    "천천히 도는 장비의 각 부위에 drei <Html>로 실제 DOM 라벨을 앵커한다. 부위에 마우스를 올리면 그 라벨만 떠오르고, 부위가 본체 뒤로 돌아가면 occlude가 라벨을 페이드시킨다. distanceFactor로 원근 스케일이 걸려 라벨이 장비에 속한 것처럼 보인다.",
-};
 
 /** 콘솔 전체가 도는 각속도(rad/s). 부위가 본체 뒤로 돌아가는 것을 보이려면 계속 돈다. */
 const TURNTABLE_SPEED = 0.28;

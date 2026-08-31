@@ -6,11 +6,8 @@ import dynamic from "next/dynamic";
 import { TOUCH } from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import {
-  SHOWCASE_ENTRIES,
-  findShowcase,
-  getSceneLoader,
-} from "@/showcases/registry";
+import { SHOWCASE_ENTRIES, findShowcase } from "@/showcases/registry";
+import { getSceneLoader } from "@/showcases/scene-registry";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { SceneErrorBoundary } from "./scene-error-boundary";
 import { SceneLoading } from "./scene-loading";
