@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -137,8 +136,10 @@ function FilterChip({
 function ShowcaseCard({ entry }: { entry: ShowcaseEntry }) {
   const { slug, meta, thumbnail } = entry;
 
-  // 썸네일 로드 실패 시 제목 이니셜 플레이스홀더로 대체한다 (PRD 16절).
-  const [thumbFailed, setThumbFailed] = useState(false);
+  // 썸네일 상태: 로딩 중(스켈레톤) → 로드됨 / 실패(이니셜 플레이스홀더, PRD 16절).
+  const [thumbStatus, setThumbStatus] = useState<"loading" | "loaded" | "failed">(
+    "loading",
+  );
 
   return (
     <li>
@@ -147,17 +148,41 @@ function ShowcaseCard({ entry }: { entry: ShowcaseEntry }) {
         className="group flex h-full flex-col gap-3 rounded-lg border border-neutral-200 p-4 transition-colors hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-neutral-800 dark:hover:border-neutral-600"
       >
         <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-md bg-neutral-100 text-2xl font-semibold text-neutral-400 dark:bg-neutral-900">
-          {thumbFailed ? (
+          {thumbStatus === "failed" ? (
             meta.title.slice(0, 1)
           ) : (
-            <Image
-              src={thumbnail}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              onError={() => setThumbFailed(true)}
-            />
+            <>
+              {thumbStatus === "loading" && (
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 animate-pulse bg-neutral-200 motion-reduce:animate-none dark:bg-neutral-800"
+                />
+              )}
+              {/*
+                썸네일은 이미 800x450 최적 크기 webp라 next/image 리사이징
+                이득이 없고, 정적 자산이라 네이티브 loading="lazy"가 더
+                단순하고 예측 가능하다.
+              */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={thumbnail}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={450}
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                // 캐시된 이미지는 onLoad가 안 불릴 수 있으므로 마운트 시
+                // complete를 직접 확인한다. 렌더 중 setState를 피하려 rAF로 미룬다.
+                ref={(img) => {
+                  if (img?.complete && img.naturalWidth > 0) {
+                    requestAnimationFrame(() => setThumbStatus("loaded"));
+                  }
+                }}
+                onLoad={() => setThumbStatus("loaded")}
+                onError={() => setThumbStatus("failed")}
+              />
+            </>
           )}
         </div>
 
