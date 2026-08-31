@@ -65,7 +65,10 @@ export function GalleryBrowser() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4" aria-labelledby="gallery-filter-heading">
+        <h2 id="gallery-filter-heading" className="sr-only">
+          검색과 필터
+        </h2>
         <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium">검색</span>
           <input
@@ -92,17 +95,22 @@ export function GalleryBrowser() {
             />
           ))}
         </div>
-      </div>
+      </section>
 
-      {visible.length === 0 ? (
-        <EmptyState hasFilter={category !== ALL || query !== ""} />
-      ) : (
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map((entry) => (
-            <ShowcaseCard key={entry.slug} entry={entry} />
-          ))}
-        </ul>
-      )}
+      <section aria-labelledby="gallery-list-heading">
+        <h2 id="gallery-list-heading" className="sr-only">
+          쇼케이스 목록 ({visible.length}개)
+        </h2>
+        {visible.length === 0 ? (
+          <EmptyState hasFilter={category !== ALL || query !== ""} />
+        ) : (
+          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {visible.map((entry) => (
+              <ShowcaseCard key={entry.slug} entry={entry} />
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }

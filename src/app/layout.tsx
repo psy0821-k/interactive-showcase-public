@@ -12,9 +12,55 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://interactive-showcase-public.vercel.app";
+const SITE_TITLE = "3D Skill Showcase";
+const SITE_DESCRIPTION =
+  "React Three Fiber로 만든 3D 웹 기법 쇼케이스 38선. 재질·조명·포스트프로세싱·물리·" +
+  "스크롤 인터랙션을 실제 동작하는 예제로 보여주고, 각 기법의 함정과 회피법을 정리했다.";
+
 export const metadata: Metadata = {
-  title: "3D Skill Showcase",
-  description: "Claude Code skill로 만든 3D 결과물 갤러리",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: `%s · ${SITE_TITLE}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_TITLE,
+  authors: [{ name: "psy0821-k" }],
+  keywords: [
+    "React Three Fiber",
+    "three.js",
+    "3D 웹",
+    "WebGL",
+    "포트폴리오",
+    "쇼케이스",
+    "포스트프로세싱",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: SITE_TITLE,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    locale: "ko_KR",
+    images: [
+      {
+        url: "/thumbnails/emissive-bloom-lantern.webp",
+        width: 800,
+        height: 450,
+        alt: "발광 오브젝트에 블룸 후처리를 적용한 3D 씬",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/thumbnails/emissive-bloom-lantern.webp"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
