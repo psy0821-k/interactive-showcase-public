@@ -6,20 +6,28 @@
 
 ---
 
-## 1. axe 자동 스캔 — ✅ 통과
+## 1. axe 자동 스캔 — ✅ 전수 통과
 
-axe-core 4.10.2, WCAG 2.0/2.1 A·AA 태그.
+axe-core 4.13.0, WCAG 2.0/2.1 A·AA 태그 (`wcag2a`/`wcag2aa`/`wcag21a`/`wcag21aa`).
+`@axe-core/playwright`로 프로덕션 빌드를 스캔한다.
 
-| 페이지 | violations | passes | incomplete |
-|---|---|---|---|
-| `/` (갤러리 홈) | **0** | 24 | color-contrast (배경 판정 불가 — 사람 확인) |
-| `/showcase/standard-scene-demo` | **0** | 19 | — |
-| `/showcase/emissive-bloom-lantern` (후처리) | **0** | 19 | — |
-| `/showcase/scroll-section-reactor` (스크롤) | **0** | 19 | — |
+**41개 페이지 전부 violations 0** — 갤러리 홈 `/` + GSAP 갤러리 `/gsap` +
+상세 페이지 39개. `e2e/axe-full-scan.spec.ts`, CI e2e 잡에 포함 (약 43초).
 
-**전 쇼케이스(38개) 스캔은 미완** — 위 4개는 대표 렌더 경로(정적 조명 / 후처리 /
-스크롤 / 목록). 나머지는 셸이 공통 제공하는 구조라 같은 결과가 예상되나,
-배포 전 전수 스캔 권장.
+- `color-contrast`는 규칙에서 제외한다 — 캔버스 위 텍스트는 배경이
+  WebGL 렌더 결과라 axe가 대비를 계산할 수 없다(사람 확인, §3).
+- 로컬 실행: `bun run test:a11y`. 빠른 스모크만 돌릴 때는 `bun run test:e2e`
+  (전수 스캔 제외).
+
+### 1-0. 왜 셸 하나만 고치면 39개가 다 통과하나
+
+접근성 속성이 전부 `src/components/showcase-canvas.tsx` **한 파일**에서 나온다.
+각 쇼케이스는 `<Canvas>`를 만들지 않고 씬 노드만 반환하므로(셸 Contract,
+`TECHNICAL-HIGHLIGHTS.md §2`), `role="img"` · `aria-label` · WebGL 폴백
+`role="status"` · 에러 폴백 `role="alert"` · 로딩 상태가 39개 상세 페이지에서
+동일하다. 상세 페이지 골격(`<main>` / `<h1>` / 갤러리 복귀 `<button>`)도
+`showcase-detail.tsx` 공통이다. §1-1의 버그 2건도 셸 수정 한 번으로 전 페이지가
+해소됐고, 전수 스캔이 이를 확인한다.
 
 ### 1-1. 발견 → 수정한 위반
 
@@ -95,6 +103,7 @@ axe-core 4.10.2, WCAG 2.0/2.1 A·AA 태그.
       한 손가락 = 페이지 스크롤(캔버스 위에서도), 두 손가락 = 회전·줌 확인
 
 [전수]
+  [x] 41개 페이지 axe 전수 스캔 — violations 0 (§1)
   [x] Lighthouse — Performance 99 / Accessibility 100 /
       Best Practices 100 / SEO 100
 ```

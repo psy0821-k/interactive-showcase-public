@@ -50,6 +50,9 @@ jobs:
       - name: E2E 테스트
         run: bun run test:e2e
 
+      - name: axe 접근성 전수 스캔 (41개 페이지)
+        run: bun run test:a11y
+
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:

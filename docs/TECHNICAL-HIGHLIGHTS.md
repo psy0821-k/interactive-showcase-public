@@ -248,18 +248,19 @@ Lighthouse: Performance 99 / Accessibility·Best Practices·SEO 100.
 | 맞춤법 | `bun run spell` | ✅ 통과 |
 | 육안(38 쇼케이스) | 브라우저 수동 | ✅ 대부분 |
 | 배포 | Vercel | ✅ 완료 |
-| **접근성 (axe)** | axe-core 4.10.2, WCAG 2.0/2.1 A·AA | ✅ **홈 + 대표 상세 3종 violations 0** (`docs/ACCESSIBILITY.md`) |
+| **접근성 (axe)** | `@axe-core/playwright` 4.13, WCAG 2.0/2.1 A·AA | ✅ **41개 페이지 전수 violations 0** (`docs/ACCESSIBILITY.md`) |
 | 접근성 (사람) | NVDA · 키보드 · 발작 육안 · reduced-motion · 색 대비 | ✅ 완료, 버그 1건 발견·수정 (§4-1) |
 | Lighthouse | 상세 페이지 | ✅ Perf 99 / A11y·BP·SEO 100 |
 | 실측 성능 | Frame Rendering Stats, 30초 × 3회, RTX 3060 | ✅ 3씬 (`docs/PERFORMANCE.md`) |
 | 실기기 모바일 | Galaxy S24+ (Android Chrome) | ✅ 터치 라우팅 확인 |
 | E2E | Playwright (캔버스 a11y / 상세 로드 / 갤러리 네비) | ✅ 3개 통과 |
+| axe 전수 | `e2e/axe-full-scan.spec.ts` (41 페이지) | ✅ CI e2e 잡 포함 (~43s) |
 | 단위 | Vitest + RTL | ✅ |
-| CI | GitHub Actions (build + lint + spell + test / e2e) | ✅ 통과 (verify 38s + e2e 1m10s) |
+| CI | GitHub Actions (build + lint + spell + test / e2e + axe) | ✅ 통과 |
 
 ---
 
 ## 8. 다음 계획
 
-- 나머지 34개 쇼케이스 axe 전수 스캔
 - `render-budget-meter` 온디맨드 렌더링 정지 시 GPU 0 확인
+- 주차 2: 실무형 랜딩페이지 (쇼케이스 조합 + GSAP timeline)
