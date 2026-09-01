@@ -1,54 +1,54 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import Link from "next/link";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   TECHNIQUE_CATEGORIES,
   TECHNIQUE_CATEGORY_LABELS,
 } from "@/domain/technique-category";
-import type { ShowcaseEntry } from "@/domain/showcase";
-import { SHOWCASE_ENTRIES } from "@/showcases/registry";
 
 const ALL = "all";
 
-/** 제목·설명·사용 skill을 대소문자 무시 부분일치로 검색한다. */
-function matchesQuery(entry: ShowcaseEntry, query: string): boolean {
-  if (!query) return true;
-  const haystack = [
-    entry.meta.title,
-    entry.meta.description,
-    ...entry.meta.usedSkills,
-  ]
-    .join(" ")
-    .toLowerCase();
-
-  // 공백으로 나눈 토큰을 전부 만족해야 한다 (AND).
-  return query
-    .toLowerCase()
-    .split(/\s+/)
-    .filter(Boolean)
-    .every((token) => haystack.includes(token));
-}
-
 /**
- * 갤러리 목록 + 필터/검색.
+ * 갤러리 검색·필터 컨트롤.
  *
- * `useSearchParams`를 쓰므로 호출부는 반드시 `<Suspense>`로 감싸야 한다.
- * 감싸지 않으면 개발 서버는 통과하고 프로덕션 빌드에서 실패한다.
+ * 카드 목록(`children`)은 서버에서 렌더된 `<ul><li>`이며, SEO·접근성을 위해
+ * 38개가 초기 HTML에 전부 담긴다. 이 컴포넌트는 목록을 다시 그리지 않고,
+ * 각 `<li>`의 `data-category`·`data-haystack`을 읽어 표시/숨김만 토글한다.
+ *
+ * `useSearchParams`를 쓰므로 호출부는 `<Suspense>`로 감싸야 한다.
  */
-export function GalleryBrowser() {
+export function GalleryBrowser({ children }: { children: ReactNode }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const listRef = useRef<HTMLDivElement>(null);
 
   const category = searchParams.get("category") ?? ALL;
   const query = searchParams.get("q") ?? "";
 
-  const visible = useMemo(() => {
-    return SHOWCASE_ENTRIES.filter((entry) => {
-      const categoryMatched = category === ALL || entry.meta.category === category;
-      return categoryMatched && matchesQuery(entry, query);
-    });
+  const [visibleCount, setVisibleCount] = useState<number | null>(null);
+
+  // data 속성 기반으로 카드 표시/숨김을 적용한다. JS가 꺼져 있으면
+  // 전체가 그대로 보이므로(진행적 향상) 크롤러·접근성에 문제 없다.
+  useEffect(() => {
+    const root = listRef.current;
+    if (!root) return;
+
+    const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+    let shown = 0;
+
+    for (const li of root.querySelectorAll<HTMLLIElement>("li[data-haystack]")) {
+      const categoryMatched =
+        category === ALL || li.dataset.category === category;
+      const haystack = li.dataset.haystack ?? "";
+      const queryMatched = tokens.every((token) => haystack.includes(token));
+      const visible = categoryMatched && queryMatched;
+
+      li.hidden = !visible;
+      if (visible) shown += 1;
+    }
+
+    setVisibleCount(shown);
   }, [category, query]);
 
   /** 현재 쿼리를 유지한 채 한 항목만 바꾼다. 빈 값이면 키를 지운다. */
@@ -65,7 +65,10 @@ export function GalleryBrowser() {
 
   return (
     <div className="flex flex-col gap-8">
-      <section className="flex flex-col gap-4" aria-labelledby="gallery-filter-heading">
+      <section
+        className="flex flex-col gap-4"
+        aria-labelledby="gallery-filter-heading"
+      >
         <h2 id="gallery-filter-heading" className="sr-only">
           검색과 필터
         </h2>
@@ -99,23 +102,25 @@ export function GalleryBrowser() {
 
       <section aria-labelledby="gallery-list-heading">
         <h2 id="gallery-list-heading" className="sr-only">
-          쇼케이스 목록 ({visible.length}개)
+          쇼케이스 목록
         </h2>
-        {visible.length === 0 ? (
-          <EmptyState hasFilter={category !== ALL || query !== ""} />
-        ) : (
-          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {visible.map((entry, index) => (
-              // lg 3열 기준 첫 두 줄(6장)은 above-the-fold이므로 즉시 로드해
-              // LCP를 늦추지 않는다. 나머지는 lazy.
-              <ShowcaseCard
-                key={entry.slug}
-                entry={entry}
-                eager={index < 6}
-              />
-            ))}
-          </ul>
+
+        {visibleCount === 0 && (
+          <div className="flex flex-col items-center gap-3 py-16">
+            <p className="text-neutral-500">일치하는 결과가 없습니다.</p>
+            <button
+              type="button"
+              onClick={() => router.replace("/", { scroll: false })}
+              className="text-sm underline"
+            >
+              필터 초기화
+            </button>
+          </div>
         )}
+
+        <div ref={listRef} hidden={visibleCount === 0}>
+          {children}
+        </div>
       </section>
     </div>
   );
@@ -143,111 +148,5 @@ function FilterChip({
     >
       {label}
     </button>
-  );
-}
-
-/** 갤러리 카드. 라이브 캔버스 없이 정적 썸네일만 보여준다 (PRD 13절). */
-function ShowcaseCard({
-  entry,
-  eager = false,
-}: {
-  entry: ShowcaseEntry;
-  /** above-the-fold 카드는 true — 썸네일을 즉시 로드해 LCP를 늦추지 않는다. */
-  eager?: boolean;
-}) {
-  const { slug, meta, thumbnail } = entry;
-
-  // 썸네일 상태: 로딩 중(스켈레톤) → 로드됨 / 실패(이니셜 플레이스홀더, PRD 16절).
-  const [thumbStatus, setThumbStatus] = useState<"loading" | "loaded" | "failed">(
-    "loading",
-  );
-
-  return (
-    <li>
-      <Link
-        href={`/showcase/${slug}`}
-        className="group flex h-full flex-col gap-3 rounded-lg border border-neutral-200 p-4 transition-colors hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-neutral-800 dark:hover:border-neutral-600"
-      >
-        <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-md bg-neutral-100 text-2xl font-semibold text-neutral-400 dark:bg-neutral-900">
-          {thumbStatus === "failed" ? (
-            meta.title.slice(0, 1)
-          ) : (
-            <>
-              {thumbStatus === "loading" && (
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-0 animate-pulse bg-neutral-200 motion-reduce:animate-none dark:bg-neutral-800"
-                />
-              )}
-              {/*
-                썸네일은 이미 800x450 최적 크기 webp라 next/image 리사이징
-                이득이 없고, 정적 자산이라 네이티브 img가 더 단순하고
-                예측 가능하다. above-the-fold 카드(eager)는 즉시 + 높은
-                우선순위로 받아 LCP를 늦추지 않는다.
-              */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={thumbnail}
-                alt=""
-                loading={eager ? "eager" : "lazy"}
-                fetchPriority={eager ? "high" : "auto"}
-                decoding="async"
-                width={800}
-                height={450}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                // 캐시된 이미지는 onLoad가 안 불릴 수 있으므로 마운트 시
-                // complete를 직접 확인한다. 렌더 중 setState를 피하려 rAF로 미룬다.
-                ref={(img) => {
-                  if (img?.complete && img.naturalWidth > 0) {
-                    requestAnimationFrame(() => setThumbStatus("loaded"));
-                  }
-                }}
-                onLoad={() => setThumbStatus("loaded")}
-                onError={() => setThumbStatus("failed")}
-              />
-            </>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <h3 className="font-medium group-hover:underline">{meta.title}</h3>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            {meta.description}
-          </p>
-          <p className="text-xs text-neutral-500">
-            {TECHNIQUE_CATEGORY_LABELS[meta.category]}
-          </p>
-          <ul className="flex flex-wrap gap-1">
-            {meta.usedSkills.map((skill) => (
-              <li
-                key={skill}
-                className="rounded bg-neutral-100 px-2 py-0.5 text-xs text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
-              >
-                {skill}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Link>
-    </li>
-  );
-}
-
-function EmptyState({ hasFilter }: { hasFilter: boolean }) {
-  if (!hasFilter) {
-    return (
-      <p className="py-16 text-center text-neutral-500">
-        아직 등록된 데모가 없습니다.
-      </p>
-    );
-  }
-
-  return (
-    <div className="flex flex-col items-center gap-3 py-16">
-      <p className="text-neutral-500">일치하는 결과가 없습니다.</p>
-      <Link href="/" className="text-sm underline">
-        필터 초기화
-      </Link>
-    </div>
   );
 }

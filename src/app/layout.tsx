@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SITE_URL, IS_INDEXABLE } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,7 +13,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://interactive-showcase-public.vercel.app";
 const SITE_TITLE = "3D Skill Showcase";
 const SITE_DESCRIPTION =
   "React Three Fiber로 만든 3D 웹 기법 쇼케이스 38선. 재질·조명·포스트프로세싱·물리·" +
@@ -39,6 +39,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  robots: IS_INDEXABLE
+    ? undefined
+    : { index: false, follow: false, nocache: true },
   openGraph: {
     type: "website",
     url: SITE_URL,

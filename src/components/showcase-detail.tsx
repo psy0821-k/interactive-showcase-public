@@ -2,21 +2,25 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { TECHNIQUE_CATEGORY_LABELS } from "@/domain/technique-category";
 import { findShowcase } from "@/showcases/registry";
 import { ShowcaseCanvas } from "./showcase-canvas";
 
 interface Props {
   slug: string;
+  /** 서버에서 렌더한 제목·설명. 캔버스 대체 텍스트 조립에 쓴다. */
+  title: string;
+  description: string;
 }
 
 /**
- * 쇼케이스 상세.
+ * 쇼케이스 상세의 인터랙티브 영역.
  *
- * registry가 클라이언트 전용(glob thunk 보유)이므로 조회도 여기서 한다.
- * 서버에서 찾아 넘기려 하면 함수 prop이 경계를 넘지 못해 예외가 난다.
+ * 텍스트 콘텐츠(제목·설명·태그)는 SEO·접근성을 위해 서버 컴포넌트인
+ * `page.tsx`가 렌더한다. 이 클라이언트 컴포넌트는 three.js 캔버스와
+ * 뒤로가기만 담당한다. registry는 클라이언트 전용(glob thunk 보유)이라
+ * slug 유효성도 여기서 한 번 더 본다 — 없으면 안내 후 갤러리로 유도한다.
  */
-export function ShowcaseDetail({ slug }: Props) {
+export function ShowcaseDetail({ slug, title, description }: Props) {
   const router = useRouter();
   const entry = findShowcase(slug);
 
@@ -31,36 +35,15 @@ export function ShowcaseDetail({ slug }: Props) {
     );
   }
 
-  const { meta } = entry;
-
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="self-start text-sm text-neutral-500 underline"
-        >
-          ← 갤러리로 돌아가기
-        </button>
-
-        <h1 className="text-2xl font-semibold">{meta.title}</h1>
-        <p className="text-neutral-600 dark:text-neutral-400">{meta.description}</p>
-
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="rounded bg-neutral-100 px-2 py-1 dark:bg-neutral-800">
-            {TECHNIQUE_CATEGORY_LABELS[meta.category]}
-          </span>
-          {meta.usedSkills.map((skill) => (
-            <span
-              key={skill}
-              className="rounded bg-neutral-100 px-2 py-1 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
+    <div className="mt-6 flex flex-col gap-6">
+      <button
+        type="button"
+        onClick={() => router.back()}
+        className="self-start text-sm text-neutral-500 underline"
+      >
+        ← 갤러리로 돌아가기
+      </button>
 
       {/*
         touch-pan-y: 모바일에서 캔버스 위 한 손가락 세로 스와이프를 브라우저
@@ -73,7 +56,7 @@ export function ShowcaseDetail({ slug }: Props) {
         <ShowcaseCanvas
           key={slug}
           slug={slug}
-          label={`${meta.title} — ${meta.description}`}
+          label={`${title} — ${description}`}
         />
       </div>
     </div>
