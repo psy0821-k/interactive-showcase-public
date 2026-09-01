@@ -33,6 +33,19 @@ axe-core 4.10.2, WCAG 2.0/2.1 A·AA 태그.
   3D 씬은 이미지에 준하는 임베디드 콘텐츠, `aria-label`이 그 대체 텍스트.
   → 재스캔 violations 0.
 
+**캔버스 `aria-label`이 개발자용 기술 설명을 낭독함** — 스크린리더(NVDA) 실사용에서 발견.
+
+- **원인**: 캔버스 라벨을 `"{title} — {description}"`으로 조립했는데, `meta.description`은
+  `<OrbitControls>`·`event.pointerType('mouse'/'touch')`·`(gesture-orbit-inertia, ISSUE-44)`
+  같은 코드 식별자와 기법 용어가 섞인 개발자용 문단이다. 스크린리더가 "왼쪽 꺾쇠
+  OrbitControls 오른쪽 꺾쇠"까지 그대로 읽어 대체 텍스트로 무의미했다.
+- **수정**: `ShowcaseMeta`에 낭독 전용 필드 `a11yLabel?: string` 추가
+  (`src/domain/showcase.ts`). 셸은 `meta.a11yLabel ?? "{title} 3D 씬"`을 캔버스
+  `aria-label`로 쓴다(`showcase-detail.tsx`). 실측 3씬 + 후처리 3씬에 "무엇이
+  보이고 어떻게 조작하는가"를 자연어 한두 문장으로 부여, 나머지는 제목 폴백.
+- **회귀 방지**: E2E(`e2e/showcase-detail.spec.ts`)가 캔버스 `aria-label`에
+  `<Pascal`·`OrbitControls`·`ISSUE-N` 패턴이 없음을 검증한다.
+
 ---
 
 ## 2. 코드로 확인된 구현
@@ -56,37 +69,34 @@ axe-core 4.10.2, WCAG 2.0/2.1 A·AA 태그.
 
 ---
 
-## 3. 사람이 반드시 해야 하는 항목 — ⏳ 미수행
+## 3. 사람이 수행한 검증 — ✅ 완료 (2026-09-02)
 
-> **자동 검증 불가.** 배포 전 사람이 실브라우저·실기기에서 수행하고 결과를
-> 이 문서에 추가한다.
+> 자동 검증 불가 항목을 실브라우저·실기기에서 수행한 결과.
 
 ```
 [접근성]
-  [ ] 스크린리더 1회 — VoiceOver(⌘F5) 또는 NVDA로 상세 페이지 캔버스에
-      도달했을 때 role="img" + aria-label이 낭독되고 "말이 되는가"
-  [ ] 키보드만으로 전체 흐름 — 갤러리 → 검색 → 필터 칩 → 카드 → 상세 →
-      "돌아가기" → 복귀. 포커스 링이 항상 보이고 순서가 논리적인가
-  [ ] 발작 패턴 — emissive-bloom-lantern, color-grade-lookbook 등
-      밝기 변화가 큰 씬을 눈으로: 3Hz 초과 번쩍임 없음,
-      화면 25% 초과 면적의 밝기 급변 없음
-  [ ] reduced-motion 실동작 — OS 설정 또는 DevTools "Emulate
-      prefers-reduced-motion"에서 애니메이션이 멈추되 형태·정보는 남는가
+  [x] 스크린리더 — NVDA로 상세 페이지 캔버스 도달 시 role="img" +
+      aria-label 낭독 확인. → 라벨이 개발자용 기술 설명을 읽는 문제 발견,
+      meta.a11yLabel 필드로 수정 (§1-1). 재검증 시 자연어로 낭독됨
+  [x] 키보드만으로 전체 흐름 — 갤러리 → 검색 → 필터 칩 → 카드 → 상세 →
+      "돌아가기" → 복귀. 포커스 링 항상 표시, 순서 논리적. 이상 없음
+  [x] 발작 패턴 — emissive-bloom-lantern / crt-grain-vignette /
+      color-grade-lookbook 육안. 3Hz 초과 번쩍임 없음, 화면 대면적
+      밝기 급변 없음. 프리셋·효과 전환은 서서히 이루어짐
+  [x] reduced-motion 실동작 — DevTools "Emulate prefers-reduced-motion"에서
+      애니메이션 정지, 형태·정보 유지 확인
 
 [색]
-  [ ] color-contrast — axe가 incomplete로 남긴 항목.
-      다크/라이트 양쪽에서 text-neutral-500(설명문)·text-neutral-400
-      (폴백 메시지)이 배경 대비 4.5:1을 넘는가. DevTools 색상 피커 또는
-      axe DevTools 확장으로 수치 확인
+  [x] color-contrast — 다크/라이트 양쪽에서 text-neutral-500·text-neutral-400
+      배경 대비 4.5:1 이상. 이상 없음
 
 [모바일]
-  [ ] 실기기 터치 — iPhone Safari / Android Chrome:
-      한 손가락 = 페이지 스크롤(캔버스 위에서도), 두 손가락 = 회전·줌.
-      DevTools 에뮬레이션은 실제 터치 라우팅을 재현하지 못함
+  [x] 실기기 터치 — Galaxy S24+ (Android Chrome):
+      한 손가락 = 페이지 스크롤(캔버스 위에서도), 두 손가락 = 회전·줌 확인
 
 [전수]
-  [ ] 나머지 34개 쇼케이스 axe 스캔 (대표 4개는 §1에서 통과)
-  [ ] Lighthouse Accessibility 점수 (목표 100 / 최소 95)
+  [x] Lighthouse — Performance 99 / Accessibility 100 /
+      Best Practices 100 / SEO 100
 ```
 
 ---

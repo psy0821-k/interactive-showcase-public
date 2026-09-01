@@ -11,9 +11,8 @@ const GALLERY_PATH = { "3d": "/", gsap: "/gsap" } as const;
 
 interface Props {
   slug: string;
-  /** 서버에서 렌더한 제목·설명. 캔버스 대체 텍스트 조립에 쓴다. */
+  /** 서버에서 렌더한 제목. 캔버스 대체 텍스트 폴백에 쓴다. */
   title: string;
-  description: string;
 }
 
 /**
@@ -24,7 +23,7 @@ interface Props {
  * 뒤로가기만 담당한다. registry는 클라이언트 전용(glob thunk 보유)이라
  * slug 유효성도 여기서 한 번 더 본다 — 없으면 안내 후 갤러리로 유도한다.
  */
-export function ShowcaseDetail({ slug, title, description }: Props) {
+export function ShowcaseDetail({ slug, title }: Props) {
   const router = useRouter();
   const entry = findShowcase(slug);
 
@@ -40,6 +39,10 @@ export function ShowcaseDetail({ slug, title, description }: Props) {
   }
 
   const galleryPath = GALLERY_PATH[resolveTrack(entry.meta)];
+
+  // 캔버스 스크린리더 라벨: meta.a11yLabel이 있으면 그것을,
+  // 없으면 제목만 쓴다. description은 코드 식별자가 섞여 낭독에 부적합하다.
+  const canvasLabel = entry.meta.a11yLabel ?? `${title} 3D 씬`;
 
   return (
     <div className="mt-6 flex flex-col gap-6">
@@ -66,11 +69,7 @@ export function ShowcaseDetail({ slug, title, description }: Props) {
       <div className="h-[60vh] w-full touch-pan-y overflow-hidden rounded-lg bg-neutral-900 lg:h-[70vh]">
         {/* key={slug}: 다른 상세로 이동 시 캔버스를 재마운트해 로딩 상태를
             깨끗이 되돌린다 (showcase-canvas.tsx의 sceneLoading). */}
-        <ShowcaseCanvas
-          key={slug}
-          slug={slug}
-          label={`${title} — ${description}`}
-        />
+        <ShowcaseCanvas key={slug} slug={slug} label={canvasLabel} />
       </div>
     </div>
   );

@@ -8,6 +8,8 @@ export const meta: ShowcaseMeta = {
     "gesture-orbit-inertia",
     "html-3d-sync",
   ],
+  a11yLabel:
+    "회전할 수 있는 3D 제품 뷰어입니다. 마우스로 드래그하면 제품이 돌아가고, 스크롤로 확대·축소하며, 화면 위에 조작 방법 안내가 떠 있습니다. 손을 떼면 관성으로 잠시 더 회전합니다.",
   description:
     "회전 가능한 제품 하나 + drei <Html> 조작 안내 HUD. 셸의 <OrbitControls>가 touches를 '한 손가락=페이지 스크롤 / 두 손가락=회전·줌'으로 매핑하고 enableDamping으로 관성을 준다(gesture-orbit-inertia, ISSUE-44). HUD 문구는 첫 포인터 입력의 event.pointerType('mouse'/'touch')으로 분기한다 — 기기를 감지하는 게 아니라 실제 발생한 이벤트의 필드를 읽으므로 하이브리드 기기에서도 지금 쓰는 입력에 맞는 안내가 나온다. 관성으로 놓은 뒤 잠시 더 도는 것을 확인할 수 있고, prefers-reduced-motion이면 즉시 멈춘다(셸).",
 };

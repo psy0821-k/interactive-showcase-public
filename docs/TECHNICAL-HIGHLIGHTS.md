@@ -178,9 +178,9 @@ R3F는 언마운트 시 씬 그래프의 geometry/material/texture를 **자동 d
 | 톤매핑 (postprocessing) | `<ToneMapping>` `adaptive` 기본 true | AGX/ACES/NEUTRAL 초기 몇 프레임이 검게 | `adaptive={false}` |
 | 제스처 (OrbitControls) | `touches`가 한 손가락을 잡으면 모바일 페이지 스크롤 봉쇄 | 캔버스 위에서 스크롤 안 됨 | `touches`에서 `ONE` 제거 + 컨테이너 `touch-action: pan-y` |
 
-### 4-1. 접근성 — 발견한 실제 버그
+### 4-1. 접근성 — 발견한 실제 버그 2건
 
-**`aria-prohibited-attr` (serious)** — axe 스캔에서 발견.
+**① `aria-prohibited-attr` (serious)** — axe 스캔에서 발견.
 
 - R3F `<Canvas>`가 `aria-label`을 `{...props}`로 **캔버스 래퍼 `<div>`**에
   전달하는데(`fiber/src/web/Canvas.tsx`), 그 div에 `role`이 없다. `role` 없는
@@ -188,6 +188,16 @@ R3F는 언마운트 시 씬 그래프의 geometry/material/texture를 **자동 d
 - **수정**: `<Canvas role="img">` 추가. 3D 씬은 이미지에 준하는 임베디드
   콘텐츠, `aria-label`이 그 대체 텍스트. → 재스캔 violations 0.
 
+**② 캔버스 `aria-label`이 기술 로그를 낭독** — NVDA 실사용에서 발견.
+
+- 라벨을 `"{title} — {description}"`으로 조립했는데 `meta.description`은
+  `<OrbitControls>`·`(gesture-orbit-inertia, ISSUE-44)` 같은 코드 식별자가 섞인
+  **개발자용 문단**이다. 스크린리더가 이를 그대로 읽어 대체 텍스트로 무의미.
+- **수정**: `ShowcaseMeta`에 낭독 전용 `a11yLabel?: string` 추가. 셸이
+  `meta.a11yLabel ?? "{title} 3D 씬"`을 쓴다. E2E가 라벨에 코드 식별자 패턴이
+  없음을 검증(회귀 방지).
+
+Lighthouse: Performance 99 / Accessibility·Best Practices·SEO 100.
 상세: `docs/ACCESSIBILITY.md`.
 
 ---
@@ -239,7 +249,10 @@ R3F는 언마운트 시 씬 그래프의 geometry/material/texture를 **자동 d
 | 육안(38 쇼케이스) | 브라우저 수동 | ✅ 대부분 |
 | 배포 | Vercel | ✅ 완료 |
 | **접근성 (axe)** | axe-core 4.10.2, WCAG 2.0/2.1 A·AA | ✅ **홈 + 대표 상세 3종 violations 0** (`docs/ACCESSIBILITY.md`) |
+| 접근성 (사람) | NVDA · 키보드 · 발작 육안 · reduced-motion · 색 대비 | ✅ 완료, 버그 1건 발견·수정 (§4-1) |
+| Lighthouse | 상세 페이지 | ✅ Perf 99 / A11y·BP·SEO 100 |
 | 실측 성능 | Frame Rendering Stats, 30초 × 3회, RTX 3060 | ✅ 3씬 (`docs/PERFORMANCE.md`) |
+| 실기기 모바일 | Galaxy S24+ (Android Chrome) | ✅ 터치 라우팅 확인 |
 | E2E | Playwright (캔버스 a11y / 상세 로드 / 갤러리 네비) | ✅ 3개 통과 |
 | 단위 | Vitest + RTL | ✅ |
 | CI | GitHub Actions (build + lint + spell + test / e2e) | ✅ 워크플로 작성 |
@@ -249,6 +262,5 @@ R3F는 언마운트 시 씬 그래프의 geometry/material/texture를 **자동 d
 ## 8. 다음 계획
 
 - CI 첫 실행 확인 후 README에 배지 추가
-- 실기기 모바일 확인, 접근성 전수 스캔 (`docs/ACCESSIBILITY.md` §3)
-- Lighthouse 4개 점수 기록
+- 나머지 34개 쇼케이스 axe 전수 스캔
 - `render-budget-meter` 온디맨드 렌더링 정지 시 GPU 0 확인

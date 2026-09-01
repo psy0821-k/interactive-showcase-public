@@ -133,11 +133,7 @@ export default async function ShowcasePage({
         className="mt-6 aspect-video w-full rounded-lg bg-neutral-100 object-cover dark:bg-neutral-900"
       />
 
-      <ShowcaseDetail
-        slug={slug}
-        title={meta.title}
-        description={meta.description}
-      />
+      <ShowcaseDetail slug={slug} title={meta.title} />
     </main>
   );
 }

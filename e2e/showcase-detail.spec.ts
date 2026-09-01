@@ -12,7 +12,10 @@ test.describe('gesture-guide-viewer 상세 페이지', () => {
     await expect(canvas).toBeVisible();
 
     const label = await canvas.getAttribute('aria-label');
-    expect(label?.trim().length ?? 0).toBeGreaterThan(0);
+    // meta.a11yLabel이 채워진 씬 — 자연어 대체 텍스트가 있어야 한다.
+    expect(label?.trim().length ?? 0).toBeGreaterThan(10);
+    // description(개발자용)이 아니라 a11yLabel이 쓰였는지: 코드 식별자가 없어야 한다.
+    expect(label).not.toMatch(/<[A-Z]|OrbitControls|ISSUE-\d/);
   });
 });
 

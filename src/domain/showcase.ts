@@ -42,6 +42,13 @@ export interface ShowcaseMeta {
   usedSkills: string[];
   /** 갤러리·상세에 쓰는 한 줄~짧은 문단 설명 */
   description: string;
+  /**
+   * 캔버스의 스크린리더 대체 텍스트(`<Canvas aria-label>`).
+   * `description`은 코드 식별자·기술 용어가 섞인 개발자용 설명이라 낭독에
+   * 부적합하다. 이 필드는 "무엇이 보이고 어떻게 조작하는가"를 자연스러운
+   * 한국어 한두 문장으로 적는다. 생략하면 셸이 `"{title} 3D 씬"`으로 폴백한다.
+   */
+  a11yLabel?: string;
   /** 썸네일 이미지 경로. 선택. */
   thumbnail?: string;
   /** 렌더 루프 모드. 생략하면 `"always"`. */
