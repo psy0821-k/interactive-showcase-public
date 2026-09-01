@@ -130,17 +130,28 @@ R3F는 언마운트 시 씬 그래프의 geometry/material/texture를 **자동 d
 검증: `gl.info.memory.geometries`·`textures`를 로그하며 갤러리↔상세 10회 왕복 —
 숫자가 계속 오르면 누수.
 
-### 3-4. 실측 성능 (측정 예정)
+### 3-4. 실측 성능
 
-> ⚠️ Chrome DevTools Performance 30초 녹화 × 3회 평균으로 채운다. 브라우저
-> 자동화 환경은 GPU가 불안정해 헤드리스 측정이 불가능하다.
-> 상세: `docs/PERFORMANCE.md`(작성 예정).
+> 실브라우저 계측 (Chrome 151 / RTX 3060 Laptop / 240Hz / 프로덕션 빌드).
+> Frame Rendering Stats 오버레이로 30초 상호작용 × 3회. 자동화 환경은
+> `requestAnimationFrame` 스로틀로 측정 불가. 상세·방법: `docs/PERFORMANCE.md`.
 
-| 쇼케이스 | Avg FPS | GPU Memory | Load Time | 상태 |
+| 쇼케이스 | 평균 FPS | 부하 시 최저 | GPU Memory | Load (3회 평균) |
 |---|---|---|---|---|
-| `gesture-guide-viewer` | (측정) | (측정) | (측정) | 측정 대기 |
-| `depth-of-field-rack` | (측정) | (측정) | (측정) | 측정 대기 |
-| `physics-block-tower` (강체 다수) | (측정) | (측정) | (측정) | 측정 대기 |
+| `gesture-guide-viewer` | 240 (vsync 상한) | 235 | ~122 MB | ~697 ms |
+| `depth-of-field-rack` | 220–235 | **190** (autofocus ON) | ~122 MB | ~727 ms |
+| `physics-block-tower` (강체 15개) | 240 (vsync 상한) | ~230 (붕괴 중) | ~122 MB | ~691 ms |
+
+**읽는 법:**
+
+- 평균이 240에 붙은 두 씬은 디스플레이 vsync 상한에 닿은 것 — GPU에 여유가 크다.
+- **`depth-of-field-rack`만 상한 아래로 내려간다.** 후처리 체인이 프레임당 추가
+  렌더 패스를 요구하는, 이 프로젝트에서 가장 무거운 씬이다.
+- **autofocus를 켜면 235 → 190 fps** (약 40fps 손실). `depth-of-field-focus`
+  기법이 안내하는 Autofocus 훅은 매 프레임 raycast + DoF 갱신을 수반한다 —
+  편의성과 프레임레이트의 트레이드오프가 수치로 확인된다.
+- GPU 메모리가 3씬 모두 ~122 MB로 같은 것은 공통 셸(Canvas + drei + 기본 조명)이
+  베이스라인 VRAM을 지배하고 씬별 차이는 그 위에서 미미하기 때문이다.
 
 ---
 
@@ -228,15 +239,16 @@ R3F는 언마운트 시 씬 그래프의 geometry/material/texture를 **자동 d
 | 육안(38 쇼케이스) | 브라우저 수동 | ✅ 대부분 |
 | 배포 | Vercel | ✅ 완료 |
 | **접근성 (axe)** | axe-core 4.10.2, WCAG 2.0/2.1 A·AA | ✅ **홈 + 대표 상세 3종 violations 0** (`docs/ACCESSIBILITY.md`) |
-| 실측 성능 | Chrome DevTools 반복 측정 | ⏳ 사람 수행 (`docs/PERFORMANCE.md`) |
-| E2E | Playwright (핵심 3 씬) | ⏳ |
-| CI | GitHub Actions (build + lint) | ⏳ |
+| 실측 성능 | Frame Rendering Stats, 30초 × 3회, RTX 3060 | ✅ 3씬 (`docs/PERFORMANCE.md`) |
+| E2E | Playwright (캔버스 a11y / 상세 로드 / 갤러리 네비) | ✅ 3개 통과 |
+| 단위 | Vitest + RTL | ✅ |
+| CI | GitHub Actions (build + lint + spell + test / e2e) | ✅ 워크플로 작성 |
 
 ---
 
 ## 8. 다음 계획
 
-- 실측 성능 3씬 (DevTools 30초 × 3회) → `docs/PERFORMANCE.md`
-- E2E 3개 (Playwright) — 터치→회전 / 호버→포커스 / 클릭→낙하
-- CI (GitHub Actions: build + lint + spell)
+- CI 첫 실행 확인 후 README에 배지 추가
 - 실기기 모바일 확인, 접근성 전수 스캔 (`docs/ACCESSIBILITY.md` §3)
+- Lighthouse 4개 점수 기록
+- `render-budget-meter` 온디맨드 렌더링 정지 시 GPU 0 확인
