@@ -255,12 +255,11 @@ Lighthouse: Performance 99 / Accessibility·Best Practices·SEO 100.
 | 실기기 모바일 | Galaxy S24+ (Android Chrome) | ✅ 터치 라우팅 확인 |
 | E2E | Playwright (캔버스 a11y / 상세 로드 / 갤러리 네비) | ✅ 3개 통과 |
 | 단위 | Vitest + RTL | ✅ |
-| CI | GitHub Actions (build + lint + spell + test / e2e) | ✅ 워크플로 작성 |
+| CI | GitHub Actions (build + lint + spell + test / e2e) | ✅ 통과 (verify 38s + e2e 1m10s) |
 
 ---
 
 ## 8. 다음 계획
 
-- CI 첫 실행 확인 후 README에 배지 추가
 - 나머지 34개 쇼케이스 axe 전수 스캔
 - `render-budget-meter` 온디맨드 렌더링 정지 시 GPU 0 확인

@@ -2,7 +2,9 @@
 
 > AI와의 협업으로 작성된 **재사용 가능한 3D 구현 가이드 모음**. 마케팅 페이지, 제품 뷰어, 스크롤 스토리텔링 같은 웹 프로젝트에서 Claude Code의 SKILL.md로 즉시 활용 가능합니다.
 
-**[갤러리 보기 →](https://interactive-showcase-public.vercel.app/) · [기술 문서](docs/TECHNICAL-HIGHLIGHTS.md) · [접근성 문서](docs/ACCESSIBILITY.md)**
+[![CI](https://github.com/psy0821-k/interactive-showcase-public/actions/workflows/ci.yml/badge.svg)](https://github.com/psy0821-k/interactive-showcase-public/actions/workflows/ci.yml)
+
+**[갤러리 보기 →](https://interactive-showcase-public.vercel.app/) · [기술 문서](docs/TECHNICAL-HIGHLIGHTS.md) · [접근성 문서](docs/ACCESSIBILITY.md) · [성능 문서](docs/PERFORMANCE.md)**
 
 ---
 
