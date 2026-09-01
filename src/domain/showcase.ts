@@ -20,6 +20,18 @@ export type ShowcaseFrameloop = "always" | "demand";
  */
 export type ShowcaseControlsMode = "orbit" | "none";
 
+/**
+ * 쇼케이스가 속한 갤러리 트랙. 생략하면 `"3d"`.
+ *
+ * - `"3d"`: 홈(`/`) 갤러리. R3F 씬 기법 쇼케이스.
+ * - `"gsap"`: `/gsap` 갤러리. GSAP 애니메이션 쇼케이스. 셸 Contract는 3D와
+ *   동일하고 구현 수단만 다르다(`usedSkills`에 `gsap-*` 포함).
+ */
+export type ShowcaseTrack = "3d" | "gsap";
+
+/** 알려진 트랙 목록. */
+export const SHOWCASE_TRACKS = ["3d", "gsap"] as const;
+
 /** 쇼케이스 index.tsx가 named export 하는 메타데이터. */
 export interface ShowcaseMeta {
   /** 화면 표시 제목 */
@@ -36,6 +48,13 @@ export interface ShowcaseMeta {
   frameloop?: ShowcaseFrameloop;
   /** 셸 공통 카메라 컨트롤 모드. 생략하면 `"orbit"`. */
   controlsMode?: ShowcaseControlsMode;
+  /** 갤러리 트랙. 생략하면 `"3d"`. */
+  track?: ShowcaseTrack;
+}
+
+/** `meta.track`을 읽되 생략 시 `"3d"`로 본다. */
+export function resolveTrack(meta: ShowcaseMeta): ShowcaseTrack {
+  return meta.track ?? "3d";
 }
 
 /**

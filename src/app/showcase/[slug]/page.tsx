@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getSkillEntry } from "@/domain/skill-catalog";
 import { TECHNIQUE_CATEGORY_LABELS } from "@/domain/technique-category";
 import {
   findShowcaseOnServer,
@@ -92,14 +94,27 @@ export default async function ShowcasePage({
           <span className="rounded bg-neutral-100 px-2 py-1 dark:bg-neutral-800">
             {categoryLabel}
           </span>
-          {meta.usedSkills.map((skill) => (
-            <span
-              key={skill}
-              className="rounded bg-neutral-100 px-2 py-1 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
-            >
-              {skill}
-            </span>
-          ))}
+          {meta.usedSkills.map((skill) => {
+            // 카탈로그에 등록된 기법은 상세 문서로 링크한다.
+            // 미등록 skill(기존 3D 쇼케이스)은 링크 없이 표시한다.
+            const entry = getSkillEntry(skill);
+            return entry ? (
+              <Link
+                key={skill}
+                href={`/skills/${skill}`}
+                className="rounded bg-neutral-100 px-2 py-1 text-neutral-700 underline-offset-2 hover:underline dark:bg-neutral-800 dark:text-neutral-300"
+              >
+                {skill}
+              </Link>
+            ) : (
+              <span
+                key={skill}
+                className="rounded bg-neutral-100 px-2 py-1 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+              >
+                {skill}
+              </span>
+            );
+          })}
         </div>
       </header>
 

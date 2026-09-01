@@ -17,8 +17,16 @@ const ALL = "all";
  * 각 `<li>`의 `data-category`·`data-haystack`을 읽어 표시/숨김만 토글한다.
  *
  * `useSearchParams`를 쓰므로 호출부는 `<Suspense>`로 감싸야 한다.
+ *
+ * `basePath`는 필터·검색 쿼리를 붙일 갤러리 경로다 (`/` 또는 `/gsap`).
  */
-export function GalleryBrowser({ children }: { children: ReactNode }) {
+export function GalleryBrowser({
+  children,
+  basePath = "/",
+}: {
+  children: ReactNode;
+  basePath?: string;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const listRef = useRef<HTMLDivElement>(null);
@@ -60,7 +68,9 @@ export function GalleryBrowser({ children }: { children: ReactNode }) {
       next.set(key, value);
     }
     const queryString = next.toString();
-    router.replace(queryString ? `/?${queryString}` : "/", { scroll: false });
+    router.replace(queryString ? `${basePath}?${queryString}` : basePath, {
+      scroll: false,
+    });
   };
 
   return (
@@ -110,7 +120,7 @@ export function GalleryBrowser({ children }: { children: ReactNode }) {
             <p className="text-neutral-500">일치하는 결과가 없습니다.</p>
             <button
               type="button"
-              onClick={() => router.replace("/", { scroll: false })}
+              onClick={() => router.replace(basePath, { scroll: false })}
               className="text-sm underline"
             >
               필터 초기화

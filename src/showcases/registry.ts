@@ -1,6 +1,11 @@
 "use client";
 
-import type { ShowcaseEntry, ShowcaseMeta } from "@/domain/showcase";
+import {
+  resolveTrack,
+  type ShowcaseEntry,
+  type ShowcaseMeta,
+  type ShowcaseTrack,
+} from "@/domain/showcase";
 import { isTechniqueCategory } from "@/domain/technique-category";
 
 /**
@@ -75,6 +80,9 @@ function collectMetaViolations(meta: ShowcaseMeta): string[] {
     violations.push(
       `controlsMode '${meta.controlsMode}'는 "orbit" | "none" 중 하나여야 한다`,
     );
+  }
+  if (meta.track !== undefined && meta.track !== "3d" && meta.track !== "gsap") {
+    violations.push(`track '${meta.track}'는 "3d" | "gsap" 중 하나여야 한다`);
   }
 
   return violations;
@@ -153,4 +161,9 @@ export const SHOWCASE_ENTRIES: ShowcaseEntry[] = buildRegistry();
 /** slug로 항목을 찾는다. 없으면 undefined — 호출부가 404를 결정한다. */
 export function findShowcase(slug: string): ShowcaseEntry | undefined {
   return SHOWCASE_ENTRIES.find((entry) => entry.slug === slug);
+}
+
+/** 트랙(생략 시 `"3d"` 취급)으로 거른 목록. 갤러리 페이지가 소비한다. */
+export function getEntriesByTrack(track: ShowcaseTrack): ShowcaseEntry[] {
+  return SHOWCASE_ENTRIES.filter((entry) => resolveTrack(entry.meta) === track);
 }

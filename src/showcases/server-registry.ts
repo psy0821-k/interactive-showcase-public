@@ -1,6 +1,11 @@
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
-import type { ShowcaseEntry, ShowcaseMeta } from "@/domain/showcase";
+import {
+  resolveTrack,
+  type ShowcaseEntry,
+  type ShowcaseMeta,
+  type ShowcaseTrack,
+} from "@/domain/showcase";
 import { isTechniqueCategory } from "@/domain/technique-category";
 
 /**
@@ -49,7 +54,8 @@ async function loadMeta(category: string, slug: string): Promise<ShowcaseMeta> {
     !meta.description?.trim() ||
     !Array.isArray(meta.usedSkills) ||
     meta.usedSkills.length === 0 ||
-    !isTechniqueCategory(meta.category)
+    !isTechniqueCategory(meta.category) ||
+    (meta.track !== undefined && meta.track !== "3d" && meta.track !== "gsap")
   ) {
     throw new Error(
       `[server-registry] ${category}/${slug}/meta.ts 형태가 올바르지 않다.`,
@@ -64,8 +70,15 @@ async function loadMeta(category: string, slug: string): Promise<ShowcaseMeta> {
   return meta;
 }
 
-/** 서버 컨텍스트에서 쓰는 쇼케이스 목록. 제목 가나다순. */
-export async function getShowcaseEntries(): Promise<ShowcaseEntry[]> {
+/**
+ * 서버 컨텍스트에서 쓰는 쇼케이스 목록. 제목 가나다순.
+ *
+ * `track`을 주면 해당 트랙만 (생략된 meta.track은 `"3d"`로 취급).
+ * 무인자 호출은 전체를 돌려준다 — 상세 페이지·sitemap이 그대로 쓴다.
+ */
+export async function getShowcaseEntries(options?: {
+  track?: ShowcaseTrack;
+}): Promise<ShowcaseEntry[]> {
   const entries = await Promise.all(
     readShowcasePaths().map(async ({ category, slug }) => {
       const meta = await loadMeta(category, slug);
@@ -77,7 +90,13 @@ export async function getShowcaseEntries(): Promise<ShowcaseEntry[]> {
     }),
   );
 
-  return entries.sort((a, b) => a.meta.title.localeCompare(b.meta.title, "ko"));
+  const sorted = entries.sort((a, b) =>
+    a.meta.title.localeCompare(b.meta.title, "ko"),
+  );
+
+  return options?.track
+    ? sorted.filter((entry) => resolveTrack(entry.meta) === options.track)
+    : sorted;
 }
 
 /** slug로 서버 쪽 항목을 찾는다. 없으면 undefined. */

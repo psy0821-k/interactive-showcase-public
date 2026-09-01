@@ -8,11 +8,13 @@
         "@gltf-transform/core": "^4.4.2",
         "@gltf-transform/extensions": "^4.4.2",
         "@gltf-transform/functions": "^4.4.2",
+        "@gsap/react": "^2.1.2",
         "@react-three/drei": "^10.7.8",
         "@react-three/fiber": "^9.7.0",
         "@react-three/postprocessing": "^3.1.1",
         "@react-three/rapier": "^2.2.0",
         "draco3dgltf": "^1.5.7",
+        "gsap": "^3.15.0",
         "next": "16.3.3",
         "react": "19.2.8",
         "react-dom": "19.2.8",
@@ -250,6 +252,8 @@
     "@gltf-transform/extensions": ["@gltf-transform/extensions@4.4.2", "", { "dependencies": { "@gltf-transform/core": "^4.4.2", "ktx-parse": "^1.1.0" } }, "sha512-HJH1FM+edC5eNvl6xO0SOXJ/j/3oDoIpSu150OTdJaLBoM3TgCCGIfh4wyhgWAqZrkvgHKVGiZKxcKV5LkgPCQ=="],
 
     "@gltf-transform/functions": ["@gltf-transform/functions@4.4.2", "", { "dependencies": { "@gltf-transform/core": "^4.4.2", "@gltf-transform/extensions": "^4.4.2", "ktx-parse": "^1.1.0", "ndarray": "^1.0.19", "ndarray-lanczos": "^0.3.0", "ndarray-pixels": "^5.0.1" } }, "sha512-dclXgv9TshMaWBqPDUYd4xTwBQ2PpuR8p0Y9pokrRzGQDUPXRP6lTDzbqT0UmEmxFSvRyPJjvOWUmzeiRafpvw=="],
+
+    "@gsap/react": ["@gsap/react@2.1.2", "", { "peerDependencies": { "gsap": "^3.12.5", "react": ">=17" } }, "sha512-JqliybO1837UcgH2hVOM4VO+38APk3ECNrsuSM4MuXp+rbf+/2IG2K1YJiqfTcXQHH7XlA0m3ykniFYstfq0Iw=="],
 
     "@humanfs/core": ["@humanfs/core@0.19.2", "", { "dependencies": { "@humanfs/types": "^0.15.0" } }, "sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA=="],
 
@@ -770,6 +774,8 @@
     "gopd": ["gopd@1.2.0", "", {}, "sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg=="],
 
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
+
+    "gsap": ["gsap@3.15.0", "", {}, "sha512-dMW4CWBTUK1AEEDeZc1g4xpPGIrSf9fJF960qbTZmN/QwZIWY5wgliS6JWl9/25fpTGJrMRtSjGtOmPnfjZB+A=="],
 
     "harfbuzzjs": ["harfbuzzjs@0.10.3", "", {}, "sha512-GJnLUrgLMadlMYrBGEXwYEimObbysy3prWT4HyPpFQERvgTU/OZ+ReUlEPOum6w4RBtFXzXiCCmECOr4sz3qwQ=="],
 

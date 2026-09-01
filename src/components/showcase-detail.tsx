@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { resolveTrack } from "@/domain/showcase";
 import { findShowcase } from "@/showcases/registry";
 import { ShowcaseCanvas } from "./showcase-canvas";
+
+/** 트랙별 갤러리 경로. */
+const GALLERY_PATH = { "3d": "/", gsap: "/gsap" } as const;
 
 interface Props {
   slug: string;
@@ -35,11 +39,20 @@ export function ShowcaseDetail({ slug, title, description }: Props) {
     );
   }
 
+  const galleryPath = GALLERY_PATH[resolveTrack(entry.meta)];
+
   return (
     <div className="mt-6 flex flex-col gap-6">
+      {/*
+        갤러리에서 진입했으면 router.back()이 스크롤 위치까지 복원한다.
+        직접 URL로 들어온 경우를 위해 트랙에 맞는 갤러리로 폴백한다.
+      */}
       <button
         type="button"
-        onClick={() => router.back()}
+        onClick={() => {
+          if (window.history.length > 1) router.back();
+          else router.push(galleryPath);
+        }}
         className="self-start text-sm text-neutral-500 underline"
       >
         ← 갤러리로 돌아가기
