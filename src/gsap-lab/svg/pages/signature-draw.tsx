@@ -44,7 +44,7 @@ export function SignatureDrawPage() {
     >
       <div ref={container}>
       {/* 스크롤 유도: 서명이 뷰포트 밖에서 시작하도록 */}
-      <div className="flex min-h-[70vh] items-center justify-center px-6 text-white/40">
+      <div className="flex min-h-[70vh] items-center justify-center px-6 text-white/60">
         아래로 스크롤하세요
       </div>
       <div

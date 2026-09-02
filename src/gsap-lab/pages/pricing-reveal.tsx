@@ -12,24 +12,26 @@ const FEATURES = [
   { title: "우선 지원", background: "#be123c" },
 ];
 
+// 카드 배경은 어둡게 — 위에 얹는 흰 텍스트(text-white/85 목록 포함)가
+// WCAG AA(4.5:1)를 넘도록. teal-700(#0f766e)은 흰색과 4.4:1로 경계선이었다.
 const PLANS = [
   {
     name: "Starter",
     price: "무료",
-    background: "#0f766e",
+    background: "#134e48",
     points: ["개인 사용", "노트 100개", "커뮤니티 지원"],
   },
   {
     name: "Team",
     price: "₩12,000 / 월",
-    background: "#1e40af",
+    background: "#1e3a8a",
     points: ["무제한 노트", "팀 워크스페이스", "이메일 지원"],
     featured: true,
   },
   {
     name: "Enterprise",
     price: "문의",
-    background: "#6b21a8",
+    background: "#581c87",
     points: ["SSO / SAML", "감사 로그", "전담 매니저"],
   },
 ];
@@ -114,7 +116,7 @@ export function PricingRevealPage() {
     <div ref={container} className="bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
       {/* 히어로 */}
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
-        <p className="hero-eyebrow gsap-reveal text-sm font-medium uppercase tracking-[0.2em] text-teal-600">
+        <p className="hero-eyebrow gsap-reveal text-sm font-medium uppercase tracking-[0.2em] text-teal-700 dark:text-teal-400">
           Fluxnote Pricing
         </p>
         <h1 className="hero-title gsap-reveal mt-4 text-4xl font-semibold sm:text-5xl">
