@@ -24,3 +24,63 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/*
+ * `/gsap-lab` 진행적 향상 폴백.
+ *
+ * GSAP `from()` 등장 연출은 요소를 CSS로 `opacity: 0` 시켜 두고 트윈이 올린다.
+ * JS가 비활성이거나 실행 전이면 콘텐츠가 안 보이므로, 스크립트가 없는 환경과
+ * 모션 축소 환경에서는 즉시 최종 상태로 되돌린다.
+ */
+.gsap-reveal {
+  opacity: 0;
+}
+
+@media (scripting: none) {
+  .gsap-reveal {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsap-reveal {
+    opacity: 1;
+  }
+}
+
+/* 스크롤 유도 큐: 위아래로 살짝 튀는 표시. 모션 축소 시 정지. */
+.scroll-cue::before {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 8px;
+  margin: 6px auto 0;
+  border-radius: 2px;
+  background: currentColor;
+  animation: scroll-cue-bounce 1.4s ease-in-out infinite;
+}
+
+@keyframes scroll-cue-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue::before {
+    animation: none;
+  }
+}
+
+/* 진행 인디케이터 데모: 현재 섹션 목차 링크 활성 상태 */
+.toc-link.toc-active {
+  color: #67e8f9;
+  font-weight: 600;
+  background: rgb(255 255 255 / 0.08);
+}

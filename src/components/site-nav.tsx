@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 const LINKS = [
   { href: "/", label: "3D" },
   { href: "/gsap", label: "GSAP" },
+  { href: "/gsap-lab", label: "GSAP Lab" },
 ] as const;
 
 /**
@@ -26,7 +27,9 @@ export function SiteNav() {
           const active =
             link.href === "/"
               ? pathname === "/"
-              : pathname.startsWith(link.href);
+              : link.href === "/gsap"
+                ? pathname === "/gsap" || pathname.startsWith("/gsap/")
+                : pathname.startsWith(link.href);
           return (
             <Link
               key={link.href}
