@@ -63,7 +63,7 @@ export function ScrollDemoShell({
 
       {children}
 
-      <footer className="px-6 py-24 text-center text-sm text-neutral-500">
+      <footer className="bg-neutral-950 px-6 py-24 text-center text-sm text-neutral-400">
         GSAP Lab · 스크롤 효과 데모 · 모든 이미지 자리는 색 블록으로 대체
       </footer>
     </div>

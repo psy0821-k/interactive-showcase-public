@@ -54,7 +54,7 @@ export function IconLineTracePage() {
       summary="여러 라인 아이콘의 stroke가 순서대로 그려진다 (strokeDashoffset stagger)"
     >
       <div ref={container}>
-      <div className="flex min-h-[70vh] items-center justify-center px-6 text-white/40">
+      <div className="flex min-h-[70vh] items-center justify-center px-6 text-white/60">
         아래로 스크롤하세요
       </div>
       <div className="trace-stage mx-auto grid max-w-3xl gap-8 px-6 py-24 sm:grid-cols-4">

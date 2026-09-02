@@ -1,22 +1,27 @@
-# GSAP Lab — S급 로드맵
+# GSAP Lab — 견고성·확장성 개선 로드맵
 
-> 목표: `/gsap-lab` 31개 DOM GSAP 데모를 **실무 프로덕션 견고성 + 확장성**까지
-> 끌어올린다. 현재 평가 **B+ (중상)** → 목표 **S**.
+> `/gsap-lab`의 DOM GSAP 데모를 **실무 프로덕션 견고성 + 확장성**까지 끌어올린
+> 개선 계획과 완료 현황.
 >
-> 범위: GSAP 구현 품질만. **성능·접근성은 이 문서 범위 밖** (별도 `three-quality`
-> 트랙에서 다룸). 단, reduced-motion 분기는 이미 전 데모에 있으므로 회귀만 지킨다.
+> 범위: GSAP 구현 품질. 성능은 `gsap-dom-performance`, 접근성은 `gsap-a11y`
+> 스킬이 별도로 다룬다. reduced-motion 분기는 이미 전 데모에 있으므로 회귀만
+> 지킨다.
 >
 > 작성: 2026-09-02
 
 ---
 
-## 등급 정의
+## 목표 기준
 
-| 등급 | 기준 |
+| 축 | 목표 상태 |
 |---|---|
-| B+ (현재) | GSAP API를 목적에 맞게 구분해 쓰고 공식 함정 대부분 회피. 뷰포트 가정·스크롤 점프·트리거 남발이 다양한 환경에서 깨질 여지. |
-| A | 위 + 재실행/정리 로직 정비 · 뷰포트 실측 기반 전환 · 트리거 통합 · 전 데모 matchMedia 일관 적용. |
-| **S** | 위 + **(1)** 모든 스크럽 데모가 스크롤 어느 지점에서 진입해도 값이 정확 **(2)** 콘텐츠·뷰포트가 바뀌어도 재계산으로 자동 적응 **(3)** 재사용 가능한 프리미티브로 추출돼 새 데모를 30줄 이내로 작성 가능 **(4)** 결정론적 E2E 검증 (Playwright에서 스크롤 위치 → 상태가 1:1로 재현) **(5)** 코드가 GSAP 공식 예제보다 명확 (라벨·주석·네이밍). |
+| API 사용 | GSAP API를 목적에 맞게 구분해 쓰고 공식 함정을 회피 |
+| 재실행·정리 | 재실행/정리 로직 정비 · 전 데모 `matchMedia` 일관 적용 |
+| 스크럽 정확도 | 모든 스크럽 데모가 스크롤 어느 지점에서 진입해도 값이 정확 |
+| 반응형 | 콘텐츠·뷰포트가 바뀌어도 재계산으로 자동 적응 (px 하드코딩 없음) |
+| 확장성 | 재사용 프리미티브로 추출돼 새 데모를 30줄 이내로 작성 가능 |
+| 검증 | 결정론적 E2E (Playwright에서 스크롤 위치 → 상태가 1:1로 재현) |
+| 가독성 | 코드가 GSAP 공식 예제보다 명확 (라벨·주석·네이밍) |
 
 ---
 
@@ -133,14 +138,14 @@ zoom-out-reveal에서 확인됨.)
   박히는 것 방지.
 - 데모별 초기 `gsap.set`으로 "스크롤 0일 때의 정확한 상태"를 스냅.
 
-**검증** (S급 핵심): Playwright에서
+**검증** (핵심 게이트): Playwright에서
 ```
 for (const p of [0, 0.25, 0.5, 0.75, 1]) {
   reload(); scrollTo(stageStart + range*p); wait;
   assert(state ≈ expectedStateAt(p));  // 진입 지점과 무관하게 일치
 }
 ```
-현재는 이 테스트가 대부분 실패함. 통과가 S급 게이트.
+이 테스트 통과가 진입지점 독립성의 게이트다.
 
 **영향 파일**: `scroll-trigger-setup.ts` + scrub 데모 전부.
 
@@ -197,7 +202,7 @@ tl.to(list, { y: 0 }, "+=1.1");
 
 ---
 
-## Phase 3 — 확장성 (S급 완성)
+## Phase 3 — 확장성
 
 ### 3-1. 재사용 프리미티브 추출
 
@@ -265,7 +270,7 @@ test('parallax-layers: 레이어별 이동량이 스크롤에 비례', async ({ 
 - [x] 1-4. 매직넘버 → 실측 — **hero-to-section**: `min(88vw,56rem)` CSS 함수값을 GSAP이 보간 못해 width가 튀던 버그 → px 실측 함수형 값(진입지점 독립 확인). **zoom-out-reveal**: `scale: 3` → `offsetWidth/열수`로 유도(`getBoundingClientRect`는 걸린 transform에 오염돼 sx≠sy 피드백 루프 → `offsetWidth`로 해결). **word-rotator**: `yPercent` 균등 가정 → 각 단어 `offsetTop` 실측 + 빈 트윈 제거(2-2 함께 완료). **parallax-layers**: `travel: -420px` 하드코딩 → `innerHeight × 비율` 함수형. **scroll-direction-header**: `yPercent: -110`은 바 높이 상대값이라 유지(주석 추가).
 
 ### Phase 2 (A → S)
-- [~] 2-1. 스크럽 데모 진입지점-무관 정확성 (전수) ← **S급 핵심 게이트** — hero-to-section·zoom-out-reveal·bg-color-transition은 확인 완료(1-2·1-4에서). 남음: image-mask, horizontal, pinned-caption, parallax류, kinetic, section-snap의 전수 리로드 테스트를 3-3 E2E로.
+- [~] 2-1. 스크럽 데모 진입지점-무관 정확성 (전수) ← **핵심 게이트** — hero-to-section·zoom-out-reveal·bg-color-transition은 확인 완료(1-2·1-4에서). 남음: image-mask, horizontal, pinned-caption, parallax류, kinetic, section-snap의 전수 리로드 테스트를 3-3 E2E로.
 - [x] 2-2. word-rotator 선언적 타이밍 — 1-4와 함께 완료.
 - [x] 2-3. morph-blob / signature-draw 한계 명시 — morph-blob에 일시정지/재개 버튼 추가(CSS·SMIL 대비 GSAP 재생제어 장점 시연) + "커맨드 구조 같아야 보간됨" 명시. signature-draw는 "획 순서 = 그리는 순서" 주석. registry에 `caveat` 필드 신설 + 상세 배너에 노출(5개 데모).
 - [x] 2-4. IntersectionObserver 병용 — progress-indicator 완료(1-2). section-snap-panels는 ScrollTrigger `snap`이 본질이라 IO 불필요.
@@ -282,7 +287,7 @@ test('parallax-layers: 레이어별 이동량이 스크롤에 비례', async ({ 
 
 ---
 
-## S급 최종 게이트 (전부 충족해야 S)
+## 최종 게이트 (전부 충족 목표)
 
 1. **진입 지점 독립성**: 모든 scrub 데모가 스크롤 0.0/0.25/0.5/0.75/1.0 어디서
    reload 후 진입해도 그 지점의 정확한 상태. (Playwright로 증명)

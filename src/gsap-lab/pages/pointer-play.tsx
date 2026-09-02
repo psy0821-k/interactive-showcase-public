@@ -4,11 +4,13 @@ import { useRef } from "react";
 import { useGsapDom } from "@/hooks/use-gsap-dom";
 import { useMagnetic, usePointerTilt } from "@/gsap-lab/primitives";
 
+// 배경은 전부 어두운 채도로 통일한다 — 위에 얹는 흰 텍스트가 WCAG AA(4.5:1)를
+// 넘도록. 밝은 끝(amber-700·lime-700 등)은 text-sm 흰색과 대비가 부족했다.
 const TILT_CARDS = [
   { title: "캡처", background: "#7f1d1d" },
-  { title: "정리", background: "#9a3412" },
-  { title: "연결", background: "#a16207" },
-  { title: "공유", background: "#4d7c0f" },
+  { title: "정리", background: "#7c2d12" },
+  { title: "연결", background: "#854d0e" },
+  { title: "공유", background: "#3f6212" },
   { title: "검색", background: "#155e75" },
   { title: "자동화", background: "#5b21b6" },
 ];
@@ -82,7 +84,7 @@ export function PointerPlayPage() {
         <h1 className="mt-4 text-4xl font-semibold sm:text-6xl">
           커서에 반응하는 인터페이스
         </h1>
-        <p className="mt-6 max-w-xl text-lg text-white/75">
+        <p className="mt-6 max-w-xl text-lg text-white/85">
           마우스를 움직여 보세요. 버튼이 커서에 끌려오고, 카드가 기울고, 흰 점이
           부드럽게 따라옵니다.
         </p>
@@ -104,7 +106,7 @@ export function PointerPlayPage() {
           >
             <div className="mb-4 h-28 w-full rounded-lg bg-white/15" aria-hidden />
             <h2 className="text-lg font-semibold">{card.title}</h2>
-            <p className="mt-2 text-sm text-white/75">
+            <p className="mt-2 text-sm text-white/85">
               호버하면 커서 위치에 따라 3D로 기울어집니다.
             </p>
           </article>

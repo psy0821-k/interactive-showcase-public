@@ -246,17 +246,17 @@ Lighthouse: Performance 99 / Accessibility·Best Practices·SEO 100.
 | 타입 | `bun run build` | ✅ 통과 |
 | 린트 | `bun run lint` | ✅ 0 errors / 0 warnings |
 | 맞춤법 | `bun run spell` | ✅ 통과 |
-| 육안(38 쇼케이스) | 브라우저 수동 | ✅ 대부분 |
+| 육안(38 R3F 쇼케이스 + 34 GSAP Lab) | 브라우저 수동 | ✅ 대부분 |
 | 배포 | Vercel | ✅ 완료 |
-| **접근성 (axe)** | `@axe-core/playwright` 4.13, WCAG 2.0/2.1 A·AA | ✅ **41개 페이지 전수 violations 0** (`docs/ACCESSIBILITY.md`) |
-| 접근성 (사람) | NVDA · 키보드 · 발작 육안 · reduced-motion · 색 대비 | ✅ 완료, 버그 1건 발견·수정 (§4-1) |
+| **접근성 (axe)** | `@axe-core/playwright`, WCAG 2.0/2.1 A·AA | ✅ **75개 페이지 전수 violations 0** — GSAP Lab은 color-contrast 포함 (`docs/ACCESSIBILITY.md`) |
+| 접근성 (사람) | NVDA · 키보드 · 발작 육안 · reduced-motion · 색 대비 | ✅ 완료, 버그 발견·수정 (§4-1) |
 | Lighthouse | 상세 페이지 | ✅ Perf 99 / A11y·BP·SEO 100 |
 | 실측 성능 | Frame Rendering Stats, 30초 × 3회, RTX 3060 | ✅ 3씬 (`docs/PERFORMANCE.md`) |
 | 실기기 모바일 | Galaxy S24+ (Android Chrome) | ✅ 터치 라우팅 확인 |
-| E2E | Playwright (캔버스 a11y / 상세 로드 / 갤러리 네비) | ✅ 3개 통과 |
-| axe 전수 | `e2e/axe-full-scan.spec.ts` (41 페이지) | ✅ CI e2e 잡 포함 (~43s) |
+| E2E | Playwright (캔버스 a11y / 상세 로드 / 갤러리 네비 / GSAP 트윈 누수) | ✅ 통과 |
+| axe 전수 | `e2e/axe-full-scan.spec.ts` (75 페이지) | ✅ CI e2e 잡 포함 |
 | 단위 | Vitest + RTL | ✅ |
-| CI | GitHub Actions (build + lint + spell + test / e2e + axe) | ✅ 통과 |
+| CI | GitHub Actions (`.github/workflows/ci.yml`: build + lint + spell + test / e2e + axe) | ✅ |
 
 ---
 

@@ -8,11 +8,13 @@ import {
 } from "@/gsap-lab/scroll/scroll-trigger-setup";
 import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
 
+// 어두운 cyan 그라데이션 — 패널 위 흰 텍스트(text-white/60 카운터 포함)가
+// WCAG AA(4.5:1)를 넘도록.
 const PANELS = [
   { title: "받은 편지함 제로", background: "#0c4a6e" },
-  { title: "3초 만에 캡처", background: "#155e75" },
-  { title: "팀과 실시간 공유", background: "#0e7490" },
-  { title: "어디서나 오프라인", background: "#0891b2" },
+  { title: "3초 만에 캡처", background: "#0d4f5f" },
+  { title: "팀과 실시간 공유", background: "#0e5568" },
+  { title: "어디서나 오프라인", background: "#105a70" },
 ];
 
 /**
@@ -76,7 +78,7 @@ export function SectionSnapPanelsPage() {
               style={{ background: panel.background }}
             >
               <div className="snap-inner">
-                <span className="text-sm font-medium uppercase tracking-widest text-white/60">
+                <span className="text-sm font-medium uppercase tracking-widest text-white/75">
                   {String(index + 1).padStart(2, "0")} / {PANELS.length}
                 </span>
                 <h2 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">

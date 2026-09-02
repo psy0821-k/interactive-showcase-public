@@ -6,7 +6,8 @@ import { DemoShell } from "@/gsap-lab/demo-shell";
 
 const ITEMS = Array.from({ length: 6 }, (_, i) => ({
   title: `카드 ${i + 1}`,
-  background: `hsl(${190 + i * 12} 55% 40%)`,
+  // 명도 32% — 위에 얹는 흰 텍스트가 WCAG AA(4.5:1)를 넘도록.
+  background: `hsl(${190 + i * 12} 55% 32%)`,
 }));
 
 /**

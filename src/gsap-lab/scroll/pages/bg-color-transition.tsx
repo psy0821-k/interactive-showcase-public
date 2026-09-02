@@ -80,6 +80,11 @@ export function BgColorTransitionPage() {
             key={section.id}
             id={`bg-section-${section.id}`}
             className="flex min-h-screen flex-col items-center justify-center px-6 text-center"
+            // 전환 효과는 위 fixed `.bg-layer`가 담당하지만, 섹션에도 자기
+            // 배경색을 깔아 둔다 — 스크립트 없이도 대비가 성립하고(진행적 향상),
+            // axe가 fixed·음수 z-index 레이어를 배경으로 계산하지 못하는
+            // false positive도 없앤다.
+            style={{ backgroundColor: section.bg }}
           >
             <h2 className="bg-fg text-5xl font-semibold" style={{ color: SECTIONS[0].fg }}>
               {section.title}

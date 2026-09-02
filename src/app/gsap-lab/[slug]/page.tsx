@@ -109,10 +109,13 @@ export default async function LabDetailPage({
     <div className="flex-1">
       <div className="border-b border-neutral-200 bg-neutral-50 px-6 py-3 text-sm dark:border-neutral-800 dark:bg-neutral-900">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1">
-          <Link href="/gsap-lab" className="text-neutral-500 hover:underline">
+          <Link
+            href="/gsap-lab"
+            className="text-neutral-600 hover:underline dark:text-neutral-400"
+          >
             ← GSAP Lab
           </Link>
-          <span className="text-neutral-400">/</span>
+          <span className="text-neutral-600 dark:text-neutral-400">/</span>
           <span className="font-medium">{entry.title}</span>
           <span className="ml-auto flex flex-wrap gap-1.5">
             {entry.usedSkills.map((skill) => (

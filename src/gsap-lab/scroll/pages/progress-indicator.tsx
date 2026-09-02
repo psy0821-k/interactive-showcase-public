@@ -5,10 +5,11 @@ import { useScrollProgress } from "@/gsap-lab/primitives";
 import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
 
 const SECTIONS = [
+  // 어두운 cyan 그라데이션 — 위에 얹는 흰 텍스트가 WCAG AA(4.5:1)를 넘도록.
   { id: "intro", label: "소개", background: "#083344" },
-  { id: "features", label: "기능", background: "#0e7490" },
-  { id: "pricing", label: "요금", background: "#0891b2" },
-  { id: "faq", label: "FAQ", background: "#06b6d4" },
+  { id: "features", label: "기능", background: "#0b556a" },
+  { id: "pricing", label: "요금", background: "#0e627a" },
+  { id: "faq", label: "FAQ", background: "#116d87" },
 ];
 
 /**
@@ -67,7 +68,7 @@ export function ProgressIndicatorPage() {
               >
                 <h2 className="text-3xl font-semibold">{section.label}</h2>
                 <div className="mt-6 h-40 w-full rounded-xl bg-white/15" aria-hidden />
-                <p className="mt-6 max-w-lg text-white/80">
+                <p className="mt-6 max-w-lg text-white/90">
                   이 섹션이 화면 중앙을 지나는 동안 왼쪽 목차의 “{section.label}”
                   항목이 밝게 활성화됩니다.
                 </p>

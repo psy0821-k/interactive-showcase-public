@@ -4,13 +4,16 @@ import { useRef } from "react";
 import { useRevealOnScroll } from "@/gsap-lab/primitives";
 import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
 
+// 어두운 emerald 그라데이션 — 카드 위 흰 텍스트(text-white/75 포함)가
+// WCAG AA(4.5:1)를 넘도록. emerald-500~700(#10b981·#059669·#047857)은
+// 흰색과 대비가 3.8:1 수준이라 제외.
 const CARDS = [
   { title: "빠른 캡처", background: "#052e16" },
-  { title: "자동 정리", background: "#064e3b" },
-  { title: "팀 공유", background: "#065f46" },
-  { title: "버전 관리", background: "#047857" },
-  { title: "오프라인", background: "#059669" },
-  { title: "API", background: "#10b981" },
+  { title: "자동 정리", background: "#08331b" },
+  { title: "팀 공유", background: "#0a3b24" },
+  { title: "버전 관리", background: "#0c4530" },
+  { title: "오프라인", background: "#0e4d3a" },
+  { title: "API", background: "#115540" },
 ];
 
 /**
@@ -43,7 +46,7 @@ export function RevealSequencePage() {
             >
               <div className="mb-4 h-24 w-full rounded-lg bg-white/15" aria-hidden />
               <h3 className="text-lg font-semibold">{card.title}</h3>
-              <p className="mt-2 text-sm text-white/75">
+              <p className="mt-2 text-sm text-white/85">
                 앞 카드가 올라온 뒤 0.15초 간격으로 따라 올라옵니다.
               </p>
             </article>

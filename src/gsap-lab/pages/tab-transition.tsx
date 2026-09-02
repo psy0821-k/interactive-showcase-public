@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGsapDom } from "@/hooks/use-gsap-dom";
 
 interface TabDef {
@@ -64,8 +64,18 @@ function SplitHeading({ text }: { text: string }) {
  */
 export function TabTransitionPage() {
   const container = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState(TABS[0].id);
   const isFirstRun = useRef(true);
+  /** 사용자가 탭을 눌러 전환했을 때만 true. 최초 마운트에는 포커스를 옮기지 않는다. */
+  const shouldFocusPanel = useRef(false);
+
+  // 탭 전환 시 새 패널로 포커스를 옮겨 스크린리더가 바뀐 내용을 읽게 한다(스킬 6절).
+  useEffect(() => {
+    if (!shouldFocusPanel.current) return;
+    shouldFocusPanel.current = false;
+    panelRef.current?.focus();
+  }, [activeId]);
 
   useGsapDom(
     ({ gsap: g, reduced }) => {
@@ -133,7 +143,10 @@ export function TabTransitionPage() {
               aria-selected={tab.id === activeId}
               aria-controls={`panel-${tab.id}`}
               id={`tab-${tab.id}`}
-              onClick={() => setActiveId(tab.id)}
+              onClick={() => {
+                shouldFocusPanel.current = true;
+                setActiveId(tab.id);
+              }}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 tab.id === activeId
                   ? "bg-white text-neutral-900"
@@ -148,10 +161,12 @@ export function TabTransitionPage() {
         {/* 활성 패널 */}
         <div
           key={activeTab.id}
+          ref={panelRef}
           role="tabpanel"
           id={`panel-${activeTab.id}`}
           aria-labelledby={`tab-${activeTab.id}`}
-          className="mt-8 overflow-hidden rounded-3xl p-10"
+          tabIndex={-1}
+          className="mt-8 overflow-hidden rounded-3xl p-10 outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           style={{ background: activeTab.background }}
         >
           <SplitHeading text={activeTab.heading} />
