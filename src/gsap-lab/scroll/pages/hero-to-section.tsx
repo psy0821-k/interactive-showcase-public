@@ -13,20 +13,32 @@ import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
  * - 창 안에서 이미지가 전체 화면 → 좌상단 작은 썸네일로 `scrub` 축소·이동.
  * - 동시에 카드 본문(제목·설명)이 페이드인해 "썸네일이 붙은 카드"가 완성된다.
  * - `Flip` 같은 유료 플러그인 없이 transform 트윈만 사용.
+ *
+ * 성능(gsap-dom-performance 3절): DOM 박스는 최종 썸네일 크기(THUMB×THUMB)로
+ * **고정**하고, 크기 변화는 `width`/`height`가 아니라 `scaleX`/`scaleY`로 준다.
+ * width/height 트윈은 매 프레임 레이아웃 재계산을 일으키지만 scale은 컴포지터
+ * 처리라 리플로우가 없다. 시작·끝의 종횡비가 다르므로 x·y 축 스케일을 분리한다.
  */
 export function HeroToSectionPage() {
   const container = useRef<HTMLDivElement>(null);
 
   // GSAP은 `min(88vw, 56rem)` 같은 CSS 함수값을 보간하지 못한다 —
-  // 시작·끝 크기를 모두 **px 실측값** 함수형으로 넘겨 refresh 때 재계산.
+  // 시작 크기를 **px 실측값** 함수형으로 넘겨 refresh 때 재계산한다.
   const isMobile = () => window.innerWidth < 768;
+  const THUMB = 160; // 10rem — DOM 박스의 고정 크기
   const startW = () =>
     isMobile()
       ? window.innerWidth * 0.92
       : Math.min(window.innerWidth * 0.88, 896); // 56rem = 896px
   const startH = () => window.innerHeight * (isMobile() ? 0.44 : 0.62);
-  const THUMB = 160; // 10rem
+  // 시작 시 THUMB 박스를 큰 화면 크기로 보이게 하는 축별 배율.
+  const startScaleX = () => startW() / THUMB;
+  const startScaleY = () => startH() / THUMB;
   const endInset = () => (isMobile() ? 24 : 40);
+  // 스케일된 박스가 화면 중앙에 오도록 좌상단 좌표를 유도한다
+  // (transformOrigin: left top 기준).
+  const startX = () => window.innerWidth / 2 - startW() / 2;
+  const startY = () => window.innerHeight / 2 - startH() / 2;
 
   usePinnedTimeline(
     container,
@@ -41,18 +53,21 @@ export function HeroToSectionPage() {
       tl.fromTo(
         ".morph-image",
         {
-          width: startW,
-          height: startH,
-          x: () => window.innerWidth / 2 - startW() / 2,
-          y: () => window.innerHeight / 2 - startH() / 2,
-          borderRadius: 24,
+          scaleX: startScaleX,
+          scaleY: startScaleY,
+          x: startX,
+          y: startY,
+          transformOrigin: "left top",
+          // 시작 시 x축이 startScaleX배 확대되므로 radius를 그만큼 나눠
+          // 화면에서 12px로 보이게 한다.
+          "--r": () => 12 / startScaleX() + "px",
         },
         {
-          width: THUMB,
-          height: THUMB,
+          scaleX: 1,
+          scaleY: 1,
           x: endInset,
           y: endInset,
-          borderRadius: 12,
+          "--r": "12px",
           duration: 0.7,
         },
       )
@@ -71,13 +86,15 @@ export function HeroToSectionPage() {
         .to({}, { duration: 0.25 });
     },
     (g) => {
+      // 모션 축소: 이미지를 최종(썸네일) 상태로 고정.
       const inset = window.innerWidth < 768 ? 24 : 40;
       g.set(".morph-image", {
-        width: 160,
-        height: 160,
+        scaleX: 1,
+        scaleY: 1,
         x: inset,
         y: inset,
-        borderRadius: 12,
+        transformOrigin: "left top",
+        "--r": "12px",
       });
       g.set(".card-body", { autoAlpha: 1, x: 0 });
     },
@@ -91,13 +108,17 @@ export function HeroToSectionPage() {
       >
         <section className="morph-stage relative h-[200vh]">
           <div className="sticky top-0 h-screen w-full overflow-hidden bg-neutral-900">
-            {/* 축소·이동하는 이미지. 위치는 GSAP이 x/y(px)로 제어하므로
-                left/top은 0에 고정한다. */}
+            {/* 축소·이동하는 이미지. DOM 박스는 최종 썸네일 크기(160×160)로
+                고정하고 크기 변화는 GSAP `scaleX`/`scaleY`가 준다. 위치도 GSAP이
+                x/y(px)로 제어하므로 left/top은 0에 고정.
+                border-radius는 GSAP `--r`(px) 변수를 scale에 반비례로 트윈해
+                화면에서 항상 12px로 보이도록 역보정한다. */}
             <div
               className="morph-image absolute left-0 top-0"
               style={{
                 width: 160,
                 height: 160,
+                borderRadius: "var(--r, 12px)",
                 background: "linear-gradient(135deg, #1e1b4b, #be185d)",
               }}
               aria-hidden
