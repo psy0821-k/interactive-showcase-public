@@ -22,11 +22,17 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  /* 테스트 실행 전 프로덕션 서버를 띄운다 (dev보다 실제 배포 동작에 가까움) */
+  /*
+   * 테스트 실행 전 프로덕션 서버를 띄운다 (dev보다 실제 배포 동작에 가까움).
+   * NEXT_PUBLIC_E2E=1 은 `window.__gsapLab` 디버그 핸들을 프로덕션 빌드에도
+   * 노출시킨다 (gsap-lab-leak.spec.ts의 트윈 누수 검증용). 실제 배포에는 이
+   * 환경변수가 없다.
+   */
   webServer: {
     command: 'bun run build && bun run start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
+    env: { NEXT_PUBLIC_E2E: '1' },
   },
 });

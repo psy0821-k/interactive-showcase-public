@@ -34,7 +34,7 @@ function EntryCard({ entry }: { entry: LabEntry }) {
           aria-hidden
         />
         <div className="p-5">
-          <span className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+          <span className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
             {entry.tag}
           </span>
           <h3 className="mt-1 text-base font-semibold">{entry.title}</h3>

@@ -8,8 +8,8 @@ import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
 const CARDS = [
   { title: "캡처", body: "어디서든 단축키로 노트를 띄운다.", background: "#431407" },
   { title: "정리", body: "태그와 백링크로 노트가 스스로 연결된다.", background: "#7c2d12" },
-  { title: "협업", body: "실시간으로 함께 편집하고 댓글을 남긴다.", background: "#9a3412" },
-  { title: "게시", body: "링크 하나로 노트를 웹 페이지로 공개한다.", background: "#c2410c" },
+  { title: "협업", body: "실시간으로 함께 편집하고 댓글을 남긴다.", background: "#8a3213" },
+  { title: "게시", body: "링크 하나로 노트를 웹 페이지로 공개한다.", background: "#9a3a17" },
 ];
 
 /**
@@ -68,7 +68,7 @@ export function StickyStackCardsPage() {
             >
               <div className="mb-6 h-32 w-full rounded-xl bg-white/15" aria-hidden />
               <h3 className="text-2xl font-semibold">{card.title}</h3>
-              <p className="mt-2 text-white/80">{card.body}</p>
+              <p className="mt-2 text-white/90">{card.body}</p>
             </div>
           ))}
           {/* 마지막 카드가 풀릴 여백 */}

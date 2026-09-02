@@ -5,12 +5,14 @@ import { useRevealOnScroll } from "@/gsap-lab/primitives";
 import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
 
 const BLOCKS = [
+  // 어두운 amber 그라데이션 — 카드 위 흰 텍스트가 WCAG AA(4.5:1)를 넘도록.
+  // yellow-500/600(#eab308·#ca8a04)은 흰색과 대비가 2:1 수준이라 제외.
   { title: "지표 A", background: "#422006" },
-  { title: "지표 B", background: "#713f12" },
-  { title: "지표 C", background: "#854d0e" },
-  { title: "지표 D", background: "#a16207" },
-  { title: "지표 E", background: "#ca8a04" },
-  { title: "지표 F", background: "#eab308" },
+  { title: "지표 B", background: "#5a2f0d" },
+  { title: "지표 C", background: "#713f12" },
+  { title: "지표 D", background: "#7c4a13" },
+  { title: "지표 E", background: "#854d0e" },
+  { title: "지표 F", background: "#92561a" },
 ];
 
 /**

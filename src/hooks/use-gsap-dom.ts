@@ -6,11 +6,21 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 /**
- * 개발 환경에서만 GSAP 인스턴스·카운터를 `window.__gsapLab`에 노출한다.
- * E2E(누수·트리거 예산) 검증용. 프로덕션 번들에는 트리 셰이킹으로 빠진다.
+ * GSAP 인스턴스·카운터를 `window.__gsapLab`에 노출한다.
+ * E2E(누수·트리거 예산) 검증용.
+ *
+ * - 개발 환경(`bun dev`)에서는 항상 노출된다.
+ * - 프로덕션 빌드에서는 기본적으로 노출되지 않고 트리 셰이킹으로 제거된다.
+ *   단, `NEXT_PUBLIC_E2E === "1"`로 빌드하면(= Playwright webServer) 노출된다.
+ *   실제 배포에는 이 환경변수가 없으므로 프로덕션 번들에는 그대로 빠진다.
  */
 function exposeDebugHandle(): void {
-  if (process.env.NODE_ENV === "production") return;
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.NEXT_PUBLIC_E2E !== "1"
+  ) {
+    return;
+  }
   if (typeof window === "undefined") return;
   const w = window as unknown as {
     __gsapLab?: {

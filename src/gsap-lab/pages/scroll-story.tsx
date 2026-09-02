@@ -14,11 +14,13 @@ const PARALLAX_LAYERS = [
   { label: "전경 레이어", background: "#7c3aed", speed: 20 },
 ];
 
+// 배경은 어둡게 — 위에 얹는 흰 텍스트(text-white/80 본문 포함)가
+// WCAG AA(4.5:1)를 넘도록. sky-700·teal-600은 흰색과 3.4~4.4:1이었다.
 const FEATURE_BLOCKS = [
-  { title: "실시간 협업", background: "#0369a1" },
-  { title: "버전 히스토리", background: "#0d9488" },
-  { title: "AI 요약", background: "#9333ea" },
-  { title: "오프라인 우선", background: "#c2410c" },
+  { title: "실시간 협업", background: "#075985" },
+  { title: "버전 히스토리", background: "#115e59" },
+  { title: "AI 요약", background: "#6b21a8" },
+  { title: "오프라인 우선", background: "#9a3412" },
 ];
 
 /**
@@ -27,7 +29,7 @@ const FEATURE_BLOCKS = [
  * 시연 항목:
  * - 히어로 `pin` + `scrub` (스크롤로 배경 스케일·텍스트 이동)
  * - 패럴랙스 레이어별 `yPercent` 스크럽
- * - 스크롤 진행 인디케이터(`onUpdate`로 상단 바 width)
+ * - 스크롤 진행 인디케이터(상단 바 `scaleX` 스크럽 — transform이라 리플로우 없음)
  * - 기능 블록 뷰포트 진입 시 1회 재생(`toggleActions`)
  */
 export function ScrollStoryPage() {
@@ -40,17 +42,22 @@ export function ScrollStoryPage() {
         void document.fonts.ready.then(() => ScrollTrigger.refresh());
       }
 
-      // 진행 인디케이터: 전체 문서 스크롤 진행률을 바 width로.
-      g.to(".progress-bar", {
-        width: "100%",
-        ease: "none",
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: true,
+      // 진행 인디케이터: 전체 문서 스크롤 진행률을 바 scaleX로.
+      // width 대신 transform(scaleX)이라 매 프레임 리플로우가 없다.
+      g.fromTo(
+        ".progress-bar",
+        { scaleX: 0, transformOrigin: "left center" },
+        {
+          scaleX: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+          },
         },
-      });
+      );
 
       // 기능 블록은 모션 축소와 무관하게 항상 보여야 하므로 먼저 최종 상태.
       g.set(".feature-block", { autoAlpha: 1, y: 0 });
@@ -109,9 +116,9 @@ export function ScrollStoryPage() {
 
   return (
     <div ref={container} className="bg-neutral-950 text-neutral-100">
-      {/* 스크롤 진행 인디케이터 */}
+      {/* 스크롤 진행 인디케이터 — 바는 scaleX(왼쪽 기준)로 채워진다 */}
       <div className="fixed left-0 top-0 z-50 h-1 w-full bg-white/10">
-        <div className="progress-bar h-full w-0 bg-white" />
+        <div className="progress-bar h-full w-full origin-left scale-x-0 bg-white" />
       </div>
 
       {/* 히어로 (핀 고정) */}
@@ -163,7 +170,7 @@ export function ScrollStoryPage() {
               aria-hidden
             />
             <h2 className="text-xl font-semibold">{block.title}</h2>
-            <p className="mt-2 text-sm text-white/80">
+            <p className="mt-2 text-sm text-white/85">
               뷰포트에 들어올 때 한 번 등장합니다. 스크롤을 되돌려도 다시 재생되지
               않습니다.
             </p>
@@ -171,7 +178,7 @@ export function ScrollStoryPage() {
         ))}
       </section>
 
-      <footer className="px-6 py-20 text-center text-sm text-neutral-500">
+      <footer className="bg-neutral-950 px-6 py-20 text-center text-sm text-neutral-400">
         Fluxnote — 스크롤 스토리 데모 · 모든 이미지 자리는 색 블록으로 대체
       </footer>
     </div>

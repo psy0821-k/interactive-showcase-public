@@ -6,9 +6,9 @@ import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
 
 const STATS = [
   { label: "활성 팀", value: 12_400, suffix: "+", background: "#14532d" },
-  { label: "생성된 노트", value: 3_200_000, suffix: "", background: "#166534" },
-  { label: "가동률", value: 99.98, suffix: "%", decimals: 2, background: "#15803d" },
-  { label: "지원 언어", value: 27, suffix: "", background: "#16a34a" },
+  { label: "생성된 노트", value: 3_200_000, suffix: "", background: "#15602f" },
+  { label: "가동률", value: 99.98, suffix: "%", decimals: 2, background: "#166534" },
+  { label: "지원 언어", value: 27, suffix: "", background: "#176b39" },
 ];
 
 /**
@@ -43,7 +43,7 @@ export function CounterOnScrollPage() {
                 <span className="stat-value">0</span>
                 {stat.suffix}
               </p>
-              <p className="mt-1 text-sm text-white/75">{stat.label}</p>
+              <p className="mt-1 text-sm text-white/85">{stat.label}</p>
             </article>
           ))}
         </section>

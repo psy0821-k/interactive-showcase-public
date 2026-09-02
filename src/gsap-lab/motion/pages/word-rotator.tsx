@@ -60,7 +60,16 @@ export function WordRotatorPage() {
         ref={container}
         className="flex min-h-[70vh] items-center justify-center px-6"
       >
-        <p className="flex flex-wrap items-center justify-center gap-x-4 text-4xl font-bold sm:text-6xl">
+        {/*
+          스크린리더는 회전하는 단어를 하나씩 낭독하면 안 된다(스킬 6절).
+          접근성 트리에는 대표 문구 하나만 남기고, 시각적 회전 연출 전체는
+          aria-hidden으로 가린다.
+        */}
+        <p className="sr-only">우리는 더 나은 {WORDS[0]} 만듭니다</p>
+        <p
+          className="flex flex-wrap items-center justify-center gap-x-4 text-4xl font-bold sm:text-6xl"
+          aria-hidden
+        >
           <span className="text-white/70">우리는 더 나은</span>
           {/* 한 줄 높이만 보이는 마스크 */}
           <span

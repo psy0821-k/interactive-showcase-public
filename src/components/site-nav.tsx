@@ -20,7 +20,7 @@ export function SiteNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="border-b border-neutral-200 dark:border-neutral-800">
+    <nav className="relative z-10 border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
       <div className="mx-auto flex w-full max-w-6xl items-center gap-1 px-6 py-3">
         <span className="mr-3 text-sm font-semibold">Skill Showcase</span>
         {LINKS.map((link) => {
