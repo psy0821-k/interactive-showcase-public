@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 /** 갤러리 트랙 링크. 상세 페이지(`/showcase/*`)에서도 맥락이 유지된다. */
 const LINKS = [
   { href: "/", label: "3D" },
-  { href: "/gsap", label: "GSAP" },
   { href: "/gsap-lab", label: "GSAP Lab" },
   { href: "/landings", label: "Landings" },
 ] as const;
@@ -28,9 +27,7 @@ export function SiteNav() {
           const active =
             link.href === "/"
               ? pathname === "/"
-              : link.href === "/gsap"
-                ? pathname === "/gsap" || pathname.startsWith("/gsap/")
-                : pathname.startsWith(link.href);
+              : pathname.startsWith(link.href);
           return (
             <Link
               key={link.href}
