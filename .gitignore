@@ -66,3 +66,7 @@ coverage/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+/.playwright-mcp/
+
+# 브라우저 디버그 스크린샷
+/*.png
