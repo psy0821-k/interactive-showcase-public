@@ -2,7 +2,7 @@
 
 > axe-core 자동 스캔 결과 + 코드로 확인된 항목 + 사람이 수행해야 하는 항목.
 >
-> 최종 갱신: 2026-08-31
+> 최종 갱신: 2026-09-03
 
 ---
 
@@ -11,15 +11,15 @@
 axe-core 4.13.0, WCAG 2.0/2.1 A·AA 태그 (`wcag2a`/`wcag2aa`/`wcag21a`/`wcag21aa`).
 `@axe-core/playwright`로 프로덕션 빌드를 스캔한다.
 
-**75개 페이지 전부 violations 0** — 갤러리 홈 `/` + GSAP 갤러리 `/gsap` +
-R3F 상세 페이지 39개 + GSAP Lab 데모 34개. `e2e/axe-full-scan.spec.ts`,
+**71개 페이지 전부 violations 0** — 갤러리 홈 `/` + GSAP 갤러리 `/gsap` +
+R3F 상세 페이지 39개 + GSAP Lab 데모 30개. `e2e/axe-full-scan.spec.ts`,
 CI e2e 잡에 포함.
 
 - **`/showcase/*` (R3F 캔버스)**: `color-contrast`를 규칙에서 제외한다 —
   캔버스 위 텍스트는 배경이 WebGL 렌더 결과라 axe가 대비를 계산할 수 없다
   (사람 확인, §3).
 - **`/gsap-lab/*` (순수 DOM)**: `color-contrast`를 **켠다.** 캔버스가 없어
-  배경 계산이 가능하므로 자동 게이트로 다룬다. 다크·라이트 양쪽에서 34개
+  배경 계산이 가능하므로 자동 게이트로 다룬다. 다크·라이트 양쪽에서 30개
   데모 전부 WCAG AA(4.5:1) 통과.
 - 로컬 실행: `bun run test:a11y`. 빠른 스모크만 돌릴 때는 `bun run test:e2e`
   (전수 스캔 제외).
@@ -103,14 +103,14 @@ CI e2e 잡에 포함.
   [x] color-contrast (R3F 상세) — 캔버스 위 텍스트는 axe가 배경을 계산할 수
       없어 사람이 확인. 다크/라이트 양쪽에서 4.5:1 이상. 이상 없음
   [x] color-contrast (GSAP Lab) — 순수 DOM이라 axe 전수 스캔이 자동으로
-      검증. 34개 데모 전부 다크·라이트 양쪽 통과 (§1)
+      검증. 30개 데모 전부 다크·라이트 양쪽 통과 (§1)
 
 [모바일]
   [x] 실기기 터치 — Galaxy S24+ (Android Chrome):
       한 손가락 = 페이지 스크롤(캔버스 위에서도), 두 손가락 = 회전·줌 확인
 
 [전수]
-  [x] 75개 페이지 axe 전수 스캔 — violations 0 (§1)
+  [x] 71개 페이지 axe 전수 스캔 — violations 0 (§1)
   [x] Lighthouse — Performance 99 / Accessibility 100 /
       Best Practices 100 / SEO 100
 ```

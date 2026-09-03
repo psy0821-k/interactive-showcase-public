@@ -14,7 +14,7 @@
 각 기법을 **라이브 쇼케이스**로 이 갤러리에 전시한다. 문서의 핵심은 기법
 사용법이 아니라 **"이렇게 하면 조용히 깨진다"는 함정과 그 회피법**이다.
 
-- **쇼케이스**: `src/showcases/{category}/{name}/index.tsx` × 38 (8개 카테고리)
+- **쇼케이스**: `src/showcases/{category}/{name}/index.tsx` × 39 (8개 카테고리)
 - **스택**: Next.js 16 (App Router) · React 19 · React Three Fiber v9 · three.js 0.185
 
 ---
@@ -23,8 +23,8 @@
 
 ### 문제
 
-쇼케이스 38개가 각자 `<Canvas>`·카메라 컨트롤·에러 처리·리사이즈를 구현하면,
-(1) 코드가 38배로 중복되고 (2) R3F 캔버스 중첩 같은 실수가 반복되며
+쇼케이스 39개가 각자 `<Canvas>`·카메라 컨트롤·에러 처리·리사이즈를 구현하면,
+(1) 코드가 39배로 중복되고 (2) R3F 캔버스 중첩 같은 실수가 반복되며
 (3) 갤러리 전역 정책(모션 축소, WebGL 폴백)을 한 곳에서 못 바꾼다.
 
 ### 결정 — 쇼케이스는 "씬"만 반환한다
@@ -61,7 +61,7 @@ export const meta = {
 | 캔버스 생성 | 셸이 `<Canvas shadows>` 1개 | 캔버스 중첩 방지 |
 | SSR 회피 | `dynamic(() => loader().then(m => m.Scene), { ssr: false })` | R3F 재조정자가 `supportsHydration: false` — 하이드레이션 불가 |
 | 동적 컴포넌트 안정성 | `dynamic()`을 **모듈 로드 시 한 번** 호출해 `slug → Component` 맵 생성 | 렌더 중 `dynamic()` 호출 시 매 렌더 새 컴포넌트 → 상태 초기화 |
-| 코드 분할 유지 | 위 맵을 만들어도 `dynamic`이 청크를 사용 시점까지 지연 로드 | 38개 씬을 한 번에 받지 않음 |
+| 코드 분할 유지 | 위 맵을 만들어도 `dynamic`이 청크를 사용 시점까지 지연 로드 | 39개 씬을 한 번에 받지 않음 |
 | 카메라 컨트롤 | 셸이 `<OrbitControls makeDefault>` | 쇼케이스가 카메라를 직접 몰면 `controlsMode: "none"`으로 끔 |
 | 에러 격리 | `SceneErrorBoundary`로 감싸 폴백 UI (`role="alert"`) | 한 씬이 던져도 갤러리 전체는 살아 있음 |
 | WebGL 미지원 | `<Canvas fallback={...}>` (`role="status"`) | 안내 메시지로 대체 |
@@ -246,15 +246,15 @@ Lighthouse: Performance 99 / Accessibility·Best Practices·SEO 100.
 | 타입 | `bun run build` | ✅ 통과 |
 | 린트 | `bun run lint` | ✅ 0 errors / 0 warnings |
 | 맞춤법 | `bun run spell` | ✅ 통과 |
-| 육안(38 R3F 쇼케이스 + 34 GSAP Lab) | 브라우저 수동 | ✅ 대부분 |
+| 육안(39 R3F 쇼케이스 + 30 GSAP Lab) | 브라우저 수동 | ✅ 대부분 |
 | 배포 | Vercel | ✅ 완료 |
-| **접근성 (axe)** | `@axe-core/playwright`, WCAG 2.0/2.1 A·AA | ✅ **75개 페이지 전수 violations 0** — GSAP Lab은 color-contrast 포함 (`docs/ACCESSIBILITY.md`) |
+| **접근성 (axe)** | `@axe-core/playwright`, WCAG 2.0/2.1 A·AA | ✅ **71개 페이지 전수 violations 0** — GSAP Lab은 color-contrast 포함 (`docs/ACCESSIBILITY.md`) |
 | 접근성 (사람) | NVDA · 키보드 · 발작 육안 · reduced-motion · 색 대비 | ✅ 완료, 버그 발견·수정 (§4-1) |
 | Lighthouse | 상세 페이지 | ✅ Perf 99 / A11y·BP·SEO 100 |
 | 실측 성능 | Frame Rendering Stats, 30초 × 3회, RTX 3060 | ✅ 3씬 (`docs/PERFORMANCE.md`) |
 | 실기기 모바일 | Galaxy S24+ (Android Chrome) | ✅ 터치 라우팅 확인 |
 | E2E | Playwright (캔버스 a11y / 상세 로드 / 갤러리 네비 / GSAP 트윈 누수) | ✅ 통과 |
-| axe 전수 | `e2e/axe-full-scan.spec.ts` (75 페이지) | ✅ CI e2e 잡 포함 |
+| axe 전수 | `e2e/axe-full-scan.spec.ts` (71 페이지) | ✅ CI e2e 잡 포함 |
 | 단위 | Vitest + RTL | ✅ |
 | CI | GitHub Actions (`.github/workflows/ci.yml`: build + lint + spell + test / e2e + axe) | ✅ |
 

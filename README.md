@@ -17,7 +17,7 @@
 - **"이렇게 하면 조용히 깨진다"** (실제로 마주친 버그)
 - **최신 기술 스택 검증** (Next.js 16 + R3F v9 + three.js 0.185)
 - **실무 패턴** (에러 처리, 성능 최적화, 접근성)
-- **라이브 쇼케이스** (38개 씬, 직접 상호작용 가능)
+- **라이브 쇼케이스** (R3F 39개 + GSAP Lab 30개 + 랜딩 11개, 직접 상호작용 가능)
 
 ---
 
@@ -35,7 +35,7 @@
 
 ## 아키텍처: 셸 Contract
 
-모든 38개 쇼케이스가 같은 구조를 따릅니다 — 3D 씬만 반환하고, `<Canvas>`·`<OrbitControls>`는 셸(`showcase-canvas.tsx`)이 제공합니다.
+모든 39개 R3F 쇼케이스가 같은 구조를 따릅니다 — 3D 씬만 반환하고, `<Canvas>`·`<OrbitControls>`는 셸(`showcase-canvas.tsx`)이 제공합니다.
 
 ```tsx
 export function Scene() {
@@ -61,7 +61,7 @@ export const meta = {
 ## 성능 & 접근성
 
 - **성능**: 프레임 개수 → 드로우콜/정점/픽셀/그림자 비용 → 다운로드·GPU 메모리 순으로 계측·최적화하는 층위 사고 모델을 씁니다. 담당 skill과 실측 방법은 [`docs/TECHNICAL-HIGHLIGHTS.md`](docs/TECHNICAL-HIGHLIGHTS.md) §3.
-- **접근성**: 캔버스 `role="img"` + `aria-label`, `prefers-reduced-motion` 대응, WebGL 폴백, ErrorBoundary `role="alert"`을 셸이 공통 제공합니다. axe-core 검증 결과는 [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md) (**violations 0**).
+- **접근성**: 캔버스 `role="img"` + `aria-label`, `prefers-reduced-motion` 대응, WebGL 폴백, ErrorBoundary `role="alert"`을 셸이 공통 제공합니다. axe-core 전수 스캔 **71개 페이지 violations 0** — 상세는 [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md).
 
 ---
 
@@ -93,8 +93,9 @@ interactive-gallery/
 ├── src/
 │   ├── app/                  # Next.js App Router
 │   ├── components/           # 갤러리·셸·에러 바운더리
-│   └── showcases/            # 38개 쇼케이스, 8개 카테고리
-│       └── {slug}/index.tsx  # Scene + meta export (셸 Contract)
+│   ├── showcases/            # 39개 R3F 쇼케이스 — {category}/{slug}/{index.tsx,meta.ts}
+│   ├── gsap-lab/             # 30개 순수 DOM GSAP 데모
+│   └── landings/             # 11개 완성형 랜딩페이지
 └── package.json
 ```
 
@@ -106,16 +107,16 @@ Next.js 16.3 (React 19) · React Three Fiber v9 · three.js 0.185 · drei · @re
 
 ---
 
-## 다음 계획
+## 진행 상황
 
-| 항목                                   | 상태            |
-| -------------------------------------- | --------------- |
-| 38개 쇼케이스 + 셸 Contract            | ✅ 완료         |
-| Vercel 배포                            | ✅ 완료         |
-| axe 접근성 스캔 (대표 4페이지)         | ✅ violations 0 |
-| 실측 성능 3씬 · E2E · CI · 실기기 확인 | ⏳ 진행 중      |
-
-애니메이션 타임라인(GSAP), 다중 뷰포트, 3D 변환 툴, 데이터 바인딩은 아직 없습니다.
+| 항목                                    | 상태            |
+| --------------------------------------- | --------------- |
+| 39개 R3F 쇼케이스 + 셸 Contract         | ✅ 완료         |
+| GSAP Lab 30개 · 랜딩 11개               | ✅ 완료         |
+| Vercel 배포                             | ✅ 완료         |
+| axe 접근성 전수 스캔 (71개 페이지)      | ✅ violations 0 |
+| E2E · CI · 실측 성능                    | ✅ 완료         |
+| 실기기 확인                             | ⏳ 진행 중      |
 
 ---
 
@@ -126,4 +127,4 @@ Next.js 16.3 (React 19) · React Three Fiber v9 · three.js 0.185 · drei · @re
 
 ---
 
-**마지막 갱신:** 2026-08-31 · **관리자:** psy0821-k
+**마지막 갱신:** 2026-09-03 · **관리자:** psy0821-k

@@ -9,7 +9,7 @@ export interface ShowcaseModule {
 
 // Scene 로더 — 상세 페이지(showcase-canvas.tsx)에서만 import 한다.
 //
-// 아래 glob이 38개 쇼케이스의 three/drei/rapier import를 번들 그래프에
+// 아래 glob이 모든 쇼케이스의 three/drei/rapier import를 번들 그래프에
 // 연결한다. registry.ts(meta만)와 분리해, 갤러리 홈이 이 파일을 import 하지
 // 않도록 한다. lazy glob이므로 각 index.tsx는 개별 청크가 되고, 상세 진입
 // 시에만 로드된다.

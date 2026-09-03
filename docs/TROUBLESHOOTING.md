@@ -107,5 +107,5 @@ meta를 걷는다. 이 glob은 **빌드 타임 서버 컨텍스트에서 신뢰�
 
 `src/app/showcase/[slug]/page.tsx`(서버)에서 `findShowcaseOnServer(slug)`
 결과가 없으면 `notFound()`를 호출한다 → Next가 404 상태로 `not-found.tsx`를
-렌더한다. `generateStaticParams`가 유효한 38개만 프리렌더하므로 그 외
+렌더한다. `generateStaticParams`가 유효한 39개만 프리렌더하므로 그 외
 경로는 빌드 결과에 존재하지 않는다.

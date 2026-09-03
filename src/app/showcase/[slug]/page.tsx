@@ -16,7 +16,7 @@ import { SITE_URL } from "@/lib/site";
 /** 트랙별 갤러리 경로. 직접 URL 진입 시 뒤로가기 폴백에 쓴다. */
 const GALLERY_PATH = { "3d": "/", gsap: "/gsap" } as const;
 
-/** 38개 상세 페이지를 빌드 타임에 정적 생성한다. */
+/** 모든 쇼케이스 상세 페이지를 빌드 타임에 정적 생성한다. */
 export async function generateStaticParams() {
   const entries = await getShowcaseEntries();
   return entries.map((entry) => ({ slug: entry.slug }));

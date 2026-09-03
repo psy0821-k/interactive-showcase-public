@@ -12,7 +12,7 @@
 
 | 항목 | 내용 |
 |---|---|
-| 규모 | 34개 데모, 5개 카테고리 (scroll 19 / motion 4 / svg 4 / landing 4 / pointer 3) |
+| 규모 | 30개 데모, 4개 카테고리 (scroll 19 / motion 4 / svg 4 / pointer 3) |
 | 스택 | Next.js 16 App Router · React 19 · GSAP 3.15 · `@gsap/react` `useGSAP` · Tailwind 4 · TypeScript(any 금지) |
 | 유료 플러그인 | **0** (SplitText·DrawSVG·MorphSVG·Flip·ScrollSmoother 전부 미사용, 수동 구현) |
 | 빌드 | 90 static pages, tsc/lint/spell/build 4-게이트 전부 green |
@@ -76,7 +76,7 @@
 
 ```
 src/gsap-lab/
-├── registry.ts              # 34개 데모 메타 (카테고리·태그·caveat), R3F registry와 무관
+├── registry.ts              # 30개 데모 메타 (카테고리·태그·caveat), R3F registry와 무관
 ├── demo-shell.tsx           # motion/pointer/svg용 가벼운 셸
 ├── scroll/
 │   ├── scroll-trigger-setup.ts   # registerPlugin 1회 + 공통 헬퍼
@@ -208,7 +208,7 @@ Flip은 목표 rect 계산 후 transform 트윈. 각각의 **적용 한계**도 
 
 **Q. 다음 단계는?**
 → 3-3 결정론적 E2E: `e2e/gsap-lab.spec.ts`에 "스크롤 0/0.25/0.5/0.75/1.0 어디서 리로드해도
-그 지점 상태가 일치"를 34개 데모 각 1~3개 테스트로. rAF 부드러운 스크롤 헬퍼 공용화.
+그 지점 상태가 일치"를 30개 데모 각 1~3개 테스트로. rAF 부드러운 스크롤 헬퍼 공용화.
 그러면 S급 게이트 6번 충족.
 
 ---

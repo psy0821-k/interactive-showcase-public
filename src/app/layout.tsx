@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 const SITE_TITLE = "3D Skill Showcase";
 const SITE_DESCRIPTION =
-  "React Three Fiber로 만든 3D 웹 기법 쇼케이스 38선. 재질·조명·포스트프로세싱·물리·" +
+  "React Three Fiber로 만든 3D 웹 기법 쇼케이스 39선. 재질·조명·포스트프로세싱·물리·" +
   "스크롤 인터랙션을 실제 동작하는 예제로 보여주고, 각 기법의 함정과 회피법을 정리했다.";
 
 export const metadata: Metadata = {
