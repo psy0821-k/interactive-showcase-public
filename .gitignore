@@ -10,6 +10,9 @@ bun.lockb
 dist/
 build/
 
+# Next 자동 생성 (빌드마다 경로가 바뀐다)
+next-env.d.ts
+
 # 프로덕션
 /build
 
