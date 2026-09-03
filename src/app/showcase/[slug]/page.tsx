@@ -88,9 +88,18 @@ export default async function ShowcasePage({
       />
 
       {/*
+        뒤로가기 — 제목 위에 둔다(gsap-lab 상세와 통일). 갤러리에서 진입했으면
+        router.back()이 스크롤 위치까지 복원하고, 직접 URL이면 트랙에 맞는
+        갤러리로 폴백한다. router를 쓰므로 클라이언트 컴포넌트다.
+      */}
+      <div className="mb-4">
+        <BackButton fallbackHref={galleryPath} />
+      </div>
+
+      {/*
         SEO·접근성을 위해 텍스트 콘텐츠(제목·설명·분류·사용 기법)는 서버에서
-        렌더한다. 클라이언트 컴포넌트인 ShowcaseDetail은 three.js 캔버스와
-        뒤로가기 인터랙션만 담당한다.
+        렌더한다. 클라이언트 컴포넌트인 ShowcaseDetail은 three.js 캔버스만
+        담당한다.
       */}
       <header className="flex flex-col gap-3">
         <h1 className="text-2xl font-semibold">{meta.title}</h1>
@@ -126,15 +135,6 @@ export default async function ShowcasePage({
       </header>
 
       {/*
-        뒤로가기 — 미리보기 이미지 위에 둔다. 갤러리에서 진입했으면
-        router.back()이 스크롤 위치까지 복원하고, 직접 URL이면 트랙에 맞는
-        갤러리로 폴백한다. router를 쓰므로 클라이언트 컴포넌트다.
-      */}
-      <div className="mt-6">
-        <BackButton fallbackHref={galleryPath} />
-      </div>
-
-      {/*
         캔버스 로드 전 프리뷰이자 이미지 검색 대상인 정적 썸네일.
         크롤러·JS 비활성 환경에서 이 씬이 무엇인지 보여주는 유일한 시각 자료다.
         eslint-disable: 정적 800x450 webp라 next/image 리사이징 이득이 없다.
@@ -146,7 +146,7 @@ export default async function ShowcasePage({
         width={800}
         height={450}
         fetchPriority="high"
-        className="mt-3 aspect-video w-full rounded-lg bg-neutral-100 object-cover dark:bg-neutral-900"
+        className="mt-6 aspect-video w-full rounded-lg bg-neutral-100 object-cover dark:bg-neutral-900"
       />
 
       <ShowcaseDetail slug={slug} title={meta.title} />
