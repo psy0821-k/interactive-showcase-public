@@ -258,10 +258,3 @@ Lighthouse: Performance 99 / Accessibility·Best Practices·SEO 100.
 | axe 전수                            | `e2e/axe-full-scan.spec.ts` (71 페이지)                                              | ✅ CI e2e 잡 포함                                                                               |
 | 단위                                | Vitest + RTL                                                                         | ✅                                                                                              |
 | CI                                  | GitHub Actions (`.github/workflows/ci.yml`: build + lint + spell + test / e2e + axe) | ✅                                                                                              |
-
----
-
-## 8. 다음 계획
-
-- `render-budget-meter` 온디맨드 렌더링 정지 시 GPU 0 확인
-- 주차 2: 실무형 랜딩페이지 (쇼케이스 조합 + GSAP timeline)
