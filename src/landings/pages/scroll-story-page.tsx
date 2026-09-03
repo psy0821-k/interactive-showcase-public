@@ -24,15 +24,18 @@ const FEATURE_BLOCKS = [
 ];
 
 /**
- * `/gsap-lab/scroll-story` — ScrollTrigger 스크롤 연동 랜딩.
+ * `/landings/scroll-story` — ScrollTrigger 스크롤 연동 랜딩.
  *
  * 시연 항목:
  * - 히어로 `pin` + `scrub` (스크롤로 배경 스케일·텍스트 이동)
  * - 패럴랙스 레이어별 `yPercent` 스크럽
  * - 스크롤 진행 인디케이터(상단 바 `scaleX` 스크럽 — transform이라 리플로우 없음)
  * - 기능 블록 뷰포트 진입 시 1회 재생(`toggleActions`)
+ *
+ * breadcrumb·caveat·프롬프트 패널은 `landings/[slug]/page.tsx`가
+ * `LandingDomHeader`로 씌운다. 이 컴포넌트는 콘텐츠만 렌더한다.
  */
-export function ScrollStoryPage() {
+export function ScrollStoryLandingPage() {
   const container = useRef<HTMLDivElement>(null);
 
   useGsapDom(
@@ -115,7 +118,7 @@ export function ScrollStoryPage() {
   );
 
   return (
-    <main ref={container} className="bg-neutral-950 text-neutral-100">
+    <div ref={container} className="bg-neutral-950 text-neutral-100">
       {/* 스크롤 진행 인디케이터 — 바는 scaleX(왼쪽 기준)로 채워진다 */}
       <div className="fixed left-0 top-0 z-50 h-1 w-full bg-white/10">
         <div className="progress-bar h-full w-full origin-left scale-x-0 bg-white" />
@@ -179,8 +182,8 @@ export function ScrollStoryPage() {
       </section>
 
       <footer className="bg-neutral-950 px-6 py-20 text-center text-sm text-neutral-400">
-        Fluxnote — 스크롤 스토리 데모 · 모든 이미지 자리는 색 블록으로 대체
+        Landings · 스크롤 스토리 · 순수 DOM + GSAP ScrollTrigger
       </footer>
-    </main>
+    </div>
   );
 }

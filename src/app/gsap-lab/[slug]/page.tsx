@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findLabEntry, LAB_ENTRIES } from "@/gsap-lab/registry";
-import { ScrollStoryPage } from "@/gsap-lab/pages/scroll-story";
-import { PricingRevealPage } from "@/gsap-lab/pages/pricing-reveal";
-import { PointerPlayPage } from "@/gsap-lab/pages/pointer-play";
-import { TabTransitionPage } from "@/gsap-lab/pages/tab-transition";
 import { ParallaxLayersPage } from "@/gsap-lab/scroll/pages/parallax-layers";
 import { HeroToSectionPage } from "@/gsap-lab/scroll/pages/hero-to-section";
 import { RevealSequencePage } from "@/gsap-lab/scroll/pages/reveal-sequence";
@@ -39,11 +35,6 @@ import { IconLineTracePage } from "@/gsap-lab/svg/pages/icon-line-trace";
 
 /** slug → 페이지 컴포넌트. registry와 1:1 대응. */
 const PAGE_COMPONENTS: Record<string, () => React.JSX.Element> = {
-  // 랜딩페이지
-  "scroll-story": ScrollStoryPage,
-  "pricing-reveal": PricingRevealPage,
-  "pointer-play": PointerPlayPage,
-  "tab-transition": TabTransitionPage,
   // 스크롤 효과 데모
   "parallax-layers": ParallaxLayersPage,
   "hero-to-section": HeroToSectionPage,

@@ -54,15 +54,18 @@ function SplitHeading({ text }: { text: string }) {
 }
 
 /**
- * `/gsap-lab/tab-transition` — 전환 이펙트 랜딩.
+ * `/landings/tab-transition` — 전환 이펙트 랜딩.
  *
  * 시연 항목:
  * - 페이지 진입 오버레이(위→아래로 걷힘)
  * - 활성 탭 패널의 글자 단위 stagger 제목
  * - 탭 전환 시 패널 크로스페이드(이전 패널 out → 새 패널 in)
  * - 탭 상태는 state, 애니메이션은 `useGsapDom` deps로 재실행
+ *
+ * breadcrumb·caveat·프롬프트 패널은 `landings/[slug]/page.tsx`가
+ * `LandingDomHeader`로 씌운다. 이 컴포넌트는 콘텐츠만 렌더한다.
  */
-export function TabTransitionPage() {
+export function TabTransitionLandingPage() {
   const container = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState(TABS[0].id);
@@ -121,7 +124,7 @@ export function TabTransitionPage() {
   const activeTab = TABS.find((tab) => tab.id === activeId) ?? TABS[0];
 
   return (
-    <main ref={container} className="relative min-h-screen overflow-hidden bg-neutral-950 text-neutral-100">
+    <div ref={container} className="relative min-h-screen overflow-hidden bg-neutral-950 text-neutral-100">
       {/* 진입 오버레이 */}
       <div
         className="enter-overlay pointer-events-none absolute inset-0 z-40 bg-neutral-900"
@@ -179,6 +182,6 @@ export function TabTransitionPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

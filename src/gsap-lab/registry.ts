@@ -6,25 +6,22 @@
  * 이미지가 필요한 자리는 전부 배경색만 다른 `<div>`다.
  *
  * 항목은 카테고리로 나뉜다.
- * - `landing`: 인터랙션 유형별 완성형 랜딩페이지
  * - `motion`: Tween·Timeline·Stagger — 스크롤과 무관한 시간 기반 애니메이션
  * - `scroll`: ScrollTrigger·Pin·Scrub·Parallax·가로 스크롤
  * - `pointer`: 마우스/포인터 위치에 반응하는 인터랙션
  * - `svg`: SVG path·stroke·shape 애니메이션
+ *
+ * 완성형 랜딩페이지는 이 랩이 아니라 `/landings` 트랙에 있다.
  */
 
 /** 랩 항목의 카테고리. */
-export type LabCategory = "landing" | "motion" | "scroll" | "pointer" | "svg";
+export type LabCategory = "motion" | "scroll" | "pointer" | "svg";
 
 /** 카테고리 표시명·설명. */
 export const LAB_CATEGORY_META: Record<
   LabCategory,
   { label: string; description: string }
 > = {
-  landing: {
-    label: "랜딩페이지",
-    description: "인터랙션 유형별로 여러 기법을 엮은 완성형 랜딩페이지입니다.",
-  },
   motion: {
     label: "모션 (Tween·Timeline·Stagger)",
     description:
@@ -75,52 +72,6 @@ export interface LabEntry {
 }
 
 export const LAB_ENTRIES: LabEntry[] = [
-  // ─── 랜딩페이지 ───────────────────────────────────────────
-  {
-    slug: "scroll-story",
-    category: "landing",
-    title: "Fluxnote — 스크롤 스토리",
-    tag: "스크롤 연동 랜딩",
-    description:
-      "히어로 핀 고정, 패럴랙스 레이어, 스크롤 진행 인디케이터를 한 페이지에 " +
-      "엮은 롱폼 랜딩.",
-    usedSkills: ["gsap-dom-scrolltrigger", "gsap-dom-core"],
-    accent: "linear-gradient(135deg, #1e3a8a, #7c3aed)",
-  },
-  {
-    slug: "pricing-reveal",
-    category: "landing",
-    title: "Fluxnote — 요금제 공개",
-    tag: "시퀀스 등장 랜딩",
-    description:
-      "타임라인과 stagger로 히어로 → 기능 → 요금제 → FAQ가 순서대로 등장하는 " +
-      "제품 소개 페이지.",
-    usedSkills: ["gsap-dom-core", "gsap-dom-motion"],
-    accent: "linear-gradient(135deg, #047857, #0ea5e9)",
-  },
-  {
-    slug: "pointer-play",
-    category: "landing",
-    title: "Fluxnote — 포인터 플레이",
-    tag: "포인터 인터랙션 랜딩",
-    description:
-      "마그네틱 CTA 버튼, quickTo 커스텀 커서, 호버 틸트 기능 그리드로 구성한 " +
-      "에이전시풍 인터랙티브 히어로.",
-    usedSkills: ["gsap-dom-interaction", "gsap-dom-core"],
-    accent: "linear-gradient(135deg, #b91c1c, #ea580c)",
-  },
-  {
-    slug: "tab-transition",
-    category: "landing",
-    title: "Fluxnote — 탭 전환",
-    tag: "전환 이펙트 랜딩",
-    description:
-      "페이지 진입 오버레이, 글자 단위 스태거 제목, 탭 전환 크로스페이드로 묶은 " +
-      "기능 둘러보기 페이지.",
-    usedSkills: ["gsap-dom-motion", "gsap-dom-core"],
-    accent: "linear-gradient(135deg, #7c2d12, #a21caf)",
-  },
-
   // ─── 스크롤 효과 데모 ─────────────────────────────────────
   {
     slug: "parallax-layers",
@@ -490,5 +441,24 @@ export const LAB_CATEGORY_ORDER: LabCategory[] = [
   "motion",
   "pointer",
   "svg",
-  "landing",
 ];
+
+/**
+ * 갤러리 필터 chip용 카테고리 목록.
+ *
+ * chip은 공간이 좁으므로 `LAB_CATEGORY_META.label`의 괄호 보조설명을 뗀
+ * 짧은 이름을 쓴다. 순서는 `LAB_CATEGORY_ORDER`를 따른다.
+ */
+export const LAB_CATEGORY_FILTERS: { value: LabCategory; label: string }[] = [
+  { value: "scroll", label: "스크롤 효과" },
+  { value: "motion", label: "모션" },
+  { value: "pointer", label: "포인터" },
+  { value: "svg", label: "SVG" },
+];
+
+/** 갤러리 목록이 쓰는 표시 순서(카테고리 → 정의 순서) 정렬된 전체 목록. */
+export function getLabEntriesInDisplayOrder(): LabEntry[] {
+  return LAB_CATEGORY_ORDER.flatMap((category) =>
+    getLabEntriesByCategory(category),
+  );
+}

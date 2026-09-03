@@ -16,14 +16,17 @@ const TILT_CARDS = [
 ];
 
 /**
- * `/gsap-lab/pointer-play` — 포인터 인터랙션 랜딩.
+ * `/landings/pointer-play` — 포인터 인터랙션 랜딩.
  *
  * 세 가지를 조합한다.
  * - 마그네틱 CTA 버튼 → `useMagnetic`
  * - 호버 틸트 그리드 → `usePointerTilt`
  * - 커스텀 커서 팔로워 → 이 데모 고유(window 레벨 pointermove) → 인라인
+ *
+ * breadcrumb·caveat·프롬프트 패널은 `landings/[slug]/page.tsx`가
+ * `LandingDomHeader`로 씌운다. 이 컴포넌트는 콘텐츠만 렌더한다.
  */
-export function PointerPlayPage() {
+export function PointerPlayLandingPage() {
   const container = useRef<HTMLDivElement>(null);
 
   useMagnetic(container, {
@@ -64,7 +67,7 @@ export function PointerPlayPage() {
   );
 
   return (
-    <main
+    <div
       ref={container}
       className="relative min-h-screen bg-neutral-950 text-neutral-100"
       style={{ perspective: "1000px" }}
@@ -112,6 +115,6 @@ export function PointerPlayPage() {
           </article>
         ))}
       </section>
-    </main>
+    </div>
   );
 }

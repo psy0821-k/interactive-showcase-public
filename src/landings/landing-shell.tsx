@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import type { ReactNode, RefObject } from "react";
 import { LandingCanvas } from "./landing-canvas";
+import { LandingDomHeader } from "./landing-dom-header";
 import { useLandingScroll } from "./use-landing-scroll";
 import type { LandingEntry } from "./registry";
 
@@ -44,9 +44,6 @@ export function LandingShell({ entry, renderScene, children }: LandingShellProps
   const trackRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
 
-  // "예시 프롬프트" 패널 펼침 상태 (per-viewer 편의, localStorage 불필요).
-  const [promptOpen, setPromptOpen] = useState(false);
-
   const reduced = useLandingScroll({
     track: trackRef,
     onProgress: (p) => {
@@ -56,58 +53,7 @@ export function LandingShell({ entry, renderScene, children }: LandingShellProps
 
   return (
     <main className="flex-1">
-      {/* breadcrumb */}
-      <nav
-        aria-label="탐색 위치"
-        className="relative z-30 border-b border-neutral-200 bg-neutral-50 px-6 py-3 text-sm dark:border-neutral-800 dark:bg-neutral-900"
-      >
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1">
-          <Link
-            href="/landings"
-            className="text-neutral-600 hover:underline dark:text-neutral-400"
-          >
-            ← Landings
-          </Link>
-          <span className="text-neutral-600 dark:text-neutral-400">/</span>
-          <span className="font-medium">{entry.title}</span>
-          <span className="ml-auto flex flex-wrap gap-1.5">
-            {entry.usedSkills.map((skill) => (
-              <code
-                key={skill}
-                className="rounded bg-neutral-200 px-1.5 py-0.5 text-xs text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
-              >
-                {skill}
-              </code>
-            ))}
-          </span>
-        </div>
-      </nav>
-
-      {entry.caveat && (
-        <p className="relative z-30 mx-auto max-w-6xl border-b border-neutral-200 bg-neutral-50 px-6 pb-3 text-xs text-amber-700 dark:border-neutral-800 dark:bg-neutral-900 dark:text-amber-500">
-          <span className="font-semibold">적용 한계</span> · {entry.caveat}
-        </p>
-      )}
-
-      {/* 예시 프롬프트 패널 */}
-      <section className="relative z-30 border-b border-neutral-200 bg-white px-6 py-3 dark:border-neutral-800 dark:bg-neutral-950">
-        <div className="mx-auto max-w-6xl">
-          <button
-            type="button"
-            onClick={() => setPromptOpen((v) => !v)}
-            aria-expanded={promptOpen}
-            className="flex items-center gap-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"
-          >
-            <span aria-hidden>{promptOpen ? "▾" : "▸"}</span>
-            이 페이지를 만든 예시 프롬프트
-          </button>
-          {promptOpen && (
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-neutral-100 p-4 text-xs leading-relaxed whitespace-pre-wrap text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200">
-              {entry.prompt}
-            </pre>
-          )}
-        </div>
-      </section>
+      <LandingDomHeader entry={entry} />
 
       {/*
         스크롤 트랙. 이 안에서 캔버스는 sticky로 화면에 고정되고,

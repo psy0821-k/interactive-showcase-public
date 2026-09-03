@@ -1,21 +1,39 @@
 /**
- * `/landings` — 3D 히어로 + 스크롤 연동 랜딩페이지 예시 6선.
+ * `/landings` — 스크롤 연동 랜딩페이지 예시 모음.
  *
- * `/gsap-lab`(순수 DOM GSAP)과 `/showcase`(셸 Contract 3D) 사이의 세 번째 트랙.
- * 각 페이지는 셸 밖 독립 라우트로, 자체 `<Canvas>` + 스크롤 컨테이너 +
- * ScrollTrigger를 직접 구성한다(gsap-scrolltrigger-scene 형태 B).
+ * `/gsap-lab`(순수 DOM GSAP 기법 데모)과 `/showcase`(셸 Contract 3D) 사이의
+ * 세 번째 트랙 — "완성형 랜딩페이지". 각 페이지는 셸 밖 독립 라우트다.
+ *
+ * - `kind: "r3f"`(기본): 자체 `<Canvas>` + 스크롤 컨테이너 + ScrollTrigger를
+ *   직접 접합한다(gsap-scrolltrigger-scene 형태 B).
+ * - `kind: "dom"`: R3F 없이 순수 DOM + GSAP ScrollTrigger로만 구성한다
+ *   (원래 `/gsap-lab`의 landing 카테고리였다가 이 트랙으로 이관).
  *
  * 소재는 `/gsap-lab`과 같은 가상 SaaS "Fluxnote". 이미지가 필요한 자리는
  * 배경색만 다른 블록으로 대체한다.
  *
  * 각 항목은 이 페이지를 만들 때 쓸 법한 **예시 프롬프트**(`prompt`)를 함께 담는다 —
  * "이런 요청을 하면 이런 페이지가 나온다"를 보여주는 것이 이 트랙의 목적이다.
+ * `authoring`으로 사람이 코드를 다듬은 것(`"paired"`)과 프롬프트만으로 생성한
+ * 것(`"ai"`)을 나눠, 목록에서 별도 섹션으로 보여준다.
  */
+
+/**
+ * 이 페이지가 만들어진 방식.
+ *
+ * - `"paired"`: AI 초안에 개발자가 직접 코드를 수정·조율한 결과.
+ * - `"ai"`: 프롬프트 하나로 AI가 생성했고, 이후 사람의 코드 수정이 없다.
+ *
+ * 목록 페이지가 이 값으로 섹션을 나눈다.
+ */
+export type LandingAuthoring = "paired" | "ai";
 
 /** 랜딩 항목 하나. */
 export interface LandingEntry {
   /** URL 세그먼트 (`/landings/{slug}`) */
   slug: string;
+  /** 이 페이지가 만들어진 방식. 목록 섹션 분리 기준. */
+  authoring: LandingAuthoring;
   /** 카드·상세 제목 */
   title: string;
   /** 한 줄 태그 — 이 페이지가 보여주는 3D + 스크롤 연출 */
@@ -44,6 +62,7 @@ export interface LandingEntry {
 export const LANDING_ENTRIES: LandingEntry[] = [
   {
     slug: "forest",
+    authoring: "paired",
     kind: "dom",
     title: "FOREST — 흩어졌다 모이는 제목",
     tag: "DOM 패럴랙스 히어로 + 비디오 스토리 + 키네틱 타이포",
@@ -105,6 +124,7 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "cloud-sync",
+    authoring: "ai",
     title: "Fluxnote Cloud — 스크롤로 갈라지는 구름",
     tag: "glTF 모델 히어로 + 스크롤 카메라 전진",
     description:
@@ -131,6 +151,7 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "orbit-launch",
+    authoring: "ai",
     title: "Fluxnote Launch — 궤도를 도는 별자리",
     tag: "procedural 별자리 + 스크롤 궤도 회전",
     description:
@@ -153,6 +174,7 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "prism-pricing",
+    authoring: "ai",
     title: "Fluxnote Pricing — 빛을 가르는 프리즘",
     tag: "procedural 프리즘 + 스크롤 분광 회전",
     description:
@@ -174,6 +196,7 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "grid-metrics",
+    authoring: "ai",
     title: "Fluxnote Analytics — 자라나는 지표 필드",
     tag: "instanced 막대 필드 + 스크롤 성장",
     description:
@@ -199,6 +222,7 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "ribbon-story",
+    authoring: "ai",
     title: "Fluxnote Story — 흐르는 리본을 따라",
     tag: "procedural TubeGeometry + 스크롤 경로 카메라",
     description:
@@ -221,6 +245,7 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "crystal-features",
+    authoring: "ai",
     title: "Fluxnote Features — 피어나는 결정",
     tag: "procedural 결정 클러스터 + 스크롤 개화",
     description:
@@ -241,6 +266,102 @@ export const LANDING_ENTRIES: LandingEntry[] = [
       "스크롤 진행률에 따라 결정이 하나씩(스태거) 바깥으로 밀려나며 scale 1로 열리고, " +
       "열릴 때마다 옆에 '오프라인 우선 · 종단 암호화 · 무한 캔버스 · API · 자동 백업' " +
       "기능 항목이 나타나게. 결정은 상시 미세하게 자전. reduced-motion이면 처음부터 다 열림.",
+  },
+
+  // ─── 순수 DOM + GSAP (원래 /gsap-lab landing 카테고리) ────────────
+  {
+    slug: "scroll-story",
+    authoring: "ai",
+    kind: "dom",
+    title: "Fluxnote — 스크롤 스토리",
+    tag: "DOM 히어로 핀 + 패럴랙스 + 진행 인디케이터",
+    description:
+      "히어로를 핀으로 고정한 채 배경이 스케일되고, 패럴랙스 레이어가 서로 다른 " +
+      "속도로 흐르며, 상단 진행 바가 스크롤에 따라 채워진다. R3F 없이 순수 DOM + GSAP.",
+    usedSkills: ["gsap-dom-scrolltrigger", "gsap-dom-core"],
+    accent: "linear-gradient(135deg, #1e3a8a, #7c3aed)",
+    prompt:
+      "Fluxnote 스크롤 스토리 랜딩페이지를 /landings에 만들어줘. R3F 없이 순수 DOM + GSAP.\n\n" +
+      "1. 히어로: pin으로 고정하고 scrub로 배경(hero-bg)이 scale 1.25→1로 " +
+      "줄고 카피(hero-copy)가 yPercent 40→0으로 올라오게. end는 '+=120%'.\n\n" +
+      "2. 패럴랙스: 색 블록 3개(배경 -12 / 중간 +6 / 전경 +20)를 yPercent로 " +
+      "스크럽, ease: none. 트리거는 구간 전체(top bottom → bottom top).\n\n" +
+      "3. 진행 인디케이터: 상단 고정 바를 문서 전체 스크롤 진행률에 맞춰 " +
+      "scaleX 0→1 (width가 아니라 transform이라 리플로우 없음).\n\n" +
+      "4. 기능 블록 4개: 뷰포트 진입 시 stagger로 한 번만 올라오고(toggleActions " +
+      "play none none none), 되돌려도 재생 안 됨.\n\n" +
+      "prefers-reduced-motion이면 스크럽을 걸지 않고 전부 최종 상태로 set. " +
+      "카드 배경은 흰 텍스트가 WCAG AA(4.5:1)를 넘도록 충분히 어둡게.",
+  },
+  {
+    slug: "pricing-reveal",
+    authoring: "ai",
+    kind: "dom",
+    title: "Fluxnote — 요금제 공개",
+    tag: "DOM 마스터 타임라인 + stagger 시퀀스",
+    description:
+      "제목 → 부제 → 기능 → 요금제 → FAQ가 하나의 마스터 타임라인으로 순서대로 " +
+      "펼쳐진다. position parameter 겹침과 라벨, stagger amount를 함께 쓴다.",
+    usedSkills: ["gsap-dom-core", "gsap-dom-motion"],
+    accent: "linear-gradient(135deg, #047857, #0ea5e9)",
+    prompt:
+      "Fluxnote 요금제 소개 랜딩페이지를 /landings에 만들어줘. R3F 없이 순수 DOM + GSAP.\n\n" +
+      "하나의 마스터 타임라인으로 페이지를 위에서 아래로 펼쳐줘 — " +
+      "히어로(eyebrow → title → sub) → 기능 카드 6개 → 요금제 카드 3개 → FAQ 3개 " +
+      "순서로. 타임라인 defaults로 공통 duration 0.6 / ease power3.out을 주고, " +
+      "히어로 항목끼리는 position parameter 겹침('-=0.15' 등)으로 살짝 물리게, " +
+      "카드 그룹 정렬 지점은 addLabel로 잡아줘. 카드 stagger는 개수와 무관하게 " +
+      "전체 시간이 일정하도록 { amount } 형태로.\n\n" +
+      "SSR로 렌더된 요소라 from이 아니라 set(시작 상태) + to(등장)로 짜고, " +
+      "prefers-reduced-motion이면 타임라인 없이 최종 상태만 set. " +
+      "카드 배경은 흰 텍스트 대비(AA)를 확보할 만큼 어둡게.",
+  },
+  {
+    slug: "pointer-play",
+    authoring: "ai",
+    kind: "dom",
+    title: "Fluxnote — 포인터 플레이",
+    tag: "DOM 마그네틱 CTA + 틸트 그리드 + 커스텀 커서",
+    description:
+      "커서가 가까워지면 CTA 버튼이 끌려오고, 카드가 커서 위치로 3D 기울고, " +
+      "흰 점이 quickTo로 부드럽게 따라온다. 데스크탑(hover: hover) 전용.",
+    usedSkills: ["gsap-dom-interaction", "gsap-dom-core"],
+    accent: "linear-gradient(135deg, #b91c1c, #ea580c)",
+    prompt:
+      "Fluxnote 인터랙티브 히어로 랜딩페이지를 /landings에 만들어줘. R3F 없이 순수 DOM + GSAP.\n\n" +
+      "세 가지 포인터 인터랙션을 조합해줘.\n" +
+      "1. 마그네틱 CTA: '14일 무료로 시작하기' 버튼이 커서가 range 90 안에 들면 " +
+      "strength 0.4로 커서 쪽으로 당겨졌다가 벗어나면 복귀.\n" +
+      "2. 틸트 그리드: 기능 카드 6개가 호버 시 커서 위치에 따라 rotateX/Y로 " +
+      "maxTilt 16도 기울고 hoverScale 1.06.\n" +
+      "3. 커스텀 커서: 화면 전체를 추적하는 흰 점을 quickTo(duration 0.35)로 " +
+      "부드럽게 따라오게, mix-blend-difference로.\n\n" +
+      "(hover: hover) and (pointer: fine)가 아니거나 prefers-reduced-motion이면 " +
+      "커스텀 커서를 숨기고 인터랙션을 끈다. 카드 배경은 흰 텍스트 대비(AA) 확보.",
+  },
+  {
+    slug: "tab-transition",
+    authoring: "ai",
+    kind: "dom",
+    title: "Fluxnote — 탭 전환",
+    tag: "DOM 진입 오버레이 + 글자 stagger + 탭 크로스페이드",
+    description:
+      "진입 오버레이가 위로 걷히고, 활성 탭 패널의 제목이 글자 단위로 올라오며, " +
+      "탭을 바꾸면 패널이 크로스페이드된다. 탭 전환 시 새 패널로 포커스 이동.",
+    usedSkills: ["gsap-dom-motion", "gsap-dom-core"],
+    accent: "linear-gradient(135deg, #7c2d12, #a21caf)",
+    prompt:
+      "Fluxnote 기능 둘러보기 랜딩페이지를 /landings에 만들어줘. R3F 없이 순수 DOM + GSAP.\n\n" +
+      "1. 진입 오버레이: 페이지 첫 로드에만 어두운 오버레이가 yPercent -100으로 " +
+      "위로 걷힌다(power4.inOut). 이후 탭 전환에는 나타나지 않음.\n\n" +
+      "2. 탭 3개(빠른 캡처 / 자동 정리 / 공유). role=tablist·tab·tabpanel, " +
+      "aria-selected·aria-controls를 제대로 달고, 탭을 누르면 새 패널로 " +
+      "포커스를 옮겨 스크린리더가 바뀐 내용을 읽게 해줘.\n\n" +
+      "3. 활성 패널 등장: 본문은 페이드업, 제목은 글자 단위 <span>으로 쪼개 " +
+      "yPercent 120에서 stagger { amount: 0.4 }로 올라오게. 원문은 aria-label, " +
+      "쪼갠 글자는 aria-hidden.\n\n" +
+      "탭 상태는 React state로, 애니메이션은 activeId를 deps로 재실행. " +
+      "prefers-reduced-motion이면 오버레이·글자 애니메이션 없이 최종 상태만.",
   },
 ];
 

@@ -9,23 +9,39 @@ import {
 
 const ALL = "all";
 
+/** 필터 chip 하나. `value`는 카드의 `data-category`와 대조된다. */
+export interface GalleryCategoryOption {
+  value: string;
+  label: string;
+}
+
+/** R3F 갤러리(`/`, `/gsap`)의 기본 카테고리 목록. */
+const TECHNIQUE_CATEGORY_OPTIONS: GalleryCategoryOption[] =
+  TECHNIQUE_CATEGORIES.map((value) => ({
+    value,
+    label: TECHNIQUE_CATEGORY_LABELS[value],
+  }));
+
 /**
  * 갤러리 검색·필터 컨트롤.
  *
  * 카드 목록(`children`)은 서버에서 렌더된 `<ul><li>`이며, SEO·접근성을 위해
- * 38개가 초기 HTML에 전부 담긴다. 이 컴포넌트는 목록을 다시 그리지 않고,
+ * 전부 초기 HTML에 담긴다. 이 컴포넌트는 목록을 다시 그리지 않고,
  * 각 `<li>`의 `data-category`·`data-haystack`을 읽어 표시/숨김만 토글한다.
  *
  * `useSearchParams`를 쓰므로 호출부는 `<Suspense>`로 감싸야 한다.
  *
- * `basePath`는 필터·검색 쿼리를 붙일 갤러리 경로다 (`/` 또는 `/gsap`).
+ * - `basePath`: 필터·검색 쿼리를 붙일 갤러리 경로 (`/`·`/gsap`·`/gsap-lab`).
+ * - `categories`: 필터 chip 목록. 생략하면 R3F 기법 카테고리 8종.
  */
 export function GalleryBrowser({
   children,
   basePath = "/",
+  categories = TECHNIQUE_CATEGORY_OPTIONS,
 }: {
   children: ReactNode;
   basePath?: string;
+  categories?: GalleryCategoryOption[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -99,12 +115,12 @@ export function GalleryBrowser({
             active={category === ALL}
             onClick={() => updateParam("category", ALL)}
           />
-          {TECHNIQUE_CATEGORIES.map((value) => (
+          {categories.map((option) => (
             <FilterChip
-              key={value}
-              label={TECHNIQUE_CATEGORY_LABELS[value]}
-              active={category === value}
-              onClick={() => updateParam("category", value)}
+              key={option.value}
+              label={option.label}
+              active={category === option.value}
+              onClick={() => updateParam("category", option.value)}
             />
           ))}
         </div>

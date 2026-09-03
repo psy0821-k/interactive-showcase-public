@@ -57,6 +57,35 @@ const PAGE_COMPONENTS: Record<string, ComponentType> = {
       ),
     { ssr: false },
   ),
+  // 순수 DOM + GSAP 랜딩(원래 /gsap-lab landing 카테고리).
+  "scroll-story": dynamic(
+    () =>
+      import("@/landings/pages/scroll-story-page").then(
+        (m) => m.ScrollStoryLandingPage,
+      ),
+    { ssr: false },
+  ),
+  "pricing-reveal": dynamic(
+    () =>
+      import("@/landings/pages/pricing-reveal-page").then(
+        (m) => m.PricingRevealLandingPage,
+      ),
+    { ssr: false },
+  ),
+  "pointer-play": dynamic(
+    () =>
+      import("@/landings/pages/pointer-play-page").then(
+        (m) => m.PointerPlayLandingPage,
+      ),
+    { ssr: false },
+  ),
+  "tab-transition": dynamic(
+    () =>
+      import("@/landings/pages/tab-transition-page").then(
+        (m) => m.TabTransitionLandingPage,
+      ),
+    { ssr: false },
+  ),
 };
 
 export function LandingRenderer({ slug }: { slug: string }) {

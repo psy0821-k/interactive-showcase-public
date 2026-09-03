@@ -52,15 +52,18 @@ const FAQS = [
 ];
 
 /**
- * `/gsap-lab/pricing-reveal` — 타임라인 시퀀스 + stagger 등장 랜딩.
+ * `/landings/pricing-reveal` — 타임라인 시퀀스 + stagger 등장 랜딩.
  *
  * 시연 항목:
  * - 마스터 타임라인 `defaults`로 자식 공통 길이·이징
  * - position parameter 겹침(`"-=0.3"`)과 라벨(`"cards"`) 병용
  * - `stagger: { amount }`로 항목 수와 무관하게 전체 시간 고정
  * - `reduced`에서 타임라인 대신 `gsap.set`으로 최종 상태만
+ *
+ * breadcrumb·caveat·프롬프트 패널은 `landings/[slug]/page.tsx`가
+ * `LandingDomHeader`로 씌운다. 이 컴포넌트는 콘텐츠만 렌더한다.
  */
-export function PricingRevealPage() {
+export function PricingRevealLandingPage() {
   const container = useRef<HTMLDivElement>(null);
 
   useGsapDom(
@@ -113,7 +116,7 @@ export function PricingRevealPage() {
   );
 
   return (
-    <main ref={container} className="bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+    <div ref={container} className="bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
       {/* 히어로 */}
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
         <p className="hero-eyebrow gsap-reveal text-sm font-medium uppercase tracking-[0.2em] text-teal-700 dark:text-teal-400">
@@ -181,6 +184,6 @@ export function PricingRevealPage() {
           ))}
         </dl>
       </section>
-    </main>
+    </div>
   );
 }
