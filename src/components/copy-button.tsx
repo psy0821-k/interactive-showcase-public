@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
   /** 클립보드에 복사할 원문. */
@@ -31,13 +31,13 @@ export function CopyButton({ text, label }: Props) {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(text);
       } else {
-        const area = document.createElement("textarea");
+        const area = document.createElement('textarea');
         area.value = text;
-        area.style.position = "fixed";
-        area.style.opacity = "0";
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
         document.body.appendChild(area);
         area.select();
-        document.execCommand("copy");
+        document.execCommand('copy');
         document.body.removeChild(area);
       }
       setCopied(true);
@@ -55,7 +55,7 @@ export function CopyButton({ text, label }: Props) {
       aria-label={label}
       className="shrink-0 rounded border border-neutral-300 px-2 py-1 text-xs text-neutral-600 transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800"
     >
-      {copied ? "복사됨" : "복사"}
+      {copied ? '복사됨' : '복사'}
     </button>
   );
 }

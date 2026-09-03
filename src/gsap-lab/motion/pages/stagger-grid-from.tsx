@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { DemoShell } from "@/gsap-lab/demo-shell";
+import { useRef, useState } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { DemoShell } from '@/gsap-lab/demo-shell';
 
 const COLS = 8;
 const ROWS = 6;
@@ -10,11 +10,11 @@ const TILE_COUNT = COLS * ROWS;
 
 /** stagger from 옵션 선택지. */
 const FROM_OPTIONS = [
-  { id: "start", label: "처음부터", from: 0 },
-  { id: "center", label: "가운데에서", from: "center" as const },
-  { id: "edges", label: "모서리에서", from: "edges" as const },
-  { id: "end", label: "끝에서", from: "end" as const },
-  { id: "random", label: "무작위", from: "random" as const },
+  { id: 'start', label: '처음부터', from: 0 },
+  { id: 'center', label: '가운데에서', from: 'center' as const },
+  { id: 'edges', label: '모서리에서', from: 'edges' as const },
+  { id: 'end', label: '끝에서', from: 'end' as const },
+  { id: 'random', label: '무작위', from: 'random' as const },
 ];
 
 /**
@@ -30,20 +30,21 @@ export function StaggerGridFromPage() {
   useGsapDom(
     ({ gsap: g, reduced }) => {
       if (reduced) {
-        g.set(".stg-tile", { autoAlpha: 1, scale: 1 });
+        g.set('.stg-tile', { autoAlpha: 1, scale: 1 });
         return;
       }
 
-      const option = FROM_OPTIONS.find((o) => o.id === fromId) ?? FROM_OPTIONS[0];
+      const option =
+        FROM_OPTIONS.find((o) => o.id === fromId) ?? FROM_OPTIONS[0];
 
       g.fromTo(
-        ".stg-tile",
+        '.stg-tile',
         { autoAlpha: 0, scale: 0.3 },
         {
           autoAlpha: 1,
           scale: 1,
           duration: 0.5,
-          ease: "back.out(1.7)",
+          ease: 'back.out(1.7)',
           stagger: {
             each: 0.03,
             from: option.from,
@@ -70,8 +71,8 @@ export function StaggerGridFromPage() {
               onClick={() => setFromId(option.id)}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 option.id === fromId
-                  ? "bg-white text-neutral-900"
-                  : "bg-white/10 text-white/70 hover:bg-white/20"
+                  ? 'bg-white text-neutral-900'
+                  : 'bg-white/10 text-white/70 hover:bg-white/20'
               }`}
             >
               {option.label}

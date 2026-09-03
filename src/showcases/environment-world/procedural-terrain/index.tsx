@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useEffect, useMemo } from "react";
-import * as THREE from "three";
-import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
+import { useEffect, useMemo } from 'react';
+import * as THREE from 'three';
+import { Environment, Lightformer, PerspectiveCamera } from '@react-three/drei';
 
 /** 격자 분할 수. 정점은 (SEGMENTS+1)^2 개가 된다. */
 const SEGMENTS = 140;
@@ -128,8 +128,8 @@ function createTerrainGeometry(): THREE.BufferGeometry {
     }
   }
 
-  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
   geometry.setIndex(new THREE.BufferAttribute(indices, 1));
 
   // 인덱스가 있으므로 공유 면들의 평균이 되어 음영이 부드럽게 이어진다.
@@ -157,7 +157,13 @@ export function Scene() {
         12유닛 크기의 지형을 담을 수 없어 makeDefault로 교체한다.
         far/near = 60/1 = 60 으로 depth 정밀도도 여유롭다.
       */}
-      <PerspectiveCamera makeDefault fov={45} near={1} far={60} position={[0, 9, 13]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={45}
+        near={1}
+        far={60}
+        position={[0, 9, 13]}
+      />
 
       <Environment resolution={256} environmentIntensity={0.7}>
         <Lightformer

@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Suspense, useEffect, useState } from "react";
-import type { ComponentType } from "react";
-import dynamic from "next/dynamic";
-import { TOUCH } from "three";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import { SHOWCASE_ENTRIES, findShowcase } from "@/showcases/registry";
-import { getSceneLoader } from "@/showcases/scene-registry";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneErrorBoundary } from "./scene-error-boundary";
-import { SceneLoading } from "./scene-loading";
+import { Suspense, useEffect, useState } from 'react';
+import type { ComponentType } from 'react';
+import dynamic from 'next/dynamic';
+import { TOUCH } from 'three';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import { SHOWCASE_ENTRIES, findShowcase } from '@/showcases/registry';
+import { getSceneLoader } from '@/showcases/scene-registry';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneErrorBoundary } from './scene-error-boundary';
+import { SceneLoading } from './scene-loading';
 
 /**
  * 터치 제스처 매핑 (gesture-orbit-inertia, ISSUE-44).
@@ -38,7 +38,7 @@ const ORBIT_TOUCHES = { TWO: TOUCH.DOLLY_ROTATE } as const;
  * 유지하는 부담이 없다. 캡처 절차는 `scripts/capture-thumbnails.md` 참조.
  */
 const CAPTURE_GL =
-  process.env.NEXT_PUBLIC_CAPTURE === "1"
+  process.env.NEXT_PUBLIC_CAPTURE === '1'
     ? ({ preserveDrawingBuffer: true } as const)
     : undefined;
 
@@ -99,10 +99,10 @@ function SceneReadySignal({
  */
 function CanvasFallback({
   message,
-  role = "status",
+  role = 'status',
 }: {
   message: string;
-  role?: "alert" | "status";
+  role?: 'alert' | 'status';
 }) {
   return (
     <div
@@ -139,8 +139,8 @@ export function ShowcaseCanvas({ slug, label }: Props) {
 
   // 렌더 모드·컨트롤 모드는 쇼케이스 meta에서 옵트인한다. 생략 시 기본값.
   const meta = findShowcase(slug)?.meta;
-  const frameloop = meta?.frameloop ?? "always";
-  const controlsMode = meta?.controlsMode ?? "orbit";
+  const frameloop = meta?.frameloop ?? 'always';
+  const controlsMode = meta?.controlsMode ?? 'orbit';
 
   if (!SceneComponent) {
     return (
@@ -173,25 +173,25 @@ export function ShowcaseCanvas({ slug, label }: Props) {
         (accessible-3d 6단계)
       */}
         <Canvas
-        shadows
-        frameloop={frameloop}
-        gl={CAPTURE_GL}
-        onCreated={
-          CAPTURE_GL
-            ? ({ gl }) => {
-                // 캡처 모드: toDataURL이 투명 영역을 흰색으로 채우므로
-                // 셸 컨테이너와 같은 어두운 색(#171717 = neutral-900)으로
-                // 클리어해 썸네일 여백이 흰색으로 뜨지 않게 한다.
-                gl.setClearColor(0x171717, 1);
-              }
-            : undefined
-        }
-        role="img"
-        aria-label={label}
-        fallback={
-          <CanvasFallback message="이 데모를 보려면 WebGL이 필요합니다." />
-        }
-      >
+          shadows
+          frameloop={frameloop}
+          gl={CAPTURE_GL}
+          onCreated={
+            CAPTURE_GL
+              ? ({ gl }) => {
+                  // 캡처 모드: toDataURL이 투명 영역을 흰색으로 채우므로
+                  // 셸 컨테이너와 같은 어두운 색(#171717 = neutral-900)으로
+                  // 클리어해 썸네일 여백이 흰색으로 뜨지 않게 한다.
+                  gl.setClearColor(0x171717, 1);
+                }
+              : undefined
+          }
+          role="img"
+          aria-label={label}
+          fallback={
+            <CanvasFallback message="이 데모를 보려면 WebGL이 필요합니다." />
+          }
+        >
           <Suspense fallback={null}>
             <SceneReadySignal
               Scene={SceneComponent}
@@ -206,7 +206,7 @@ export function ShowcaseCanvas({ slug, label }: Props) {
           enableDamping: 관성. prefers-reduced-motion이면 끈다.
           (gesture-orbit-inertia, ISSUE-44)
         */}
-          {controlsMode === "orbit" && (
+          {controlsMode === 'orbit' && (
             <OrbitControls
               makeDefault
               enableDamping={!reducedMotion}

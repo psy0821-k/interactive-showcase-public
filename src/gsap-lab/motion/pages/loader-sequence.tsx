@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import type gsap from "gsap";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { DemoShell } from "@/gsap-lab/demo-shell";
+import { useRef } from 'react';
+import type gsap from 'gsap';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { DemoShell } from '@/gsap-lab/demo-shell';
 
 const CONTENT_CARDS = [
-  { title: "받은 편지함", background: "#1e293b" },
-  { title: "오늘 할 일", background: "#334155" },
-  { title: "최근 노트", background: "#475569" },
-  { title: "팀 활동", background: "#64748b" },
+  { title: '받은 편지함', background: '#1e293b' },
+  { title: '오늘 할 일', background: '#334155' },
+  { title: '최근 노트', background: '#475569' },
+  { title: '팀 활동', background: '#64748b' },
 ];
 
 /**
@@ -22,35 +22,49 @@ export function LoaderSequencePage() {
   const container = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced, contextSafe }) => {
-      if (reduced) {
-        g.set(".loader-overlay", { autoAlpha: 0 });
-        g.set(".content-card", { autoAlpha: 1, y: 0 });
-        return;
-      }
+  useGsapDom(({ gsap: g, reduced, contextSafe }) => {
+    if (reduced) {
+      g.set('.loader-overlay', { autoAlpha: 0 });
+      g.set('.content-card', { autoAlpha: 1, y: 0 });
+      return;
+    }
 
-      const tl = g.timeline({ defaults: { ease: "power3.out" } });
-      tlRef.current = tl;
+    const tl = g.timeline({ defaults: { ease: 'power3.out' } });
+    tlRef.current = tl;
 
-      tl.from(".loader-logo", { scale: 0.4, autoAlpha: 0, duration: 0.5, ease: "back.out(1.7)" })
-        .to(".loader-progress", { scaleX: 1, duration: 0.9, ease: "power1.inOut" }, "+=0.1")
-        .to(".loader-logo", { autoAlpha: 0, y: -20, duration: 0.3 })
-        .to(".overlay-top", { yPercent: -100, duration: 0.6, ease: "power3.inOut" }, "split")
-        .to(".overlay-bottom", { yPercent: 100, duration: 0.6, ease: "power3.inOut" }, "split")
-        .from(
-          ".content-card",
-          { y: 40, autoAlpha: 0, duration: 0.5, stagger: 0.1 },
-          "-=0.2",
-        );
+    tl.from('.loader-logo', {
+      scale: 0.4,
+      autoAlpha: 0,
+      duration: 0.5,
+      ease: 'back.out(1.7)',
+    })
+      .to(
+        '.loader-progress',
+        { scaleX: 1, duration: 0.9, ease: 'power1.inOut' },
+        '+=0.1',
+      )
+      .to('.loader-logo', { autoAlpha: 0, y: -20, duration: 0.3 })
+      .to(
+        '.overlay-top',
+        { yPercent: -100, duration: 0.6, ease: 'power3.inOut' },
+        'split',
+      )
+      .to(
+        '.overlay-bottom',
+        { yPercent: 100, duration: 0.6, ease: 'power3.inOut' },
+        'split',
+      )
+      .from(
+        '.content-card',
+        { y: 40, autoAlpha: 0, duration: 0.5, stagger: 0.1 },
+        '-=0.2',
+      );
 
-      const replay = contextSafe(() => tlRef.current?.restart());
-      const btn = container.current?.querySelector(".replay-btn");
-      btn?.addEventListener("click", replay);
-      return () => btn?.removeEventListener("click", replay);
-    },
-    container,
-  );
+    const replay = contextSafe(() => tlRef.current?.restart());
+    const btn = container.current?.querySelector('.replay-btn');
+    btn?.addEventListener('click', replay);
+    return () => btn?.removeEventListener('click', replay);
+  }, container);
 
   return (
     <DemoShell
@@ -73,7 +87,10 @@ export function LoaderSequencePage() {
                 className="content-card rounded-2xl p-6 text-white"
                 style={{ background: card.background }}
               >
-                <div className="mb-3 h-20 w-full rounded-lg bg-white/15" aria-hidden />
+                <div
+                  className="mb-3 h-20 w-full rounded-lg bg-white/15"
+                  aria-hidden
+                />
                 <h3 className="font-semibold">{card.title}</h3>
               </div>
             ))}

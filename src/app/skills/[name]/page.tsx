@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { SKILL_CATEGORY_LABELS } from "@/domain/skill-category";
-import { getSkillEntry, SKILL_CATALOG } from "@/domain/skill-catalog";
-import { getShowcaseEntries } from "@/showcases/server-registry";
-import { SITE_URL } from "@/lib/site";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { SKILL_CATEGORY_LABELS } from '@/domain/skill-category';
+import { getSkillEntry, SKILL_CATALOG } from '@/domain/skill-catalog';
+import { getShowcaseEntries } from '@/showcases/server-registry';
+import { SITE_URL } from '@/lib/site';
 
 /** 카탈로그에 등록된 skill 상세 페이지를 빌드 타임에 정적 생성한다. */
 export function generateStaticParams() {
@@ -13,7 +13,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/skills/[name]">): Promise<Metadata> {
+}: PageProps<'/skills/[name]'>): Promise<Metadata> {
   const { name } = await params;
   const skill = getSkillEntry(name);
   if (!skill) return {};
@@ -22,10 +22,10 @@ export async function generateMetadata({
   return {
     title: `${skill.title} — 사용 기법`,
     description: skill.summary,
-    keywords: [skill.name, skill.category, "3D", "웹 개발"],
+    keywords: [skill.name, skill.category, '3D', '웹 개발'],
     alternates: { canonical },
     openGraph: {
-      type: "article",
+      type: 'article',
       url: `${SITE_URL}${canonical}`,
       title: skill.title,
       description: skill.summary,
@@ -35,7 +35,7 @@ export async function generateMetadata({
 
 export default async function SkillPage({
   params,
-}: PageProps<"/skills/[name]">) {
+}: PageProps<'/skills/[name]'>) {
   const { name } = await params;
   const skill = getSkillEntry(name);
   if (!skill) notFound();
@@ -49,13 +49,13 @@ export default async function SkillPage({
   );
 
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "TechArticle",
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
     headline: skill.title,
     description: skill.summary,
     url: `${SITE_URL}/skills/${name}`,
     keywords: skill.name,
-    isPartOf: { "@type": "CollectionPage", "@id": SITE_URL },
+    isPartOf: { '@type': 'CollectionPage', '@id': SITE_URL },
   };
 
   return (
@@ -82,7 +82,9 @@ export default async function SkillPage({
           </span>
         </div>
         <code className="text-sm text-neutral-500">{skill.name}</code>
-        <p className="text-neutral-600 dark:text-neutral-400">{skill.summary}</p>
+        <p className="text-neutral-600 dark:text-neutral-400">
+          {skill.summary}
+        </p>
       </header>
 
       <section className="mt-8">

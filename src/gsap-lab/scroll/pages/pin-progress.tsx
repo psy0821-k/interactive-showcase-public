@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useRef } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 import {
   pinnedTriggerDefaults,
   refreshAfterLayout,
   viewportScrollLength,
   withResponsiveScroll,
-} from "@/gsap-lab/scroll/scroll-trigger-setup";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+} from '@/gsap-lab/scroll/scroll-trigger-setup';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 const STEPS = [
-  { title: "1. 아이디어를 적는다", background: "#172554" },
-  { title: "2. 관련 노트가 자동 연결된다", background: "#1e3a8a" },
-  { title: "3. 팀과 공유한다", background: "#1d4ed8" },
-  { title: "4. 완성된 문서로 게시한다", background: "#3b82f6" },
+  { title: '1. 아이디어를 적는다', background: '#172554' },
+  { title: '2. 관련 노트가 자동 연결된다', background: '#1e3a8a' },
+  { title: '3. 팀과 공유한다', background: '#1d4ed8' },
+  { title: '4. 완성된 문서로 게시한다', background: '#3b82f6' },
 ];
 
 /**
@@ -27,62 +27,59 @@ const STEPS = [
 export function PinProgressPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      refreshAfterLayout();
+  useGsapDom(({ gsap: g, reduced }) => {
+    refreshAfterLayout();
 
-      if (reduced) {
-        g.set(".pin-step", { autoAlpha: 1, y: 0 });
-        return;
-      }
+    if (reduced) {
+      g.set('.pin-step', { autoAlpha: 1, y: 0 });
+      return;
+    }
 
-      withResponsiveScroll(g, {
-        // 데스크탑: 섹션을 핀 고정하고 스크럽으로 단계를 넘긴다.
-        desktop: () => {
-          g.set(".pin-step", { autoAlpha: 0, y: 30 });
-          const tl = g.timeline({
-            scrollTrigger: {
-              ...pinnedTriggerDefaults,
-              trigger: ".pin-stage",
-              start: "top top",
-              end: viewportScrollLength(2.4, 1.4),
-              pin: true,
-              scrub: 1,
-            },
-          });
-          STEPS.forEach((_, index) => {
-            tl.to(`.pin-step[data-index="${index}"]`, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 1,
-            });
-            if (index < STEPS.length - 1) {
-              tl.to(`.pin-step[data-index="${index}"]`, {
-                autoAlpha: 0,
-                y: -30,
-                duration: 1,
-              });
-            }
-          });
-        },
-        // 모바일: 핀 없이 뷰포트 진입 시 순차 등장(iOS 관성 충돌 회피).
-        mobile: () => {
-          g.set(".pin-step", { autoAlpha: 0, y: 24 });
-          g.to(".pin-step", {
+    withResponsiveScroll(g, {
+      // 데스크탑: 섹션을 핀 고정하고 스크럽으로 단계를 넘긴다.
+      desktop: () => {
+        g.set('.pin-step', { autoAlpha: 0, y: 30 });
+        const tl = g.timeline({
+          scrollTrigger: {
+            ...pinnedTriggerDefaults,
+            trigger: '.pin-stage',
+            start: 'top top',
+            end: viewportScrollLength(2.4, 1.4),
+            pin: true,
+            scrub: 1,
+          },
+        });
+        STEPS.forEach((_, index) => {
+          tl.to(`.pin-step[data-index="${index}"]`, {
             autoAlpha: 1,
             y: 0,
-            stagger: 0.2,
-            scrollTrigger: {
-              trigger: ".pin-stage",
-              start: "top 70%",
-              toggleActions: "play none none reverse",
-            },
+            duration: 1,
           });
-        },
-      });
-    },
-    container,
-  );
+          if (index < STEPS.length - 1) {
+            tl.to(`.pin-step[data-index="${index}"]`, {
+              autoAlpha: 0,
+              y: -30,
+              duration: 1,
+            });
+          }
+        });
+      },
+      // 모바일: 핀 없이 뷰포트 진입 시 순차 등장(iOS 관성 충돌 회피).
+      mobile: () => {
+        g.set('.pin-step', { autoAlpha: 0, y: 24 });
+        g.to('.pin-step', {
+          autoAlpha: 1,
+          y: 0,
+          stagger: 0.2,
+          scrollTrigger: {
+            trigger: '.pin-stage',
+            start: 'top 70%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      },
+    });
+  }, container);
 
   return (
     <div ref={container}>

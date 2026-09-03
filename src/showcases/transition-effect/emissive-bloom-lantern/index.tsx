@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import { Bloom, EffectComposer } from "@react-three/postprocessing";
+import { useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
 
 /** 블룸이 걸리는 밝기 임계값. 이 값을 넘는 픽셀만 번진다. */
 const LUMINANCE_THRESHOLD = 1;
@@ -18,12 +18,12 @@ const BLOOM_INTENSITY = 1.15;
 const BLOOM_RADIUS = 0.75;
 
 /** 발광 구의 기본 색조. 곱셈 계수로 1.0을 넘겨 HDR 영역으로 밀어 올린다. */
-const EMISSIVE_HUES = ["#ff5d3b", "#3bd7ff", "#b46bff"] as const;
+const EMISSIVE_HUES = ['#ff5d3b', '#3bd7ff', '#b46bff'] as const;
 /** 발광 구가 임계값을 넘도록 색에 곱하는 계수. 1 이하면 블룸이 전혀 걸리지 않는다. */
 const HDR_GAIN = 3.4;
 
 /** 대조군(비발광) 구의 재질 색. 발광군과 같은 색조지만 밝기는 1 이하다. */
-const MATTE_HUES = ["#ff5d3b", "#3bd7ff", "#b46bff"] as const;
+const MATTE_HUES = ['#ff5d3b', '#3bd7ff', '#b46bff'] as const;
 
 /** 구 한 쌍의 z 간격. 발광군(-)과 대조군(+)을 좌우로 갈라 놓는다. */
 const COLUMN_X = 1.9;
@@ -167,10 +167,14 @@ export function Scene() {
       */}
       <ambientLight intensity={0.6} />
       <directionalLight position={[3, 4, 5]} intensity={1.8} />
-      <directionalLight position={[-4, 2, -3]} intensity={0.5} color="#8fb4ff" />
+      <directionalLight
+        position={[-4, 2, -3]}
+        intensity={0.5}
+        color="#8fb4ff"
+      />
 
       {/* 어두운 배경이라야 번짐이 눈에 보인다. 밝은 배경에서는 블룸이 묻힌다. */}
-      <color attach="background" args={["#07080d"]} />
+      <color attach="background" args={['#07080d']} />
 
       <EmissiveColumn />
       <MatteColumn />

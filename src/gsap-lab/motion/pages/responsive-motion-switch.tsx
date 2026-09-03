@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { DemoShell } from "@/gsap-lab/demo-shell";
+import { useRef } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { DemoShell } from '@/gsap-lab/demo-shell';
 
 const ITEMS = Array.from({ length: 6 }, (_, i) => ({
   title: `카드 ${i + 1}`,
@@ -22,49 +22,49 @@ const ITEMS = Array.from({ length: 6 }, (_, i) => ({
 export function ResponsiveMotionSwitchPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      if (reduced) {
-        g.set(".rm-card", { x: 0, rotate: 0, autoAlpha: 1, y: 0 });
-        return;
-      }
+  useGsapDom(({ gsap: g, reduced }) => {
+    if (reduced) {
+      g.set('.rm-card', { x: 0, rotate: 0, autoAlpha: 1, y: 0 });
+      return;
+    }
 
-      const mm = g.matchMedia();
+    const mm = g.matchMedia();
 
-      mm.add("(min-width: 768px)", () => {
-        g.fromTo(
-          ".rm-card",
-          { x: (i) => (i % 2 === 0 ? -60 : 60), rotate: (i) => (i % 2 === 0 ? -6 : 6) },
-          {
-            x: (i) => (i % 2 === 0 ? 60 : -60),
-            rotate: (i) => (i % 2 === 0 ? 6 : -6),
-            duration: 1.6,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-            stagger: { each: 0.15, from: "center" },
-          },
-        );
-      });
+    mm.add('(min-width: 768px)', () => {
+      g.fromTo(
+        '.rm-card',
+        {
+          x: (i) => (i % 2 === 0 ? -60 : 60),
+          rotate: (i) => (i % 2 === 0 ? -6 : 6),
+        },
+        {
+          x: (i) => (i % 2 === 0 ? 60 : -60),
+          rotate: (i) => (i % 2 === 0 ? 6 : -6),
+          duration: 1.6,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          stagger: { each: 0.15, from: 'center' },
+        },
+      );
+    });
 
-      mm.add("(max-width: 767px)", () => {
-        g.fromTo(
-          ".rm-card",
-          { y: 16, autoAlpha: 0.4 },
-          {
-            y: -16,
-            autoAlpha: 1,
-            duration: 1.2,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-            stagger: 0.1,
-          },
-        );
-      });
-    },
-    container,
-  );
+    mm.add('(max-width: 767px)', () => {
+      g.fromTo(
+        '.rm-card',
+        { y: 16, autoAlpha: 0.4 },
+        {
+          y: -16,
+          autoAlpha: 1,
+          duration: 1.2,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          stagger: 0.1,
+        },
+      );
+    });
+  }, container);
 
   return (
     <DemoShell
@@ -83,7 +83,10 @@ export function ResponsiveMotionSwitchPage() {
               className="rm-card flex items-center gap-4 rounded-2xl p-6 text-white"
               style={{ background: item.background }}
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-white/20" aria-hidden />
+              <div
+                className="h-12 w-12 shrink-0 rounded-lg bg-white/20"
+                aria-hidden
+              />
               <span className="font-medium">{item.title}</span>
             </div>
           ))}

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { refreshAfterLayout } from "@/gsap-lab/scroll/scroll-trigger-setup";
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { refreshAfterLayout } from '@/gsap-lab/scroll/scroll-trigger-setup';
 
 /** `useRevealOnScroll` 옵션. */
 export interface RevealOnScrollOptions {
@@ -52,10 +52,10 @@ export function useRevealOnScroll(
   const {
     target,
     trigger,
-    start = "top 75%",
+    start = 'top 75%',
     from = { autoAlpha: 0, y: 48 },
     duration = 0.6,
-    ease = "power3.out",
+    ease = 'power3.out',
     stagger,
     reversible = true,
     deps = [],
@@ -75,8 +75,8 @@ export function useRevealOnScroll(
           trigger: trigger ?? target,
           start,
           toggleActions: reversible
-            ? "play none none reverse"
-            : "play none none none",
+            ? 'play none none reverse'
+            : 'play none none none',
         },
       });
     },

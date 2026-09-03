@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useDrawSvgPaths } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { useDrawSvgPaths } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 /**
  * `/gsap-lab/svg-path-draw` — 스크롤에 따라 SVG 경로가 그려진다.
@@ -15,11 +15,11 @@ export function SvgPathDrawPage() {
   const container = useRef<HTMLDivElement>(null);
 
   useDrawSvgPaths(container, {
-    target: ".draw-path",
-    trigger: ".draw-stage",
-    mode: "scrub",
-    start: "top 60%",
-    end: "bottom 80%",
+    target: '.draw-path',
+    trigger: '.draw-stage',
+    mode: 'scrub',
+    start: 'top 60%',
+    end: 'bottom 80%',
   });
 
   return (

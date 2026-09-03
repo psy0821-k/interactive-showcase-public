@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Suspense } from "react";
-import type { ReactNode } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Suspense } from 'react';
+import type { ReactNode } from 'react';
+import { Canvas } from '@react-three/fiber';
 
 /**
  * R3F 크기 측정 옵션.
@@ -16,7 +16,7 @@ import { Canvas } from "@react-three/fiber";
 const RESIZE_OPTIONS = { offsetSize: true, debounce: 0 } as const;
 
 /** 뷰포트 크기 고정 — fixed 캔버스라 항상 전체 화면. */
-const CANVAS_STYLE = { width: "100vw", height: "100vh" } as const;
+const CANVAS_STYLE = { width: '100vw', height: '100vh' } as const;
 
 /**
  * 캔버스 자리 폴백. WebGL 미지원 브라우저·Scene 예외에서 스크린리더가 읽는다
@@ -62,7 +62,9 @@ export function LandingCanvas({ label, children }: LandingCanvasProps) {
       gl={{ toneMappingExposure: 1 }}
       role="img"
       aria-label={label}
-      fallback={<CanvasFallback message="이 데모를 보려면 WebGL이 필요합니다." />}
+      fallback={
+        <CanvasFallback message="이 데모를 보려면 WebGL이 필요합니다." />
+      }
     >
       <Suspense fallback={null}>{children}</Suspense>
     </Canvas>

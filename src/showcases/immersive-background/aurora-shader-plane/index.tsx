@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useRef } from "react";
-import * as THREE from "three";
+import { useRef } from 'react';
+import * as THREE from 'three';
 import {
   extend,
   useFrame,
   useThree,
   type ThreeElement,
-} from "@react-three/fiber";
-import { shaderMaterial } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+} from '@react-three/fiber';
+import { shaderMaterial } from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 평면의 z 위치. 멀수록 카메라 회전에 강하다. */
 const PLANE_Z = -8;
@@ -99,7 +99,7 @@ const AuroraPlaneMaterial = shaderMaterial(
 extend({ AuroraPlaneMaterial });
 
 // R3F v9 타입 선언. 구버전 JSX.IntrinsicElements 방식은 폐기됐다.
-declare module "@react-three/fiber" {
+declare module '@react-three/fiber' {
   interface ThreeElements {
     auroraPlaneMaterial: ThreeElement<typeof AuroraPlaneMaterial>;
   }
@@ -132,7 +132,10 @@ export function Scene() {
     material.uniforms.uAspect.value = width / height;
 
     // pointer는 이미 정규화된 중심 기준 좌표다. 보간해 부드럽게 따라간다.
-    material.uniforms.uPointer.value.lerp(state.pointer, Math.min(delta * 4, 1));
+    material.uniforms.uPointer.value.lerp(
+      state.pointer,
+      Math.min(delta * 4, 1),
+    );
   });
 
   return (

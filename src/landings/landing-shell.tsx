@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import type { ReactNode, RefObject } from "react";
-import { LandingCanvas } from "./landing-canvas";
-import { LandingDomHeader } from "./landing-dom-header";
-import { useLandingScroll } from "./use-landing-scroll";
-import type { LandingEntry } from "./registry";
+import { useRef } from 'react';
+import type { ReactNode, RefObject } from 'react';
+import { LandingCanvas } from './landing-canvas';
+import { LandingDomHeader } from './landing-dom-header';
+import { useLandingScroll } from './use-landing-scroll';
+import type { LandingEntry } from './registry';
 
 /** Scene에 넘어가는 컨텍스트. 진행률은 ref로 읽어 리렌더를 피한다. */
 export interface LandingSceneContext {
@@ -40,7 +40,11 @@ interface LandingShellProps {
  * ScrollTrigger는 window를 scroller로 잡고 트랙 기준 진행률을 `progressRef`에
  * 쓴다. Scene은 그 ref를 `useFrame`에서 읽어 3D를 보간한다(3절 b).
  */
-export function LandingShell({ entry, renderScene, children }: LandingShellProps) {
+export function LandingShell({
+  entry,
+  renderScene,
+  children,
+}: LandingShellProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
 
@@ -90,18 +94,18 @@ export function LandingShell({ entry, renderScene, children }: LandingShellProps
  */
 export function LandingSection({
   children,
-  align = "start",
+  align = 'start',
 }: {
   children: ReactNode;
   /** 콘텐츠 가로 정렬. */
-  align?: "start" | "center" | "end";
+  align?: 'start' | 'center' | 'end';
 }) {
   const justify =
-    align === "center"
-      ? "items-center text-center"
-      : align === "end"
-        ? "items-end text-right"
-        : "items-start text-left";
+    align === 'center'
+      ? 'items-center text-center'
+      : align === 'end'
+        ? 'items-end text-right'
+        : 'items-start text-left';
   return (
     <section
       className={`flex min-h-screen flex-col justify-center gap-4 px-6 py-24 ${justify}`}
@@ -117,7 +121,7 @@ export function LandingSection({
  */
 export function LandingCard({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;

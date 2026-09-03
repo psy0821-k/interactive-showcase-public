@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
 import {
   useCallback,
@@ -8,19 +8,19 @@ import {
   useRef,
   useState,
   type CSSProperties,
-} from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { Html, PerspectiveCamera } from "@react-three/drei";
+} from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { Html, PerspectiveCamera } from '@react-three/drei';
 import {
   Autofocus,
   Bloom,
   EffectComposer,
   ToneMapping,
-} from "@react-three/postprocessing";
-import { ToneMappingMode } from "postprocessing";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneReadout } from "@/components/scene-label";
+} from '@react-three/postprocessing';
+import { ToneMappingMode } from 'postprocessing';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneReadout } from '@/components/scene-label';
 
 /** Bloom은 프리셋과 무관하게 고정. 뒤쪽 발광 점이 보케로 커질 때 빛나게 한다. */
 const BLOOM = {
@@ -45,30 +45,30 @@ interface Product {
   label: string;
   position: readonly [number, number, number];
   color: string;
-  geometry: "box" | "sphere" | "cone";
+  geometry: 'box' | 'sphere' | 'cone';
 }
 
 const PRODUCTS: readonly Product[] = [
   {
-    id: "front",
-    label: "앞 (근거리)",
+    id: 'front',
+    label: '앞 (근거리)',
     position: [-1.4, 0, 2.2],
-    color: "#d8623f",
-    geometry: "box",
+    color: '#d8623f',
+    geometry: 'box',
   },
   {
-    id: "mid",
-    label: "중간",
+    id: 'mid',
+    label: '중간',
     position: [0.1, 0, 0],
-    color: "#3f8fd8",
-    geometry: "sphere",
+    color: '#3f8fd8',
+    geometry: 'sphere',
   },
   {
-    id: "back",
-    label: "뒤 (원거리)",
+    id: 'back',
+    label: '뒤 (원거리)',
     position: [1.5, 0, -2.4],
-    color: "#3fae5a",
-    geometry: "cone",
+    color: '#3fae5a',
+    geometry: 'cone',
   },
 ] as const;
 
@@ -88,13 +88,11 @@ interface ProductMeshProps {
 function ProductMesh({ product }: ProductMeshProps) {
   return (
     <mesh position={product.position} castShadow>
-      {product.geometry === "box" && <boxGeometry args={[1, 1, 1]} />}
-      {product.geometry === "sphere" && (
+      {product.geometry === 'box' && <boxGeometry args={[1, 1, 1]} />}
+      {product.geometry === 'sphere' && (
         <sphereGeometry args={[0.62, 40, 24]} />
       )}
-      {product.geometry === "cone" && (
-        <coneGeometry args={[0.62, 1.2, 32]} />
-      )}
+      {product.geometry === 'cone' && <coneGeometry args={[0.62, 1.2, 32]} />}
       <meshStandardMaterial
         color={product.color}
         roughness={0.4}
@@ -107,7 +105,7 @@ function ProductMesh({ product }: ProductMeshProps) {
 /** 뒤쪽 발광 점들 — Bloom이 걸리는 유일한 대상. DoF가 이걸 큰 보케로 만든다. */
 function BokehLights() {
   const color = useMemo(
-    () => new THREE.Color("#ffd9a8").multiplyScalar(EMISSIVE_GAIN),
+    () => new THREE.Color('#ffd9a8').multiplyScalar(EMISSIVE_GAIN),
     [],
   );
 
@@ -147,18 +145,18 @@ export function Scene() {
 
   const buttonStyle = useMemo<CSSProperties>(
     () => ({
-      padding: "5px 10px",
+      padding: '5px 10px',
       borderRadius: 6,
       // border shorthand 대신 분리 속성 — active 스타일이 borderColor만 덮어써도
       // shorthand/non-shorthand 충돌 경고가 안 난다.
       borderWidth: 1,
-      borderStyle: "solid",
-      borderColor: "rgba(138, 180, 255, 0.4)",
-      background: "rgba(15, 20, 30, 0.9)",
-      color: "#e8edf5",
+      borderStyle: 'solid',
+      borderColor: 'rgba(138, 180, 255, 0.4)',
+      background: 'rgba(15, 20, 30, 0.9)',
+      color: '#e8edf5',
       fontSize: 12,
-      cursor: "pointer",
-      userSelect: "none",
+      cursor: 'pointer',
+      userSelect: 'none',
     }),
     [],
   );
@@ -166,14 +164,16 @@ export function Scene() {
   const activeButtonStyle = useMemo<CSSProperties>(
     () => ({
       ...buttonStyle,
-      background: "rgba(90, 130, 220, 0.9)",
-      borderColor: "rgba(180, 205, 255, 0.8)",
+      background: 'rgba(90, 130, 220, 0.9)',
+      borderColor: 'rgba(180, 205, 255, 0.8)',
     }),
     [buttonStyle],
   );
 
   const getReadout = useCallback(() => {
-    const mode = mouseMode ? "마우스 초점" : `고정 초점 · ${PRODUCTS[focusIndex].label}`;
+    const mode = mouseMode
+      ? '마우스 초점'
+      : `고정 초점 · ${PRODUCTS[focusIndex].label}`;
     return (
       `${mode}\n` +
       `bokehScale ${BOKEH_SCALE} · worldFocusRange ${WORLD_FOCUS_RANGE}`
@@ -208,14 +208,22 @@ export function Scene() {
       />
 
       {/* 어두운 배경 — Bloom이 보이는 전제 (bloom-postprocessing 5절). */}
-      <color attach="background" args={["#0b0c11"]} />
+      <color attach="background" args={['#0b0c11']} />
 
       <ambientLight intensity={0.5} />
       <directionalLight position={[4, 6, 5]} intensity={2} castShadow />
-      <directionalLight position={[-5, 3, -2]} intensity={0.45} color="#9fb8ff" />
+      <directionalLight
+        position={[-5, 3, -2]}
+        intensity={0.45}
+        color="#9fb8ff"
+      />
 
       {/* 바닥 — mouse 모드가 빈 공간을 가리켜도 표면이 잡히게. */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.65, -1]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.65, -1]}
+        receiveShadow
+      >
         <planeGeometry args={[24, 20]} />
         <meshStandardMaterial color="#6b7079" roughness={0.95} />
       </mesh>
@@ -246,13 +254,18 @@ export function Scene() {
         lineHeight={1.5}
       />
 
-      <Html position={[0, -1.7, 0]} center distanceFactor={9} zIndexRange={[120, 0]}>
+      <Html
+        position={[0, -1.7, 0]}
+        center
+        distanceFactor={9}
+        zIndexRange={[120, 0]}
+      >
         <div
           style={{
-            display: "flex",
+            display: 'flex',
             gap: 6,
-            flexWrap: "wrap",
-            justifyContent: "center",
+            flexWrap: 'wrap',
+            justifyContent: 'center',
             maxWidth: 320,
           }}
         >
@@ -278,14 +291,14 @@ export function Scene() {
             style={mouseMode ? activeButtonStyle : buttonStyle}
             onClick={() => setMouseMode((value) => !value)}
           >
-            {mouseMode ? "마우스 초점 끄기" : "마우스 초점"}
+            {mouseMode ? '마우스 초점 끄기' : '마우스 초점'}
           </button>
           <button
             type="button"
             style={debug ? activeButtonStyle : buttonStyle}
             onClick={() => setDebug((value) => !value)}
           >
-            {debug ? "debug 끄기" : "debug 구"}
+            {debug ? 'debug 끄기' : 'debug 구'}
           </button>
         </div>
       </Html>

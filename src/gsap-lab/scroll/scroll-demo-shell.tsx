@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 /** 스크롤 데모 공통 셸이 받는 props. */
 interface ScrollDemoShellProps {
@@ -34,16 +34,20 @@ interface ScrollDemoShellProps {
 export function ScrollDemoShell({
   title,
   summary,
-  scrollHint = "아래로 스크롤해 효과를 확인하세요",
+  scrollHint = '아래로 스크롤해 효과를 확인하세요',
   transparent = false,
   stickyHeader = true,
   children,
 }: ScrollDemoShellProps) {
   return (
-    <div className={transparent ? "text-neutral-100" : "bg-neutral-950 text-neutral-100"}>
+    <div
+      className={
+        transparent ? 'text-neutral-100' : 'bg-neutral-950 text-neutral-100'
+      }
+    >
       <header
         className={`${
-          stickyHeader ? "sticky top-0 z-40" : "relative"
+          stickyHeader ? 'sticky top-0 z-40' : 'relative'
         } border-b border-white/10 bg-neutral-950/85 px-6 py-3 backdrop-blur`}
       >
         <div className="mx-auto flex max-w-5xl flex-wrap items-baseline gap-x-3">

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import type { LandingSceneContext } from "../landing-shell";
-import { useEasedProgress } from "./use-eased-progress";
+import { useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import type { LandingSceneContext } from '../landing-shell';
+import { useEasedProgress } from './use-eased-progress';
 
 /** 리본을 정의하는 제어점. S자로 공간을 가로지른다. */
 const CONTROL_POINTS = [
@@ -31,7 +31,7 @@ export function RibbonStoryScene({ progress, reduced }: LandingSceneContext) {
   const eased = useEasedProgress(progress, { smooth: true, stiffness: 3 });
 
   const curve = useMemo(
-    () => new THREE.CatmullRomCurve3(CONTROL_POINTS, false, "catmullrom", 0.5),
+    () => new THREE.CatmullRomCurve3(CONTROL_POINTS, false, 'catmullrom', 0.5),
     [],
   );
 
@@ -89,7 +89,11 @@ export function RibbonStoryScene({ progress, reduced }: LandingSceneContext) {
 
       <ambientLight intensity={0.5} />
       <directionalLight position={[4, 6, 3]} intensity={2} castShadow />
-      <directionalLight position={[-4, 2, -6]} intensity={0.6} color="#f9a8d4" />
+      <directionalLight
+        position={[-4, 2, -6]}
+        intensity={0.6}
+        color="#f9a8d4"
+      />
 
       {/* 리본 */}
       <mesh geometry={tubeGeometry} castShadow>

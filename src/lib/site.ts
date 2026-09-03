@@ -5,7 +5,7 @@
  * 우선 쓴다(프로토콜 없는 host 형태). 로컬·미설정 시 폴백 상수를 쓴다.
  */
 
-const FALLBACK_HOST = "interactive-showcase-public.vercel.app";
+const FALLBACK_HOST = 'interactive-showcase-public.vercel.app';
 
 const productionHost =
   process.env.VERCEL_PROJECT_PRODUCTION_URL ?? FALLBACK_HOST;
@@ -18,5 +18,5 @@ export const SITE_URL = `https://${productionHost}`;
  * Vercel `production` 환경에서만 true. preview·development는 색인 차단.
  */
 export const IS_INDEXABLE = process.env.VERCEL_ENV
-  ? process.env.VERCEL_ENV === "production"
+  ? process.env.VERCEL_ENV === 'production'
   : true;

@@ -1,43 +1,44 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { LANDING_ENTRIES, type LandingEntry } from "@/landings/registry";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { LANDING_ENTRIES, type LandingEntry } from '@/landings/registry';
 
 export const metadata: Metadata = {
-  title: "Landings",
+  title: 'Landings',
   description:
-    "스크롤 연동 랜딩페이지 예시 모음. R3F Canvas에 GSAP ScrollTrigger를 물린 " +
-    "방식과 순수 DOM GSAP 방식을 나눠, 가상 SaaS Fluxnote를 소재로 시연한다.",
-  alternates: { canonical: "/landings" },
+    '스크롤 연동 랜딩페이지 예시 모음. R3F Canvas에 GSAP ScrollTrigger를 물린 ' +
+    '방식과 순수 DOM GSAP 방식을 나눠, 가상 SaaS Fluxnote를 소재로 시연한다.',
+  alternates: { canonical: '/landings' },
   openGraph: {
-    type: "website",
-    url: "/landings",
-    title: "Landings",
-    description: "스크롤 연동 랜딩페이지 예시 — R3F + GSAP, 그리고 순수 DOM GSAP.",
+    type: 'website',
+    url: '/landings',
+    title: 'Landings',
+    description:
+      '스크롤 연동 랜딩페이지 예시 — R3F + GSAP, 그리고 순수 DOM GSAP.',
   },
 };
 
 /** 렌더링 방식별 섹션 메타. 표시 순서는 이 배열 순서를 따른다. */
 const SECTIONS: {
-  kind: "r3f" | "dom";
+  kind: 'r3f' | 'dom';
   heading: string;
   description: string;
   badge: string;
 }[] = [
   {
-    kind: "r3f",
-    heading: "3D 히어로 + 스크롤",
+    kind: 'r3f',
+    heading: '3D 히어로 + 스크롤',
     description:
-      "자체 <Canvas>와 스크롤 컨테이너에 GSAP ScrollTrigger를 직접 접합했습니다. " +
-      "스크롤 진행률이 카메라·오브젝트 상태를 몹니다.",
-    badge: "R3F",
+      '자체 <Canvas>와 스크롤 컨테이너에 GSAP ScrollTrigger를 직접 접합했습니다. ' +
+      '스크롤 진행률이 카메라·오브젝트 상태를 몹니다.',
+    badge: 'R3F',
   },
   {
-    kind: "dom",
-    heading: "순수 DOM + GSAP",
+    kind: 'dom',
+    heading: '순수 DOM + GSAP',
     description:
-      "R3F 없이 DOM 요소만 GSAP ScrollTrigger로 움직입니다. 패럴랙스, 핀, " +
-      "키네틱 타이포를 마크업과 CSS transform으로 구성했습니다.",
-    badge: "DOM",
+      'R3F 없이 DOM 요소만 GSAP ScrollTrigger로 움직입니다. 패럴랙스, 핀, ' +
+      '키네틱 타이포를 마크업과 CSS transform으로 구성했습니다.',
+    badge: 'DOM',
   },
 ];
 
@@ -91,14 +92,14 @@ export default function LandingsIndexPage() {
           스크롤에 반응하는 완성형 랜딩페이지 예시입니다. R3F 3D 히어로에 GSAP
           ScrollTrigger를 물린 것과 R3F 없이 순수 DOM + GSAP으로만 만든 것으로
           나눴습니다. 쇼케이스 셸을 거치지 않고 독립 라우트에서 직접 구성하며,
-          소재는 가상 SaaS Fluxnote입니다. 각 상세 페이지에는 그 페이지를 만들 때
-          정의한 요구사항이 결과물과 나란히 있습니다.
+          소재는 가상 SaaS Fluxnote입니다. 각 상세 페이지에는 그 페이지를 만들
+          때 정의한 요구사항이 결과물과 나란히 있습니다.
         </p>
       </header>
 
       {SECTIONS.map((section) => {
         const entries = LANDING_ENTRIES.filter(
-          (entry) => (entry.kind ?? "r3f") === section.kind,
+          (entry) => (entry.kind ?? 'r3f') === section.kind,
         );
         if (entries.length === 0) return null;
 

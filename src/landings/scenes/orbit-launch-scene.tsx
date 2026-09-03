@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import type { LandingSceneContext } from "../landing-shell";
-import { useEasedProgress } from "./use-eased-progress";
+import { useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import type { LandingSceneContext } from '../landing-shell';
+import { useEasedProgress } from './use-eased-progress';
 
 /** 궤도를 도는 노드 개수. */
 const NODE_COUNT = 8;
@@ -81,7 +81,12 @@ export function OrbitLaunchScene({ progress, reduced }: LandingSceneContext) {
 
       <ambientLight intensity={0.4} />
       <directionalLight position={[4, 6, 5]} intensity={2} castShadow />
-      <pointLight position={[0, 0, 0]} intensity={8} distance={12} color="#a5b4fc" />
+      <pointLight
+        position={[0, 0, 0]}
+        intensity={8}
+        distance={12}
+        color="#a5b4fc"
+      />
 
       <group ref={groupRef}>
         {/* 중심 구 */}

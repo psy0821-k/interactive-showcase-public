@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
 interface Props {
   /** history가 없을 때(직접 URL 진입) 이동할 갤러리 경로. */
@@ -17,7 +17,7 @@ interface Props {
  */
 export function BackButton({
   fallbackHref,
-  label = "← 갤러리로 돌아가기",
+  label = '← 갤러리로 돌아가기',
 }: Props) {
   const router = useRouter();
 

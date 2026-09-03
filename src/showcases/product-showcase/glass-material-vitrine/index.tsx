@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
 // cspell:ignore nior -- 라벨 문자열의 "\n" + "ior"(굴절률)가 합쳐져 보이는 것
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
 import {
   Environment,
   Lightformer,
   MeshTransmissionMaterial,
   PerspectiveCamera,
-} from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneLabel, SceneReadout } from "@/components/scene-label";
+} from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneLabel, SceneReadout } from '@/components/scene-label';
 
 /** 셀 하나의 재질 정의. */
 interface GlassCell {
@@ -40,46 +40,46 @@ interface GlassCell {
  */
 const CELLS: GlassCell[] = [
   {
-    label: "맑은 유리\nPhysical  ior 1.5",
+    label: '맑은 유리\nPhysical  ior 1.5',
     useMTM: false,
     ior: 1.5,
     thickness: 0.5,
     roughness: 0,
   },
   {
-    label: "맑은 유리\nMTM  배경 굴절",
+    label: '맑은 유리\nMTM  배경 굴절',
     useMTM: true,
     ior: 1.5,
     thickness: 0.5,
     roughness: 0,
   },
   {
-    label: "간유리\nroughness 0.45",
+    label: '간유리\nroughness 0.45',
     useMTM: true,
     ior: 1.5,
     thickness: 0.4,
     roughness: 0.45,
   },
   {
-    label: "색유리\nattenuation 0.4",
+    label: '색유리\nattenuation 0.4',
     useMTM: true,
     ior: 1.5,
     thickness: 0.6,
     roughness: 0,
-    attenuationColor: "#2f9e6e",
+    attenuationColor: '#2f9e6e',
     attenuationDistance: 0.4,
   },
   {
-    label: "액체\nior 1.33  레드",
+    label: '액체\nior 1.33  레드',
     useMTM: true,
     ior: 1.33,
     thickness: 0.6,
     roughness: 0,
-    attenuationColor: "#a82424",
+    attenuationColor: '#a82424',
     attenuationDistance: 0.5,
   },
   {
-    label: "색수차\ndispersion",
+    label: '색수차\ndispersion',
     useMTM: false,
     ior: 1.5,
     thickness: 0.7,
@@ -139,7 +139,7 @@ function GlassSphere({ cell, position, reducedMotion }: GlassSphereProps) {
             transmissionSampler
             anisotropicBlur={cell.roughness > 0 ? 0.6 : 0}
             chromaticAberration={cell.chromaticAberration ?? 0}
-            attenuationColor={cell.attenuationColor ?? "#ffffff"}
+            attenuationColor={cell.attenuationColor ?? '#ffffff'}
             attenuationDistance={cell.attenuationDistance ?? Infinity}
           />
         ) : (
@@ -149,7 +149,7 @@ function GlassSphere({ cell, position, reducedMotion }: GlassSphereProps) {
             thickness={cell.thickness}
             roughness={cell.roughness}
             dispersion={cell.dispersion ?? 0}
-            attenuationColor={cell.attenuationColor ?? "#ffffff"}
+            attenuationColor={cell.attenuationColor ?? '#ffffff'}
             attenuationDistance={cell.attenuationDistance ?? Infinity}
             envMapIntensity={1}
           />
@@ -178,7 +178,7 @@ function RenderStats() {
   const getText = useCallback(() => {
     const { calls, triangles } = gl.info.render;
     return (
-      `드로우콜 ${calls}  ·  삼각형 ${triangles.toLocaleString("ko-KR")}\n` +
+      `드로우콜 ${calls}  ·  삼각형 ${triangles.toLocaleString('ko-KR')}\n` +
       `MTM 4개 · transmissionSampler 공유`
     );
   }, [gl]);
@@ -200,14 +200,14 @@ function RenderStats() {
 function PatternBackdrop() {
   const texture = useMemo(() => {
     const size = 512;
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (ctx) {
-      ctx.fillStyle = "#1a1f2b";
+      ctx.fillStyle = '#1a1f2b';
       ctx.fillRect(0, 0, size, size);
-      ctx.strokeStyle = "#4a90d9";
+      ctx.strokeStyle = '#4a90d9';
       ctx.lineWidth = 3;
       const step = size / 12;
       for (let i = 0; i <= 12; i += 1) {

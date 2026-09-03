@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
+import { useMemo, useRef } from 'react';
+import * as THREE from 'three';
 import {
   extend,
   useFrame,
   useThree,
   type ThreeElement,
-} from "@react-three/fiber";
-import { shaderMaterial } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+} from '@react-three/fiber';
+import { shaderMaterial } from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 파티클 개수. 점 하나당 정점 하나뿐이라 이 정도는 드로우콜 1개로 감당된다. */
 const PARTICLE_COUNT = 12_000;
@@ -44,8 +44,8 @@ const DRIFT_SPEED = 0.35;
 const REDUCED_MOTION_SPEED = 0.03;
 
 /** 별 색 팔레트. 차가운 흰빛과 따뜻한 호박빛을 섞어 단조로움을 피한다. */
-const COOL_COLOR = new THREE.Color("#9fd0ff");
-const WARM_COLOR = new THREE.Color("#ffd9a3");
+const COOL_COLOR = new THREE.Color('#9fd0ff');
+const WARM_COLOR = new THREE.Color('#ffd9a3');
 
 /**
  * 포인트 전용 셰이더 머티리얼.
@@ -136,7 +136,7 @@ const StarfieldPointDriftMaterial = shaderMaterial(
 extend({ StarfieldPointDriftMaterial });
 
 // R3F v9 타입 선언. 구버전 JSX.IntrinsicElements 방식은 폐기됐다.
-declare module "@react-three/fiber" {
+declare module '@react-three/fiber' {
   interface ThreeElements {
     starfieldPointDriftMaterial: ThreeElement<
       typeof StarfieldPointDriftMaterial
@@ -177,7 +177,8 @@ function createParticleBuffers(count: number): ParticleBuffers {
     positions[i * 3 + 2] =
       FIELD_NEAR_Z + Math.random() * (FIELD_FAR_Z - FIELD_NEAR_Z);
 
-    sizes[i] = SIZE_JITTER_MIN + Math.random() * (SIZE_JITTER_MAX - SIZE_JITTER_MIN);
+    sizes[i] =
+      SIZE_JITTER_MIN + Math.random() * (SIZE_JITTER_MAX - SIZE_JITTER_MIN);
     phases[i] = Math.random() * Math.PI * 2;
 
     color.copy(COOL_COLOR).lerp(WARM_COLOR, Math.random() ** 2);
@@ -217,7 +218,7 @@ export function Scene() {
   return (
     <>
       {/* 별먼지는 스스로 빛나므로 조명이 필요 없다. 배경만 어둡게 깐다. */}
-      <color attach="background" args={["#05060d"]} />
+      <color attach="background" args={['#05060d']} />
 
       <points
         // 파티클이 매 프레임 셰이더에서 움직여 CPU 쪽 바운딩이 실제와 어긋난다.
@@ -231,12 +232,18 @@ export function Scene() {
             attach="attributes-position"
             args={[buffers.positions, 3]}
           />
-          <bufferAttribute attach="attributes-aSize" args={[buffers.sizes, 1]} />
+          <bufferAttribute
+            attach="attributes-aSize"
+            args={[buffers.sizes, 1]}
+          />
           <bufferAttribute
             attach="attributes-aPhase"
             args={[buffers.phases, 1]}
           />
-          <bufferAttribute attach="attributes-aColor" args={[buffers.colors, 3]} />
+          <bufferAttribute
+            attach="attributes-aColor"
+            args={[buffers.colors, 3]}
+          />
         </bufferGeometry>
 
         <starfieldPointDriftMaterial

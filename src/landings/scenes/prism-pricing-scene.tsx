@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import type { LandingSceneContext } from "../landing-shell";
-import { useEasedProgress } from "./use-eased-progress";
+import { useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import type { LandingSceneContext } from '../landing-shell';
+import { useEasedProgress } from './use-eased-progress';
 
 /** 프리즘 뒤에 펼쳐지는 스펙트럼 조각(요금제 3종에 대응). */
-const SPECTRUM = ["#f87171", "#fbbf24", "#34d399"];
+const SPECTRUM = ['#f87171', '#fbbf24', '#34d399'];
 /** 상시 자전 각속도. */
 const SPIN_SPEED = 0.5;
 
@@ -77,7 +77,11 @@ export function PrismPricingScene({ progress, reduced }: LandingSceneContext) {
 
       <ambientLight intensity={0.5} />
       <directionalLight position={[3, 5, 4]} intensity={2.4} castShadow />
-      <directionalLight position={[-4, -2, 2]} intensity={0.7} color="#6ee7b7" />
+      <directionalLight
+        position={[-4, -2, 2]}
+        intensity={0.7}
+        color="#6ee7b7"
+      />
 
       {/* 프리즘 */}
       <mesh ref={prismRef} castShadow>

@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getSkillEntry } from "@/domain/skill-catalog";
-import { TECHNIQUE_CATEGORY_LABELS } from "@/domain/technique-category";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { getSkillEntry } from '@/domain/skill-catalog';
+import { TECHNIQUE_CATEGORY_LABELS } from '@/domain/technique-category';
 import {
   findShowcaseOnServer,
   getShowcaseEntries,
-} from "@/showcases/server-registry";
-import { resolveTrack } from "@/domain/showcase";
-import { BackButton } from "@/components/back-button";
-import { CopyButton } from "@/components/copy-button";
-import { ShowcaseDetail } from "@/components/showcase-detail";
-import { SITE_URL } from "@/lib/site";
+} from '@/showcases/server-registry';
+import { resolveTrack } from '@/domain/showcase';
+import { BackButton } from '@/components/back-button';
+import { CopyButton } from '@/components/copy-button';
+import { ShowcaseDetail } from '@/components/showcase-detail';
+import { SITE_URL } from '@/lib/site';
 
 /** 트랙별 갤러리 경로. 직접 URL 진입 시 뒤로가기 폴백에 쓴다. */
-const GALLERY_PATH = { "3d": "/", gsap: "/gsap" } as const;
+const GALLERY_PATH = { '3d': '/', gsap: '/gsap' } as const;
 
 /** 모든 쇼케이스 상세 페이지를 빌드 타임에 정적 생성한다. */
 export async function generateStaticParams() {
@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 /** 쇼케이스별 title·description·OG·canonical. */
 export async function generateMetadata({
   params,
-}: PageProps<"/showcase/[slug]">): Promise<Metadata> {
+}: PageProps<'/showcase/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
   const entry = await findShowcaseOnServer(slug);
   if (!entry) return {};
@@ -40,14 +40,14 @@ export async function generateMetadata({
     keywords: meta.usedSkills,
     alternates: { canonical },
     openGraph: {
-      type: "article",
+      type: 'article',
       url: `${SITE_URL}${canonical}`,
       title: meta.title,
       description: meta.description,
       images: [{ url: ogImage, width: 800, height: 450, alt: meta.title }],
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title: meta.title,
       description: meta.description,
       images: [ogImage],
@@ -58,7 +58,7 @@ export async function generateMetadata({
 /** Next 16에서 params는 Promise이므로 await 한다. */
 export default async function ShowcasePage({
   params,
-}: PageProps<"/showcase/[slug]">) {
+}: PageProps<'/showcase/[slug]'>) {
   const { slug } = await params;
   const entry = await findShowcaseOnServer(slug);
   if (!entry) notFound();
@@ -68,15 +68,15 @@ export default async function ShowcasePage({
   const galleryPath = GALLERY_PATH[resolveTrack(meta)];
 
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
     name: meta.title,
     description: meta.description,
     url: `${SITE_URL}/showcase/${slug}`,
     image: `${SITE_URL}${meta.thumbnail ?? `/thumbnails/${slug}.webp`}`,
     genre: categoryLabel,
-    keywords: meta.usedSkills.join(", "),
-    isPartOf: { "@type": "CollectionPage", "@id": SITE_URL },
+    keywords: meta.usedSkills.join(', '),
+    isPartOf: { '@type': 'CollectionPage', '@id': SITE_URL },
   };
 
   return (

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { usePinnedTimeline } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { usePinnedTimeline } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 const STEPS = [
-  { caption: "노트를 적으면", visual: "#7c2d12" },
-  { caption: "AI가 관련 노트를 찾아", visual: "#9a3412" },
-  { caption: "자동으로 연결하고", visual: "#c2410c" },
-  { caption: "팀 지식으로 쌓입니다", visual: "#ea580c" },
+  { caption: '노트를 적으면', visual: '#7c2d12' },
+  { caption: 'AI가 관련 노트를 찾아', visual: '#9a3412' },
+  { caption: '자동으로 연결하고', visual: '#c2410c' },
+  { caption: '팀 지식으로 쌓입니다', visual: '#ea580c' },
 ];
 
 /**
@@ -22,11 +22,15 @@ export function PinnedCaptionSwapPage() {
 
   usePinnedTimeline(
     container,
-    { trigger: ".pcs-stage", pin: ".pcs-pin", length: [2.6, 1.6] },
+    { trigger: '.pcs-stage', pin: '.pcs-pin', length: [2.6, 1.6] },
     ({ tl }) => {
       STEPS.forEach((step, index) => {
         const at = index / STEPS.length;
-        tl.to(".pcs-visual", { backgroundColor: step.visual, duration: 0.2 }, at);
+        tl.to(
+          '.pcs-visual',
+          { backgroundColor: step.visual, duration: 0.2 },
+          at,
+        );
         tl.to(
           `.caption-step[data-index="${index}"]`,
           { autoAlpha: 1, x: 0, duration: 0.2 },
@@ -43,7 +47,7 @@ export function PinnedCaptionSwapPage() {
     },
     (g) => {
       // 모션 축소: 캡션을 세로로 나열해 읽히게 한다.
-      g.set(".caption-step", { position: "relative", autoAlpha: 1, x: 0 });
+      g.set('.caption-step', { position: 'relative', autoAlpha: 1, x: 0 });
     },
   );
 
@@ -61,7 +65,10 @@ export function PinnedCaptionSwapPage() {
                 className="pcs-visual flex aspect-square items-center justify-center rounded-3xl"
                 style={{ background: STEPS[0].visual }}
               >
-                <div className="h-2/3 w-2/3 rounded-2xl bg-white/15" aria-hidden />
+                <div
+                  className="h-2/3 w-2/3 rounded-2xl bg-white/15"
+                  aria-hidden
+                />
               </div>
 
               {/* 바뀌는 캡션 (겹쳐 쌓임) */}
@@ -82,7 +89,8 @@ export function PinnedCaptionSwapPage() {
         </section>
 
         <section className="mx-auto max-w-2xl px-6 py-32 text-center text-white/60">
-          비주얼은 스크롤 내내 화면에 고정되고, 스크롤 진행이 곧 설명 단계입니다.
+          비주얼은 스크롤 내내 화면에 고정되고, 스크롤 진행이 곧 설명
+          단계입니다.
         </section>
       </ScrollDemoShell>
     </div>

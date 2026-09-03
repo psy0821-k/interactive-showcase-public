@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { Clone, PerspectiveCamera, useGLTF } from "@react-three/drei";
-import type { LandingSceneContext } from "../landing-shell";
-import { useEasedProgress } from "./use-eased-progress";
-import { useUiMockTexture } from "./use-ui-mock-texture";
+import { useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { Clone, PerspectiveCamera, useGLTF } from '@react-three/drei';
+import type { LandingSceneContext } from '../landing-shell';
+import { useEasedProgress } from './use-eased-progress';
+import { useUiMockTexture } from './use-ui-mock-texture';
 
 /** asset-optimization 파이프라인 산출물. 원본 cloud.glb(71MB)는 커밋·서빙 금지. */
-const CLOUD_URL = "/models/cloud-opt.glb";
+const CLOUD_URL = '/models/cloud-opt.glb';
 /** Draco 디코더 자체 호스팅 경로. 없으면 "No DRACOLoader instance provided". */
-const DRACO_PATH = "/draco/";
+const DRACO_PATH = '/draco/';
 
 /** 모델을 정규화할 목표 크기(월드 유닛). glb는 단위가 제각각이라 눈대중 금지. */
 const TARGET_SIZE = 6;
@@ -47,7 +47,7 @@ export function CloudSyncScene({ progress, reduced }: LandingSceneContext) {
   const panelRef = useRef<THREE.Mesh>(null);
 
   // 이미지 에셋 없이 코드로 그린 Fluxnote 대시보드 목업.
-  const uiTexture = useUiMockTexture({ kind: "dashboard", accent: "#38bdf8" });
+  const uiTexture = useUiMockTexture({ kind: 'dashboard', accent: '#38bdf8' });
 
   const { scene } = useGLTF(CLOUD_URL, DRACO_PATH);
 
@@ -56,7 +56,7 @@ export function CloudSyncScene({ progress, reduced }: LandingSceneContext) {
     scene.traverse((obj) => {
       if (obj instanceof THREE.Mesh) {
         obj.material = new THREE.MeshStandardMaterial({
-          color: "#e8eef5",
+          color: '#e8eef5',
           roughness: 0.9,
           metalness: 0,
         });
@@ -105,8 +105,7 @@ export function CloudSyncScene({ progress, reduced }: LandingSceneContext) {
       if (leftRef.current) leftRef.current.position.y = bob;
       if (rightRef.current) rightRef.current.position.y = -bob;
       if (leftRef.current) leftRef.current.rotation.y += delta * DRIFT_SPEED;
-      if (rightRef.current)
-        rightRef.current.rotation.y -= delta * DRIFT_SPEED;
+      if (rightRef.current) rightRef.current.rotation.y -= delta * DRIFT_SPEED;
     }
   });
 
@@ -122,10 +121,14 @@ export function CloudSyncScene({ progress, reduced }: LandingSceneContext) {
       />
 
       {/* standard-scene-setup: 하늘광 + 키 + 필 */}
-      <hemisphereLight args={["#e0f2fe", "#1e293b", 1.4]} />
+      <hemisphereLight args={['#e0f2fe', '#1e293b', 1.4]} />
       <ambientLight intensity={0.8} />
       <directionalLight position={[5, 8, 5]} intensity={3} castShadow />
-      <directionalLight position={[-6, 2, -4]} intensity={1.2} color="#bae6fd" />
+      <directionalLight
+        position={[-6, 2, -4]}
+        intensity={1.2}
+        color="#bae6fd"
+      />
 
       <group ref={leftRef} position={[-3.2, 0, 0]}>
         <group scale={scale} position={offset}>

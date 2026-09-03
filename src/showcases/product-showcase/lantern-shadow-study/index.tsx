@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
 import {
   Suspense,
@@ -11,20 +11,20 @@ import {
   useRef,
   useState,
   type RefObject,
-} from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+} from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import {
   Environment,
   PerspectiveCamera,
   useGLTF,
   useHelper,
-} from "@react-three/drei";
-import { SceneReadout } from "@/components/scene-label";
+} from '@react-three/drei';
+import { SceneReadout } from '@/components/scene-label';
 
-const MODEL_URL = "/models/lantern.glb";
+const MODEL_URL = '/models/lantern.glb';
 /** asset-optimization(ISSUE-29)이 생성한 자체 호스팅 HDRI. */
-const HDRI_URL = "/hdri/classroom-1k.hdr";
+const HDRI_URL = '/hdri/classroom-1k.hdr';
 
 /** 모델을 정규화할 목표 높이(월드 유닛). */
 const TARGET_HEIGHT = 2.0;
@@ -110,11 +110,7 @@ function ShadowLight({ extent, lightRef }: ShadowLightProps) {
 }
 
 /** 랜턴 모델 — 로드 후 그림자 플래그를 켜고 측정값을 위로 올린다. */
-function Lantern({
-  onMeasured,
-}: {
-  onMeasured: (extent: number) => void;
-}) {
+function Lantern({ onMeasured }: { onMeasured: (extent: number) => void }) {
   const { scene } = useGLTF(MODEL_URL);
 
   const normalization = useMemo(() => measureNormalization(scene), [scene]);
@@ -144,7 +140,7 @@ function ShadowStats({
 }) {
   const getText = useCallback(() => {
     const light = lightRef.current;
-    if (!light) return "측정 중";
+    if (!light) return '측정 중';
 
     const cam = light.shadow.camera as THREE.OrthographicCamera;
     return (
@@ -205,7 +201,11 @@ export function Scene() {
       />
 
       {/* HDRI 배경 + IBL. ambientLight는 두지 않는다(HDRI가 대신). */}
-      <Environment files={HDRI_URL} background environmentIntensity={ENV_INTENSITY} />
+      <Environment
+        files={HDRI_URL}
+        background
+        environmentIntensity={ENV_INTENSITY}
+      />
 
       <ShadowLight extent={extent} lightRef={lightRef} />
 

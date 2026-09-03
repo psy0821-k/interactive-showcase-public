@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { refreshAfterLayout } from "@/gsap-lab/scroll/scroll-trigger-setup";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { refreshAfterLayout } from '@/gsap-lab/scroll/scroll-trigger-setup';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
-const HEADLINE = "SCROLL SHAPES WORDS";
+const HEADLINE = 'SCROLL SHAPES WORDS';
 
 /** 제목을 글자 <span>으로 쪼갠다. 공백은 pre로 보존(스킬 core 6절). */
 function SplitWords({ text }: { text: string }) {
@@ -14,12 +14,12 @@ function SplitWords({ text }: { text: string }) {
       className="kinetic-heading text-[12vw] font-black leading-none tracking-tight"
       aria-label={text}
     >
-      {text.split("").map((ch, index) => (
+      {text.split('').map((ch, index) => (
         <span
           key={`${ch}-${index}`}
           aria-hidden
           className="char inline-block"
-          style={{ whiteSpace: "pre" }}
+          style={{ whiteSpace: 'pre' }}
         >
           {ch}
         </span>
@@ -38,64 +38,61 @@ function SplitWords({ text }: { text: string }) {
 export function KineticTypographyPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      refreshAfterLayout();
+  useGsapDom(({ gsap: g, reduced }) => {
+    refreshAfterLayout();
 
-      if (reduced) {
-        g.set([".kinetic-heading", ".char"], {
-          scale: 1,
-          xPercent: 0,
-          x: 0,
-          rotation: 0,
-        });
-        return;
-      }
+    if (reduced) {
+      g.set(['.kinetic-heading', '.char'], {
+        scale: 1,
+        xPercent: 0,
+        x: 0,
+        rotation: 0,
+      });
+      return;
+    }
 
-      // 제목 전체 스케일·이동
-      g.fromTo(
-        ".kinetic-heading",
-        { scale: 0.7, xPercent: 8 },
-        {
-          scale: 1.05,
-          xPercent: -8,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".kinetic-stage",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          },
+    // 제목 전체 스케일·이동
+    g.fromTo(
+      '.kinetic-heading',
+      { scale: 0.7, xPercent: 8 },
+      {
+        scale: 1.05,
+        xPercent: -8,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.kinetic-stage',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
         },
-      );
+      },
+    );
 
-      // 글자 단위 — 가운데에서 멀수록 더 크게 흩어졌다 모인다.
-      const chars = container.current?.querySelectorAll<HTMLElement>(".char");
-      if (chars) {
-        const mid = (chars.length - 1) / 2;
-        chars.forEach((char, index) => {
-          const offset = index - mid;
-          g.fromTo(
-            char,
-            { x: offset * 24, y: Math.abs(offset) * 10, rotation: offset * 6 },
-            {
-              x: 0,
-              y: 0,
-              rotation: 0,
-              ease: "none",
-              scrollTrigger: {
-                trigger: ".kinetic-stage",
-                start: "top center",
-                end: "center center",
-                scrub: 1,
-              },
+    // 글자 단위 — 가운데에서 멀수록 더 크게 흩어졌다 모인다.
+    const chars = container.current?.querySelectorAll<HTMLElement>('.char');
+    if (chars) {
+      const mid = (chars.length - 1) / 2;
+      chars.forEach((char, index) => {
+        const offset = index - mid;
+        g.fromTo(
+          char,
+          { x: offset * 24, y: Math.abs(offset) * 10, rotation: offset * 6 },
+          {
+            x: 0,
+            y: 0,
+            rotation: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '.kinetic-stage',
+              start: 'top center',
+              end: 'center center',
+              scrub: 1,
             },
-          );
-        });
-      }
-    },
-    container,
-  );
+          },
+        );
+      });
+    }
+  }, container);
 
   return (
     <div ref={container}>

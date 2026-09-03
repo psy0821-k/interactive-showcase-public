@@ -8,14 +8,14 @@
 //
 // 사용: node scripts/thumbnails-from-png.mjs [srcDir]
 
-import { readdir, mkdir } from "node:fs/promises";
-import { join, basename } from "node:path";
-import sharp from "sharp";
+import { readdir, mkdir } from 'node:fs/promises';
+import { join, basename } from 'node:path';
+import sharp from 'sharp';
 
 const SRC_DIR =
   process.argv[2] ??
-  "C:/temp/claude/C--Users-psy-portfolio-3d-skill/7cd73d7d-540b-4e27-9f17-387f466cf646/scratchpad/thumb-src";
-const OUT_DIR = "public/thumbnails";
+  'C:/temp/claude/C--Users-psy-portfolio-3d-skill/7cd73d7d-540b-4e27-9f17-387f466cf646/scratchpad/thumb-src';
+const OUT_DIR = 'public/thumbnails';
 
 const TARGET_W = 800;
 const TARGET_H = 450; // 16:9
@@ -23,14 +23,14 @@ const TARGET_H = 450; // 16:9
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
 
-  const files = (await readdir(SRC_DIR)).filter((f) => f.endsWith(".png"));
+  const files = (await readdir(SRC_DIR)).filter((f) => f.endsWith('.png'));
   if (files.length === 0) {
     console.error(`PNG가 없습니다: ${SRC_DIR}`);
     process.exit(1);
   }
 
   for (const file of files) {
-    const slug = basename(file, ".png");
+    const slug = basename(file, '.png');
     const src = join(SRC_DIR, file);
     const out = join(OUT_DIR, `${slug}.webp`);
 
@@ -58,7 +58,7 @@ async function main() {
 
     await img
       .extract({ left, top, width: cropW, height: cropH })
-      .resize(TARGET_W, TARGET_H, { fit: "fill" })
+      .resize(TARGET_W, TARGET_H, { fit: 'fill' })
       .webp({ quality: 80 })
       .toFile(out);
 

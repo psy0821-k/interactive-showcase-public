@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { Html, PerspectiveCamera } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useFrame, type ThreeEvent } from '@react-three/fiber';
+import { Html, PerspectiveCamera } from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 콘솔 전체가 도는 각속도(rad/s). 부위가 본체 뒤로 돌아가는 것을 보이려면 계속 돈다. */
 const TURNTABLE_SPEED = 0.28;
@@ -19,9 +19,9 @@ const LABEL_LIFT = 0.34;
 const LABEL_DISTANCE_FACTOR = 5.5;
 
 /** 부위 색 */
-const BODY_COLOR = "#39414f";
-const PART_COLOR_IDLE = "#5b6577";
-const PART_COLOR_HOVER = "#8ad2ff";
+const BODY_COLOR = '#39414f';
+const PART_COLOR_IDLE = '#5b6577';
+const PART_COLOR_HOVER = '#8ad2ff';
 
 /**
  * 라벨을 달 부위 정의. 순수 데이터라 모듈 스코프에 둔다.
@@ -30,14 +30,44 @@ const PART_COLOR_HOVER = "#8ad2ff";
  * 함께 회전하고, <Html>은 그 부위의 위치를 앵커로 삼는다.
  */
 const PARTS = [
-  { id: "sensor", position: [0, 0.95, 0], size: [0.34, 0.34, 0.34], label: "광학 센서 돔", spec: "360° LIDAR · 20 Hz" },
-  { id: "antenna", position: [0.62, 0.62, -0.15], size: [0.1, 0.9, 0.1], label: "고이득 안테나", spec: "X-band · 8.4 GHz" },
-  { id: "intake", position: [-0.66, 0.05, 0.42], size: [0.3, 0.42, 0.22], label: "냉각 흡기구", spec: "이중 팬 · 42 CFM" },
-  { id: "battery", position: [0.05, -0.35, 0.5], size: [0.7, 0.34, 0.18], label: "배터리 팩", spec: "리튬이온 · 4.1 kWh" },
-  { id: "wheel", position: [-0.72, -0.62, -0.3], size: [0.24, 0.24, 0.5], label: "구동 휠", spec: "인휠 모터 · 6×6" },
+  {
+    id: 'sensor',
+    position: [0, 0.95, 0],
+    size: [0.34, 0.34, 0.34],
+    label: '광학 센서 돔',
+    spec: '360° LIDAR · 20 Hz',
+  },
+  {
+    id: 'antenna',
+    position: [0.62, 0.62, -0.15],
+    size: [0.1, 0.9, 0.1],
+    label: '고이득 안테나',
+    spec: 'X-band · 8.4 GHz',
+  },
+  {
+    id: 'intake',
+    position: [-0.66, 0.05, 0.42],
+    size: [0.3, 0.42, 0.22],
+    label: '냉각 흡기구',
+    spec: '이중 팬 · 42 CFM',
+  },
+  {
+    id: 'battery',
+    position: [0.05, -0.35, 0.5],
+    size: [0.7, 0.34, 0.18],
+    label: '배터리 팩',
+    spec: '리튬이온 · 4.1 kWh',
+  },
+  {
+    id: 'wheel',
+    position: [-0.72, -0.62, -0.3],
+    size: [0.24, 0.24, 0.5],
+    label: '구동 휠',
+    spec: '인휠 모터 · 6×6',
+  },
 ] as const;
 
-type PartId = (typeof PARTS)[number]["id"];
+type PartId = (typeof PARTS)[number]['id'];
 
 interface AnnotatedPartProps {
   part: (typeof PARTS)[number];
@@ -54,7 +84,13 @@ interface AnnotatedPartProps {
  * 라벨은 호버 중일 때만 마운트한다. <Html>은 인스턴스마다 매 프레임 DOM 스타일을
  * 갱신하므로, 다섯 개를 상시 띄우기보다 지금 보는 하나만 띄우는 편이 가볍다.
  */
-function AnnotatedPart({ part, hovered, bodyRef, onHover, onUnhover }: AnnotatedPartProps) {
+function AnnotatedPart({
+  part,
+  hovered,
+  bodyRef,
+  onHover,
+  onUnhover,
+}: AnnotatedPartProps) {
   const [occluded, setOccluded] = useState(false);
   const reducedMotion = useReducedMotion();
 
@@ -98,26 +134,28 @@ function AnnotatedPart({ part, hovered, bodyRef, onHover, onUnhover }: Annotated
         >
           <div
             style={{
-              padding: "7px 11px",
+              padding: '7px 11px',
               borderRadius: 7,
-              background: "rgba(9, 12, 18, 0.88)",
-              border: "1px solid rgba(138, 210, 255, 0.35)",
-              color: "#e8edf5",
+              background: 'rgba(9, 12, 18, 0.88)',
+              border: '1px solid rgba(138, 210, 255, 0.35)',
+              color: '#e8edf5',
               fontSize: 13,
               lineHeight: 1.35,
-              whiteSpace: "nowrap",
+              whiteSpace: 'nowrap',
               // 라벨은 표시 전용이라 포인터 이벤트를 통과시킨다.
-              pointerEvents: "none",
-              userSelect: "none",
+              pointerEvents: 'none',
+              userSelect: 'none',
               // 본체 뒤로 가면 부드럽게 사라진다.
-              transition: reducedMotion ? "none" : "opacity 0.28s, transform 0.28s",
+              transition: reducedMotion
+                ? 'none'
+                : 'opacity 0.28s, transform 0.28s',
               opacity: occluded ? 0 : 1,
               transform: `scale(${occluded ? 0.7 : 1})`,
             }}
           >
             <strong>{part.label}</strong>
             <br />
-            <span style={{ color: "#9fb2cc", fontSize: 12 }}>{part.spec}</span>
+            <span style={{ color: '#9fb2cc', fontSize: 12 }}>{part.spec}</span>
           </div>
         </Html>
       )}
@@ -154,7 +192,11 @@ function RoverConsole() {
       {/* 본체 — occlude 대상. 부위와 라벨은 이 메시 뒤로 돌아가면 가려진다. */}
       <mesh ref={bodyRef} castShadow receiveShadow>
         <boxGeometry args={[1.3, 1.5, 1.0]} />
-        <meshStandardMaterial color={BODY_COLOR} roughness={0.65} metalness={0.15} />
+        <meshStandardMaterial
+          color={BODY_COLOR}
+          roughness={0.65}
+          metalness={0.15}
+        />
       </mesh>
 
       {PARTS.map((part) => (
@@ -178,9 +220,9 @@ export function Scene() {
   // 호버한 채로 페이지를 벗어났을 때 커서가 pointer로 영원히 남는다.
   useEffect(() => {
     if (!anyHovered) return;
-    document.body.style.cursor = "pointer";
+    document.body.style.cursor = 'pointer';
     return () => {
-      document.body.style.cursor = "auto";
+      document.body.style.cursor = 'auto';
     };
   }, [anyHovered]);
 
@@ -195,15 +237,29 @@ export function Scene() {
 
   return (
     <>
-      <PerspectiveCamera makeDefault fov={42} near={0.5} far={40} position={[0, 0.6, 6.4]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={42}
+        near={0.5}
+        far={40}
+        position={[0, 0.6, 6.4]}
+      />
 
-      <color attach="background" args={["#0b0d13"]} />
+      <color attach="background" args={['#0b0d13']} />
 
       <ambientLight intensity={0.4} />
       <directionalLight position={[4, 6, 4]} intensity={2.1} castShadow />
-      <directionalLight position={[-5, 2, -3]} intensity={0.55} color="#8fb4ff" />
+      <directionalLight
+        position={[-5, 2, -3]}
+        intensity={0.55}
+        color="#8fb4ff"
+      />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.4, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.4, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[30, 30]} />
         <meshStandardMaterial color="#14171f" roughness={0.95} />
       </mesh>

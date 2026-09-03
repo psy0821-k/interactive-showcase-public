@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { usePinnedTimeline } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { usePinnedTimeline } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 /** 그리드 열/행 수. 시작 배율 계산에 쓴다. */
 const GRID_COLS = 3;
@@ -25,9 +25,9 @@ export function ZoomOutRevealPage() {
 
   usePinnedTimeline(
     container,
-    { trigger: ".zoom-stage", length: [2, 1.3] },
+    { trigger: '.zoom-stage', length: [2, 1.3] },
     ({ tl }) => {
-      const grid = container.current?.querySelector<HTMLElement>(".zoom-grid");
+      const grid = container.current?.querySelector<HTMLElement>('.zoom-grid');
       if (!grid) return;
 
       // 한 칸이 뷰포트 짧은 변을 채우도록 하는 배율.
@@ -43,12 +43,12 @@ export function ZoomOutRevealPage() {
 
       tl.fromTo(
         grid,
-        { scale: startScale, transformOrigin: "50% 50%" },
-        { scale: 1, ease: "none", immediateRender: false },
+        { scale: startScale, transformOrigin: '50% 50%' },
+        { scale: 1, ease: 'none', immediateRender: false },
       );
     },
     (g) => {
-      g.set(".zoom-grid", { scale: 1, xPercent: 0, yPercent: 0 });
+      g.set('.zoom-grid', { scale: 1, xPercent: 0, yPercent: 0 });
     },
   );
 
@@ -60,9 +60,7 @@ export function ZoomOutRevealPage() {
       >
         <section className="zoom-stage relative h-[240vh]">
           <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden">
-            <div
-              className="zoom-grid grid aspect-square w-[min(80vw,80vh)] grid-cols-3 gap-2"
-            >
+            <div className="zoom-grid grid aspect-square w-[min(80vw,80vh)] grid-cols-3 gap-2">
               {TILES.map((tile, i) => (
                 <div
                   key={i}
@@ -76,8 +74,8 @@ export function ZoomOutRevealPage() {
         </section>
 
         <section className="mx-auto max-w-2xl px-6 py-32 text-center text-white/60">
-          되감으면 다시 한 칸으로 확대됩니다. 제품의 세부 → 전체 흐름을 보여줄 때
-          씁니다.
+          되감으면 다시 한 칸으로 확대됩니다. 제품의 세부 → 전체 흐름을 보여줄
+          때 씁니다.
         </section>
       </ScrollDemoShell>
     </div>

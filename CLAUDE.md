@@ -17,6 +17,10 @@ bun run start
 # ESLint 검사 (0 errors/warnings 유지)
 bun run lint
 
+# Prettier 포맷 (singleQuote, trailingComma all)
+bun run format          # 수정
+bun run format:check    # CI용 검사
+
 # TypeScript 타입 체크
 bunx tsc --noEmit
 

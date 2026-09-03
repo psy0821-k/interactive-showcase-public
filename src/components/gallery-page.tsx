@@ -1,9 +1,9 @@
-import { Suspense } from "react";
-import type { ShowcaseTrack } from "@/domain/showcase";
-import { GalleryBrowser } from "@/components/gallery-browser";
-import { ShowcaseCard } from "@/components/showcase-card";
-import { getShowcaseEntries } from "@/showcases/server-registry";
-import { SITE_URL } from "@/lib/site";
+import { Suspense } from 'react';
+import type { ShowcaseTrack } from '@/domain/showcase';
+import { GalleryBrowser } from '@/components/gallery-browser';
+import { ShowcaseCard } from '@/components/showcase-card';
+import { getShowcaseEntries } from '@/showcases/server-registry';
+import { SITE_URL } from '@/lib/site';
 
 interface Props {
   /** 이 갤러리가 보여줄 트랙. */
@@ -33,19 +33,19 @@ export async function GalleryPage({
   collectionName,
 }: Props) {
   const entries = await getShowcaseEntries({ track });
-  const pageUrl = `${SITE_URL}${basePath === "/" ? "" : basePath}`;
+  const pageUrl = `${SITE_URL}${basePath === '/' ? '' : basePath}`;
 
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": pageUrl,
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': pageUrl,
     name: collectionName,
     url: pageUrl,
     mainEntity: {
-      "@type": "ItemList",
+      '@type': 'ItemList',
       numberOfItems: entries.length,
       itemListElement: entries.map((entry, index) => ({
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: index + 1,
         url: `${SITE_URL}/showcase/${entry.slug}`,
         name: entry.meta.title,

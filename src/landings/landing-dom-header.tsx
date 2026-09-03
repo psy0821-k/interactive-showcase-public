@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useState } from "react";
-import type { LandingEntry } from "./registry";
+import Link from 'next/link';
+import { useState } from 'react';
+import type { LandingEntry } from './registry';
 
 /**
  * `/landings/{slug}` 상단 공통 헤더 — breadcrumb + caveat + "요구사항" 패널.
@@ -59,8 +59,8 @@ export function LandingDomHeader({ entry }: { entry: LandingEntry }) {
             aria-expanded={promptOpen}
             className="flex items-center gap-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"
           >
-            <span aria-hidden>{promptOpen ? "▾" : "▸"}</span>
-            이 페이지를 만들 때 정의한 요구사항
+            <span aria-hidden>{promptOpen ? '▾' : '▸'}</span>이 페이지를 만들 때
+            정의한 요구사항
           </button>
           {promptOpen && (
             <pre className="mt-3 overflow-x-auto rounded-lg bg-neutral-100 p-4 text-xs leading-relaxed whitespace-pre-wrap text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200">

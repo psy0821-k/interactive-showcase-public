@@ -13,16 +13,16 @@
  *   node scripts/build-decal-webp.mjs
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import sharp from "sharp";
+import { readFileSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
-const DECAL_DIR = resolve(SCRIPT_DIR, "../public/decals");
+const DECAL_DIR = resolve(SCRIPT_DIR, '../public/decals');
 
 /** 변환할 파일 이름(확장자 제외). */
-const NAMES = ["logo-mark", "sticker"];
+const NAMES = ['logo-mark', 'sticker'];
 
 /** 출력 한 변의 픽셀. 데칼은 표면 일부에만 얹히므로 256이면 충분하다. */
 const SIZE = 256;
@@ -33,7 +33,10 @@ async function main() {
     const out = resolve(DECAL_DIR, `${name}.webp`);
 
     const buffer = await sharp(svg, { density: 384 })
-      .resize(SIZE, SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .resize(SIZE, SIZE, {
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      })
       .webp({ quality: 90, alphaQuality: 100 })
       .toBuffer();
 

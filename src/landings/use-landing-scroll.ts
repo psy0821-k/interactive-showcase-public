@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useGSAP } from "@gsap/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { RefObject } from "react";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useGSAP } from '@gsap/react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type { RefObject } from 'react';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 // ScrollTrigger 등록은 모듈 스코프 1회 (gsap-scrolltrigger-scene 0절).
 gsap.registerPlugin(ScrollTrigger);
@@ -52,8 +52,8 @@ export function useLandingScroll({
 
       const trigger = ScrollTrigger.create({
         trigger: trackEl,
-        start: "top top",
-        end: "bottom bottom",
+        start: 'top top',
+        end: 'bottom bottom',
         scrub: 1,
         onUpdate: (self) => onProgress(self.progress),
       });

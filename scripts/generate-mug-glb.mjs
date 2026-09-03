@@ -29,18 +29,18 @@
  *   → public/models/mug.glb
  */
 
-import { writeFileSync, mkdirSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import * as THREE from "three";
-import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
-import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import * as THREE from 'three';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 /**
  * GLTFExporter는 브라우저 API인 `FileReader`로 Blob을 ArrayBuffer로 바꾼다.
  * Node에는 없으므로 최소 폴리필을 둔다(generate-marcher-glb.mjs와 동일).
  */
-if (typeof globalThis.FileReader === "undefined") {
+if (typeof globalThis.FileReader === 'undefined') {
   globalThis.FileReader = class NodeFileReader {
     constructor() {
       this.result = null;
@@ -63,7 +63,7 @@ if (typeof globalThis.FileReader === "undefined") {
 }
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
-const OUTPUT_PATH = resolve(SCRIPT_DIR, "../public/models/mug.glb");
+const OUTPUT_PATH = resolve(SCRIPT_DIR, '../public/models/mug.glb');
 
 /** 몸통 원통 치수. */
 const BODY_RADIUS = 0.85;
@@ -126,11 +126,7 @@ function createBody() {
   parts.push(innerWall);
 
   // 위 테두리 링 — 바깥 벽 상단과 안쪽 벽 상단을 잇는다.
-  const rim = new THREE.RingGeometry(
-    innerTop,
-    outerTop,
-    BODY_RADIAL_SEGMENTS,
-  );
+  const rim = new THREE.RingGeometry(innerTop, outerTop, BODY_RADIAL_SEGMENTS);
   rim.rotateX(-Math.PI / 2);
   rim.translate(0, BODY_HEIGHT / 2, 0);
   parts.push(rim);
@@ -191,9 +187,9 @@ function buildMesh() {
 
   // 병합 전 모든 지오메트리의 속성 세트를 맞춘다(uv 유무가 섞이면 병합 실패).
   for (const geometry of geometries) {
-    geometry.deleteAttribute("uv");
-    geometry.deleteAttribute("uv1");
-    if (!geometry.getAttribute("normal")) geometry.computeVertexNormals();
+    geometry.deleteAttribute('uv');
+    geometry.deleteAttribute('uv1');
+    if (!geometry.getAttribute('normal')) geometry.computeVertexNormals();
   }
 
   const merged = mergeGeometries(geometries, false);
@@ -202,18 +198,18 @@ function buildMesh() {
   merged.computeBoundingSphere();
 
   const material = new THREE.MeshStandardMaterial({
-    name: "MugCeramic",
-    color: new THREE.Color("#f2ede3"), // 아이보리 세라믹
+    name: 'MugCeramic',
+    color: new THREE.Color('#f2ede3'), // 아이보리 세라믹
     metalness: 0.0,
     roughness: 0.38,
   });
 
   const mesh = new THREE.Mesh(merged, material);
   // `useGLTF(...).nodes.mug` 로 접근하기 위한 이름.
-  mesh.name = "mug";
+  mesh.name = 'mug';
 
   const root = new THREE.Group();
-  root.name = "Mug";
+  root.name = 'Mug';
   root.add(mesh);
 
   return root;

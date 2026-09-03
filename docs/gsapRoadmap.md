@@ -13,15 +13,15 @@
 
 ## 목표 기준
 
-| 축 | 목표 상태 |
-|---|---|
-| API 사용 | GSAP API를 목적에 맞게 구분해 쓰고 공식 함정을 회피 |
-| 재실행·정리 | 재실행/정리 로직 정비 · 전 데모 `matchMedia` 일관 적용 |
-| 스크럽 정확도 | 모든 스크럽 데모가 스크롤 어느 지점에서 진입해도 값이 정확 |
-| 반응형 | 콘텐츠·뷰포트가 바뀌어도 재계산으로 자동 적응 (px 하드코딩 없음) |
-| 확장성 | 재사용 프리미티브로 추출돼 새 데모를 30줄 이내로 작성 가능 |
-| 검증 | 결정론적 E2E (Playwright에서 스크롤 위치 → 상태가 1:1로 재현) |
-| 가독성 | 코드가 GSAP 공식 예제보다 명확 (라벨·주석·네이밍) |
+| 축            | 목표 상태                                                        |
+| ------------- | ---------------------------------------------------------------- |
+| API 사용      | GSAP API를 목적에 맞게 구분해 쓰고 공식 함정을 회피              |
+| 재실행·정리   | 재실행/정리 로직 정비 · 전 데모 `matchMedia` 일관 적용           |
+| 스크럽 정확도 | 모든 스크럽 데모가 스크롤 어느 지점에서 진입해도 값이 정확       |
+| 반응형        | 콘텐츠·뷰포트가 바뀌어도 재계산으로 자동 적응 (px 하드코딩 없음) |
+| 확장성        | 재사용 프리미티브로 추출돼 새 데모를 30줄 이내로 작성 가능       |
+| 검증          | 결정론적 E2E (Playwright에서 스크롤 위치 → 상태가 1:1로 재현)    |
+| 가독성        | 코드가 GSAP 공식 예제보다 명확 (라벨·주석·네이밍)                |
 
 ---
 
@@ -44,6 +44,7 @@
 이슈 때문에 `revertOnUpdate`를 뺐던 것.
 
 **해결**:
+
 - `useGsapDom`에 `revertOnUpdate: true` 복원.
 - StrictMode 이중 실행은 `@gsap/react`의 `context.revert()`가 이미 멱등이므로,
   훅 내부에서 `gsap.context()`를 직접 만들지 말고 `useGSAP`가 주는 context만 쓴다.
@@ -59,11 +60,13 @@
 ### 1-2. ScrollTrigger 통합 — 트리거 남발 제거
 
 **문제**:
+
 - `progress-indicator` — 섹션마다 `ScrollTrigger.create()`. 섹션 N개 = 트리거 N개.
 - `icon-line-trace` — 아이콘마다 트리거 생성.
 - `bg-color-transition` — 섹션마다 `onEnter`/`onEnterBack` 트리거.
 
 **해결**:
+
 - `progress-indicator`: 문서 전체 트리거 1개 + `onUpdate`에서 각 섹션의
   `getBoundingClientRect()`로 현재 섹션 판정. 진행바는 그대로 `self.progress`.
 - `icon-line-trace`: 트리거 1개 + timeline stagger (아이콘 그룹별 `addLabel`).
@@ -84,6 +87,7 @@ pinned-caption-swap, zoom-out-reveal, parallax-image-grid, sticky-stack-cards,
 kinetic-typography, section-snap-panels)는 모바일 분기 없음.
 
 **해결**:
+
 - 공통 헬퍼 `withResponsiveScroll(ctx, { desktop, mobile })`를
   `scroll-trigger-setup.ts`에 추가. 내부에서 `gsap.matchMedia()` +
   `(min-width: 768px)` / `(max-width: 767px)` 분기.
@@ -102,6 +106,7 @@ kinetic-typography, section-snap-panels)는 모바일 분기 없음.
 ### 1-4. 매직넘버 → 뷰포트/콘텐츠 실측
 
 **문제**:
+
 - `viewportScrollLength(2.4, 1.6)` 등 임의 배율.
 - `parallax-image-grid`의 `scale: 3` — 3×3 그리드 전제.
 - `hero-to-section`의 목표 위치 함수형 계산은 이미 실측이나 `62vh` 등 시작값 하드코딩.
@@ -109,6 +114,7 @@ kinetic-typography, section-snap-panels)는 모바일 분기 없음.
 - `scroll-direction-header`의 `yPercent: -110`.
 
 **해결**:
+
 - pin 구간 길이: "콘텐츠가 다 보이려면 얼마나 스크롤해야 하는가"를 실측.
   예) `pinned-caption-swap` → `end: () => "+=" + captionCount * 스텝당_스크롤량`.
 - `parallax-image-grid` `scale`: `그리드칸크기 / 뷰포트짧은변`으로 유도.
@@ -131,6 +137,7 @@ kinetic-typography, section-snap-panels)는 모바일 분기 없음.
 zoom-out-reveal에서 확인됨.)
 
 **해결**:
+
 - 모든 scrub 트리거에 `invalidateOnRefresh: true` + `fastScrollEnd: true`.
 - `refreshAfterLayout()`를 확장: `ScrollTrigger.refresh()` 후 각 트리거의
   `.progress`를 강제로 현재 스크롤 기준 재적용 (`ScrollTrigger.update()`).
@@ -139,12 +146,14 @@ zoom-out-reveal에서 확인됨.)
 - 데모별 초기 `gsap.set`으로 "스크롤 0일 때의 정확한 상태"를 스냅.
 
 **검증** (핵심 게이트): Playwright에서
+
 ```
 for (const p of [0, 0.25, 0.5, 0.75, 1]) {
   reload(); scrollTo(stageStart + range*p); wait;
   assert(state ≈ expectedStateAt(p));  // 진입 지점과 무관하게 일치
 }
 ```
+
 이 테스트 통과가 진입지점 독립성의 게이트다.
 
 **영향 파일**: `scroll-trigger-setup.ts` + scrub 데모 전부.
@@ -157,6 +166,7 @@ for (const p of [0, 0.25, 0.5, 0.75, 1]) {
 타임라인을 읽기 어렵고 수정 시 취약.
 
 **해결**: `repeat: -1` + 각 전환에 `repeatDelay` 또는 라벨 기반:
+
 ```
 const tl = gsap.timeline({ repeat: -1, defaults: { duration: 0.6, ease: "expo.inOut" } });
 WORDS.forEach((_, i) => {
@@ -164,6 +174,7 @@ WORDS.forEach((_, i) => {
 });
 tl.to(list, { y: 0 }, "+=1.1");
 ```
+
 `y`는 실측 offset (1-4와 연동).
 
 **영향 파일**: `word-rotator.tsx`.
@@ -173,10 +184,12 @@ tl.to(list, { y: 0 }, "+=1.1");
 ### 2-3. `morph-blob` / `signature-draw` — 한계 명시 + 파이프라인
 
 **문제**:
+
 - `morph-blob`: 점 개수 맞춘 수동 path 4개. 임의 SVG는 이 방식 불가.
 - `signature-draw`: "Fluxnote 근사" path — 실제 필기체 임포트 없음.
 
 **해결** (유료 플러그인 없이 갈 수 있는 최대치):
+
 - `morph-blob`: 두 path의 커맨드 수가 다를 때 `flubber` 같은 초경량 보간
   라이브러리 옵션을 주석으로 안내 + 현재 "동일 커맨드 수 케이스"임을 명확히.
   또는 `<animate>` SMIL 대비 GSAP 장점(재생 제어)을 데모에 노출 (일시정지 버튼).
@@ -210,16 +223,16 @@ tl.to(list, { y: 0 }, "+=1.1");
 
 **추출할 프리미티브** (`src/gsap-lab/primitives/`):
 
-| 프리미티브 | 역할 | 대체하는 데모 로직 |
-|---|---|---|
-| `useRevealOnScroll(selector, vars, opts)` | 뷰포트 진입 시 `from` 등장 + reduced 폴백 | reveal-sequence, reveal-together, line-mask-text, chart-bar-grow, signature-draw, icon-line-trace |
-| `usePinnedTimeline(trigger, buildFn, opts)` | pin + scrub + matchMedia + invalidate 일괄 | hero-to-section, pinned-caption-swap, zoom-out-reveal, image-mask-reveal, pin-progress |
-| `useParallax(items, opts)` | 요소별 속도차 yPercent 스크럽 | parallax-layers, parallax-image-grid |
-| `useScrollProgress(onProgress)` | 문서 진행률 0~1 + 현재 섹션 | progress-indicator |
-| `useMagnetic(selector, opts)` | quickTo 당김 + elastic 복귀 + hover 미디어쿼리 | magnetic-nav, pointer-play(부분) |
-| `usePointerTilt(selector, opts)` | rotateX/Y + 광택 | tilt-card-grid, pointer-play(부분) |
-| `useCountUp(selector, targets, opts)` | 프록시 트윈 + textContent | counter-on-scroll, chart-bar-grow |
-| `drawSvgPaths(selector, opts)` | getTotalLength + dashoffset 세팅·트윈 | svg-path-draw, signature-draw, icon-line-trace |
+| 프리미티브                                  | 역할                                           | 대체하는 데모 로직                                                                                |
+| ------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `useRevealOnScroll(selector, vars, opts)`   | 뷰포트 진입 시 `from` 등장 + reduced 폴백      | reveal-sequence, reveal-together, line-mask-text, chart-bar-grow, signature-draw, icon-line-trace |
+| `usePinnedTimeline(trigger, buildFn, opts)` | pin + scrub + matchMedia + invalidate 일괄     | hero-to-section, pinned-caption-swap, zoom-out-reveal, image-mask-reveal, pin-progress            |
+| `useParallax(items, opts)`                  | 요소별 속도차 yPercent 스크럽                  | parallax-layers, parallax-image-grid                                                              |
+| `useScrollProgress(onProgress)`             | 문서 진행률 0~1 + 현재 섹션                    | progress-indicator                                                                                |
+| `useMagnetic(selector, opts)`               | quickTo 당김 + elastic 복귀 + hover 미디어쿼리 | magnetic-nav, pointer-play(부분)                                                                  |
+| `usePointerTilt(selector, opts)`            | rotateX/Y + 광택                               | tilt-card-grid, pointer-play(부분)                                                                |
+| `useCountUp(selector, targets, opts)`       | 프록시 트윈 + textContent                      | counter-on-scroll, chart-bar-grow                                                                 |
+| `drawSvgPaths(selector, opts)`              | getTotalLength + dashoffset 세팅·트윈          | svg-path-draw, signature-draw, icon-line-trace                                                    |
 
 **검증**: 추출 후 각 데모 라인 수 before/after 기록. 동작 육안·Playwright 동일.
 프리미티브당 최소 2개 데모가 사용 (DRY 근거).
@@ -231,10 +244,12 @@ tl.to(list, { y: 0 }, "+=1.1");
 ### 3-2. 데모 메타에 "사용 프리미티브" + "적용 한계" 필드
 
 `registry.ts`의 `LabEntry`에 추가:
+
 ```ts
 primitives?: string[];   // 이 데모가 쓰는 프리미티브
 caveat?: string;         // 이 기법의 실무 적용 한계 한 줄
 ```
+
 상세 페이지 상단 배너에 노출. 실무 판단력을 보여주는 신호.
 
 ---
@@ -246,9 +261,9 @@ caveat?: string;         // 이 기법의 실무 적용 한계 한 줄
 ```ts
 test('parallax-layers: 레이어별 이동량이 스크롤에 비례', async ({ page }) => {
   await page.goto('/gsap-lab/parallax-layers');
-  await smoothScrollTo(page, 0.5);   // rAF 헬퍼
+  await smoothScrollTo(page, 0.5); // rAF 헬퍼
   const y = await layerYs(page);
-  expect(y[0]).toBeLessThan(y[3]);   // 배경이 전경보다 많이 이동
+  expect(y[0]).toBeLessThan(y[3]); // 배경이 전경보다 많이 이동
   expect(ratio(y[0], y[3])).toBeCloseTo(EXPECTED_RATIO, 1);
 });
 ```
@@ -264,18 +279,21 @@ test('parallax-layers: 레이어별 이동량이 스크롤에 비례', async ({ 
 ## 진행 체크리스트
 
 ### Phase 1 (A급)
+
 - [x] 1-1. `useGsapDom` revertOnUpdate 복원 + 누수 검증 — 15회 토글 후 tween/ST 누수 0. `window.__gsapLab` 디버그 핸들(dev 전용) 추가.
 - [x] 1-2. ScrollTrigger 통합 — progress-indicator 5→1(+IntersectionObserver로 섹션 판정), icon-line-trace 4→1(라벨 타임라인), bg-color-transition 4→1(quickSetter+진행률 색 보간, **진입지점 독립 + 진짜 크로스페이드**)
 - [x] 1-3. pin/scrub 데모 정비 — `pinnedTriggerDefaults`(anticipatePin+invalidateOnRefresh+fastScrollEnd) 를 8개 pin 데모에 적용. `withResponsiveScroll` 헬퍼 추가, pin-progress가 사용(데스크탑 pin / 모바일 no-pin+세로 흐름). scroll-story가 자체 registerPlugin 대신 공용 setup 사용.
 - [x] 1-4. 매직넘버 → 실측 — **hero-to-section**: `min(88vw,56rem)` CSS 함수값을 GSAP이 보간 못해 width가 튀던 버그 → px 실측 함수형 값(진입지점 독립 확인). **zoom-out-reveal**: `scale: 3` → `offsetWidth/열수`로 유도(`getBoundingClientRect`는 걸린 transform에 오염돼 sx≠sy 피드백 루프 → `offsetWidth`로 해결). **word-rotator**: `yPercent` 균등 가정 → 각 단어 `offsetTop` 실측 + 빈 트윈 제거(2-2 함께 완료). **parallax-layers**: `travel: -420px` 하드코딩 → `innerHeight × 비율` 함수형. **scroll-direction-header**: `yPercent: -110`은 바 높이 상대값이라 유지(주석 추가).
 
 ### Phase 2 (A → S)
+
 - [~] 2-1. 스크럽 데모 진입지점-무관 정확성 (전수) ← **핵심 게이트** — hero-to-section·zoom-out-reveal·bg-color-transition은 확인 완료(1-2·1-4에서). 남음: image-mask, horizontal, pinned-caption, parallax류, kinetic, section-snap의 전수 리로드 테스트를 3-3 E2E로.
 - [x] 2-2. word-rotator 선언적 타이밍 — 1-4와 함께 완료.
 - [x] 2-3. morph-blob / signature-draw 한계 명시 — morph-blob에 일시정지/재개 버튼 추가(CSS·SMIL 대비 GSAP 재생제어 장점 시연) + "커맨드 구조 같아야 보간됨" 명시. signature-draw는 "획 순서 = 그리는 순서" 주석. registry에 `caveat` 필드 신설 + 상세 배너에 노출(5개 데모).
 - [x] 2-4. IntersectionObserver 병용 — progress-indicator 완료(1-2). section-snap-panels는 ScrollTrigger `snap`이 본질이라 IO 불필요.
 
 ### Phase 3 (S 완성)
+
 - [x] 3-1. 프리미티브 8종 추출 (`src/gsap-lab/primitives/`) + 18개 데모 리팩터.
   - `useRevealOnScroll`(4), `useCountUp`(2), `useDrawSvgPaths`(3, `groupBy` 옵션), `useMagnetic`(2),
     `usePointerTilt`(2), `useParallax`(1), `useScrollProgress`(1, IntersectionObserver 내장), `usePinnedTimeline`(5, `pin: false` 옵션).

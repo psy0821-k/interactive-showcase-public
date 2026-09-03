@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useLayoutEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useLayoutEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 넓은 화면 기준 인스턴스 수. 이 값이 곧 args의 count가 되며 런타임에 늘릴 수 없다. */
 const INSTANCE_COUNT_WIDE = 4_000;
@@ -30,8 +30,8 @@ const SPIN_SPEED_MAX = 1.8;
 const BOB_AMPLITUDE = 0.35;
 
 /** 안쪽/바깥쪽 궤도의 색. 반지름 비율로 보간해 per-instance 색을 만든다. */
-const INNER_COLOR = "#ff7a3d";
-const OUTER_COLOR = "#4db2ff";
+const INNER_COLOR = '#ff7a3d';
+const OUTER_COLOR = '#4db2ff';
 
 /** 인스턴스 하나의 고정 파라미터. 매 프레임 다시 계산하지 않는다. */
 interface InstanceSeed {
@@ -70,13 +70,15 @@ function createSeeds(count: number): InstanceSeed[] {
     // sqrt를 씌워야 반지름 방향으로 밀도가 균일해진다.
     // 그냥 균등 난수를 쓰면 안쪽에 몰려 보인다.
     const radiusRatio = Math.sqrt(pseudoRandom(i, 1));
-    const radius = ORBIT_RADIUS_MIN + radiusRatio * (ORBIT_RADIUS_MAX - ORBIT_RADIUS_MIN);
+    const radius =
+      ORBIT_RADIUS_MIN + radiusRatio * (ORBIT_RADIUS_MAX - ORBIT_RADIUS_MIN);
 
     seeds.push({
       radius,
       angle: pseudoRandom(i, 2) * Math.PI * 2,
       // 안쪽일수록 빠르게 돌아 궤도가 감기며 나선 무늬가 생긴다.
-      orbitSpeed: (ORBIT_SPEED_BASE / radius) * (pseudoRandom(i, 3) * 0.5 + 0.75),
+      orbitSpeed:
+        (ORBIT_SPEED_BASE / radius) * (pseudoRandom(i, 3) * 0.5 + 0.75),
       baseHeight: (pseudoRandom(i, 4) - 0.5) * SWARM_HEIGHT,
       bobPhase: pseudoRandom(i, 5) * Math.PI * 2,
       spinSpeed: (pseudoRandom(i, 6) - 0.5) * 2 * SPIN_SPEED_MAX,
@@ -132,7 +134,8 @@ function CubeSwarm({ count, paused }: CubeSwarmProps) {
 
     for (let i = 0; i < count; i += 1) {
       const ratio =
-        (seeds[i].radius - ORBIT_RADIUS_MIN) / (ORBIT_RADIUS_MAX - ORBIT_RADIUS_MIN);
+        (seeds[i].radius - ORBIT_RADIUS_MIN) /
+        (ORBIT_RADIUS_MAX - ORBIT_RADIUS_MIN);
       // 안쪽은 주황, 바깥쪽은 파랑. 반지름이 색으로 읽히면 궤도 구조가 눈에 보인다.
       scratchColor.copy(innerColor).lerp(outerColor, ratio);
       mesh.setColorAt(i, scratchColor);
@@ -162,7 +165,11 @@ function CubeSwarm({ count, paused }: CubeSwarmProps) {
         seed.baseHeight + Math.sin(time * 0.9 + seed.bobPhase) * BOB_AMPLITUDE,
         Math.sin(angle) * seed.radius,
       );
-      dummy.rotation.set(time * seed.spinSpeed, angle, time * seed.spinSpeed * 0.6);
+      dummy.rotation.set(
+        time * seed.spinSpeed,
+        angle,
+        time * seed.spinSpeed * 0.6,
+      );
       dummy.scale.setScalar(seed.scale);
 
       // 이 한 줄이 빠지면 position/rotation/scale이 matrix에 반영되지 않는다.
@@ -213,7 +220,8 @@ export function Scene() {
   const width = useThree((state) => state.size.width);
 
   const count = useMemo(
-    () => (width < NARROW_BREAKPOINT ? INSTANCE_COUNT_NARROW : INSTANCE_COUNT_WIDE),
+    () =>
+      width < NARROW_BREAKPOINT ? INSTANCE_COUNT_NARROW : INSTANCE_COUNT_WIDE,
     [width],
   );
 
@@ -223,14 +231,24 @@ export function Scene() {
         군집 지름이 약 7유닛이므로 기본 카메라(z=5)로는 잘린다.
         far/near = 40/0.5 = 80 으로 depth 정밀도는 여유롭다.
       */}
-      <PerspectiveCamera makeDefault fov={45} near={0.5} far={40} position={[0, 2.6, 7.5]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={45}
+        near={0.5}
+        far={40}
+        position={[0, 2.6, 7.5]}
+      />
 
-      <color attach="background" args={["#0b0e16"]} />
+      <color attach="background" args={['#0b0e16']} />
 
       {/* 3점 조명. 인스턴스 표면의 굴곡이 보이려면 방향광이 필요하다. */}
       <ambientLight intensity={0.35} />
       <directionalLight position={[5, 6, 4]} intensity={2.4} />
-      <directionalLight position={[-5, -2, -4]} intensity={0.6} color="#7aa2ff" />
+      <directionalLight
+        position={[-5, -2, -4]}
+        intensity={0.6}
+        color="#7aa2ff"
+      />
 
       {/*
         count가 바뀌면 args의 상한도 바뀌어야 한다. R3F는 args가 변하면

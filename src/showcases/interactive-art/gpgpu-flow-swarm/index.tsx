@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
+import { useEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
 import {
   createPortal,
   extend,
   useFrame,
   useThree,
   type ThreeElement,
-} from "@react-three/fiber";
-import { shaderMaterial } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+} from '@react-three/fiber';
+import { shaderMaterial } from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /**
  * 시뮬레이션 텍스처 한 변의 크기.
@@ -51,8 +51,8 @@ const REDUCED_MOTION_SCALE = 0.15;
  * 여기에 픽셀 값을 넣으면 점 하나가 화면을 덮어 흰 화면이 된다.
  */
 const BASE_POINT_SIZE = 0.02;
-const SLOW_COLOR = new THREE.Color("#2b6cff");
-const FAST_COLOR = new THREE.Color("#ffd28a");
+const SLOW_COLOR = new THREE.Color('#2b6cff');
+const FAST_COLOR = new THREE.Color('#ffd28a');
 
 /**
  * 시뮬레이션 패스가 그리는 전용 카메라.
@@ -235,7 +235,7 @@ extend({
   GpgpuFlowRenderMaterial,
 });
 
-declare module "@react-three/fiber" {
+declare module '@react-three/fiber' {
   interface ThreeElements {
     gpgpuFlowPositionMaterial: ThreeElement<typeof GpgpuFlowPositionMaterial>;
     gpgpuFlowVelocityMaterial: ThreeElement<typeof GpgpuFlowVelocityMaterial>;
@@ -492,7 +492,7 @@ export function Scene() {
 
   return (
     <>
-      <color attach="background" args={["#05070f"]} />
+      <color attach="background" args={['#05070f']} />
 
       {/* 시뮬레이션 패스 — 별도 씬에 포털로 넣어 화면 씬을 오염시키지 않는다. */}
       {createPortal(

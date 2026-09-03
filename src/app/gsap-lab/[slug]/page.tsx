@@ -1,75 +1,75 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { CopyButton } from "@/components/copy-button";
-import { findLabEntry, LAB_ENTRIES } from "@/gsap-lab/registry";
-import { ParallaxLayersPage } from "@/gsap-lab/scroll/pages/parallax-layers";
-import { HeroToSectionPage } from "@/gsap-lab/scroll/pages/hero-to-section";
-import { RevealSequencePage } from "@/gsap-lab/scroll/pages/reveal-sequence";
-import { RevealTogetherPage } from "@/gsap-lab/scroll/pages/reveal-together";
-import { PinProgressPage } from "@/gsap-lab/scroll/pages/pin-progress";
-import { HorizontalScrollPage } from "@/gsap-lab/scroll/pages/horizontal-scroll";
-import { ProgressIndicatorPage } from "@/gsap-lab/scroll/pages/progress-indicator";
-import { KineticTypographyPage } from "@/gsap-lab/scroll/pages/kinetic-typography";
-import { ImageMaskRevealPage } from "@/gsap-lab/scroll/pages/image-mask-reveal";
-import { CounterOnScrollPage } from "@/gsap-lab/scroll/pages/counter-on-scroll";
-import { StickyStackCardsPage } from "@/gsap-lab/scroll/pages/sticky-stack-cards";
-import { LineMaskTextPage } from "@/gsap-lab/scroll/pages/line-mask-text";
-import { BgColorTransitionPage } from "@/gsap-lab/scroll/pages/bg-color-transition";
-import { SvgPathDrawPage } from "@/gsap-lab/scroll/pages/svg-path-draw";
-import { ScrollDirectionHeaderPage } from "@/gsap-lab/scroll/pages/scroll-direction-header";
-import { ParallaxImageGridPage } from "@/gsap-lab/scroll/pages/parallax-image-grid";
-import { ChartBarGrowPage } from "@/gsap-lab/scroll/pages/chart-bar-grow";
-import { SectionSnapPanelsPage } from "@/gsap-lab/scroll/pages/section-snap-panels";
-import { PinnedCaptionSwapPage } from "@/gsap-lab/scroll/pages/pinned-caption-swap";
-import { ZoomOutRevealPage } from "@/gsap-lab/scroll/pages/zoom-out-reveal";
-import { WordRotatorPage } from "@/gsap-lab/motion/pages/word-rotator";
-import { LoaderSequencePage } from "@/gsap-lab/motion/pages/loader-sequence";
-import { StaggerGridFromPage } from "@/gsap-lab/motion/pages/stagger-grid-from";
-import { ResponsiveMotionSwitchPage } from "@/gsap-lab/motion/pages/responsive-motion-switch";
-import { MagneticNavPage } from "@/gsap-lab/pointer/pages/magnetic-nav";
-import { CursorSpotlightPage } from "@/gsap-lab/pointer/pages/cursor-spotlight";
-import { TiltCardGridPage } from "@/gsap-lab/pointer/pages/tilt-card-grid";
-import { SignatureDrawPage } from "@/gsap-lab/svg/pages/signature-draw";
-import { MorphBlobPage } from "@/gsap-lab/svg/pages/morph-blob";
-import { IconLineTracePage } from "@/gsap-lab/svg/pages/icon-line-trace";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { CopyButton } from '@/components/copy-button';
+import { findLabEntry, LAB_ENTRIES } from '@/gsap-lab/registry';
+import { ParallaxLayersPage } from '@/gsap-lab/scroll/pages/parallax-layers';
+import { HeroToSectionPage } from '@/gsap-lab/scroll/pages/hero-to-section';
+import { RevealSequencePage } from '@/gsap-lab/scroll/pages/reveal-sequence';
+import { RevealTogetherPage } from '@/gsap-lab/scroll/pages/reveal-together';
+import { PinProgressPage } from '@/gsap-lab/scroll/pages/pin-progress';
+import { HorizontalScrollPage } from '@/gsap-lab/scroll/pages/horizontal-scroll';
+import { ProgressIndicatorPage } from '@/gsap-lab/scroll/pages/progress-indicator';
+import { KineticTypographyPage } from '@/gsap-lab/scroll/pages/kinetic-typography';
+import { ImageMaskRevealPage } from '@/gsap-lab/scroll/pages/image-mask-reveal';
+import { CounterOnScrollPage } from '@/gsap-lab/scroll/pages/counter-on-scroll';
+import { StickyStackCardsPage } from '@/gsap-lab/scroll/pages/sticky-stack-cards';
+import { LineMaskTextPage } from '@/gsap-lab/scroll/pages/line-mask-text';
+import { BgColorTransitionPage } from '@/gsap-lab/scroll/pages/bg-color-transition';
+import { SvgPathDrawPage } from '@/gsap-lab/scroll/pages/svg-path-draw';
+import { ScrollDirectionHeaderPage } from '@/gsap-lab/scroll/pages/scroll-direction-header';
+import { ParallaxImageGridPage } from '@/gsap-lab/scroll/pages/parallax-image-grid';
+import { ChartBarGrowPage } from '@/gsap-lab/scroll/pages/chart-bar-grow';
+import { SectionSnapPanelsPage } from '@/gsap-lab/scroll/pages/section-snap-panels';
+import { PinnedCaptionSwapPage } from '@/gsap-lab/scroll/pages/pinned-caption-swap';
+import { ZoomOutRevealPage } from '@/gsap-lab/scroll/pages/zoom-out-reveal';
+import { WordRotatorPage } from '@/gsap-lab/motion/pages/word-rotator';
+import { LoaderSequencePage } from '@/gsap-lab/motion/pages/loader-sequence';
+import { StaggerGridFromPage } from '@/gsap-lab/motion/pages/stagger-grid-from';
+import { ResponsiveMotionSwitchPage } from '@/gsap-lab/motion/pages/responsive-motion-switch';
+import { MagneticNavPage } from '@/gsap-lab/pointer/pages/magnetic-nav';
+import { CursorSpotlightPage } from '@/gsap-lab/pointer/pages/cursor-spotlight';
+import { TiltCardGridPage } from '@/gsap-lab/pointer/pages/tilt-card-grid';
+import { SignatureDrawPage } from '@/gsap-lab/svg/pages/signature-draw';
+import { MorphBlobPage } from '@/gsap-lab/svg/pages/morph-blob';
+import { IconLineTracePage } from '@/gsap-lab/svg/pages/icon-line-trace';
 
 /** slug → 페이지 컴포넌트. registry와 1:1 대응. */
 const PAGE_COMPONENTS: Record<string, () => React.JSX.Element> = {
   // 스크롤 효과 데모
-  "parallax-layers": ParallaxLayersPage,
-  "hero-to-section": HeroToSectionPage,
-  "reveal-sequence": RevealSequencePage,
-  "reveal-together": RevealTogetherPage,
-  "pin-progress": PinProgressPage,
-  "horizontal-scroll": HorizontalScrollPage,
-  "progress-indicator": ProgressIndicatorPage,
-  "kinetic-typography": KineticTypographyPage,
-  "image-mask-reveal": ImageMaskRevealPage,
-  "counter-on-scroll": CounterOnScrollPage,
-  "sticky-stack-cards": StickyStackCardsPage,
-  "line-mask-text": LineMaskTextPage,
-  "bg-color-transition": BgColorTransitionPage,
-  "svg-path-draw": SvgPathDrawPage,
-  "scroll-direction-header": ScrollDirectionHeaderPage,
-  "parallax-image-grid": ParallaxImageGridPage,
-  "chart-bar-grow": ChartBarGrowPage,
-  "section-snap-panels": SectionSnapPanelsPage,
-  "pinned-caption-swap": PinnedCaptionSwapPage,
-  "zoom-out-reveal": ZoomOutRevealPage,
+  'parallax-layers': ParallaxLayersPage,
+  'hero-to-section': HeroToSectionPage,
+  'reveal-sequence': RevealSequencePage,
+  'reveal-together': RevealTogetherPage,
+  'pin-progress': PinProgressPage,
+  'horizontal-scroll': HorizontalScrollPage,
+  'progress-indicator': ProgressIndicatorPage,
+  'kinetic-typography': KineticTypographyPage,
+  'image-mask-reveal': ImageMaskRevealPage,
+  'counter-on-scroll': CounterOnScrollPage,
+  'sticky-stack-cards': StickyStackCardsPage,
+  'line-mask-text': LineMaskTextPage,
+  'bg-color-transition': BgColorTransitionPage,
+  'svg-path-draw': SvgPathDrawPage,
+  'scroll-direction-header': ScrollDirectionHeaderPage,
+  'parallax-image-grid': ParallaxImageGridPage,
+  'chart-bar-grow': ChartBarGrowPage,
+  'section-snap-panels': SectionSnapPanelsPage,
+  'pinned-caption-swap': PinnedCaptionSwapPage,
+  'zoom-out-reveal': ZoomOutRevealPage,
   // 모션
-  "word-rotator": WordRotatorPage,
-  "loader-sequence": LoaderSequencePage,
-  "stagger-grid-from": StaggerGridFromPage,
-  "responsive-motion-switch": ResponsiveMotionSwitchPage,
+  'word-rotator': WordRotatorPage,
+  'loader-sequence': LoaderSequencePage,
+  'stagger-grid-from': StaggerGridFromPage,
+  'responsive-motion-switch': ResponsiveMotionSwitchPage,
   // 포인터
-  "magnetic-nav": MagneticNavPage,
-  "cursor-spotlight": CursorSpotlightPage,
-  "tilt-card-grid": TiltCardGridPage,
+  'magnetic-nav': MagneticNavPage,
+  'cursor-spotlight': CursorSpotlightPage,
+  'tilt-card-grid': TiltCardGridPage,
   // SVG
-  "signature-draw": SignatureDrawPage,
-  "morph-blob": MorphBlobPage,
-  "icon-line-trace": IconLineTracePage,
+  'signature-draw': SignatureDrawPage,
+  'morph-blob': MorphBlobPage,
+  'icon-line-trace': IconLineTracePage,
 };
 
 export function generateStaticParams(): { slug: string }[] {
@@ -78,7 +78,7 @@ export function generateStaticParams(): { slug: string }[] {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/gsap-lab/[slug]">): Promise<Metadata> {
+}: PageProps<'/gsap-lab/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
   const entry = findLabEntry(slug);
   if (!entry) return {};
@@ -91,7 +91,7 @@ export async function generateMetadata({
 
 export default async function LabDetailPage({
   params,
-}: PageProps<"/gsap-lab/[slug]">) {
+}: PageProps<'/gsap-lab/[slug]'>) {
   const { slug } = await params;
   const entry = findLabEntry(slug);
   const PageComponent = PAGE_COMPONENTS[slug];

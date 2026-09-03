@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { usePinnedTimeline } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { usePinnedTimeline } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 /**
  * `/gsap-lab/image-mask-reveal` — clip-path로 이미지 블록이 펼쳐진다.
@@ -15,17 +15,17 @@ export function ImageMaskRevealPage() {
 
   usePinnedTimeline(
     container,
-    { trigger: ".mask-stage", length: [1.8, 1.1] },
+    { trigger: '.mask-stage', length: [1.8, 1.1] },
     ({ tl }) => {
       tl.fromTo(
-        ".mask-image",
-        { clipPath: "inset(45% 10% round 1rem)" },
-        { clipPath: "inset(0% 0% round 0rem)", ease: "none" },
-      ).from(".mask-caption", { autoAlpha: 0, y: 20, ease: "none" }, ">-0.3");
+        '.mask-image',
+        { clipPath: 'inset(45% 10% round 1rem)' },
+        { clipPath: 'inset(0% 0% round 0rem)', ease: 'none' },
+      ).from('.mask-caption', { autoAlpha: 0, y: 20, ease: 'none' }, '>-0.3');
     },
     (g) => {
-      g.set(".mask-image", { clipPath: "inset(0% 0%)" });
-      g.set(".mask-caption", { autoAlpha: 1 });
+      g.set('.mask-image', { clipPath: 'inset(0% 0%)' });
+      g.set('.mask-caption', { autoAlpha: 1 });
     },
   );
 
@@ -40,8 +40,8 @@ export function ImageMaskRevealPage() {
             className="mask-image absolute inset-0"
             style={{
               background:
-                "linear-gradient(135deg, #4a044e, #c026d3 55%, #f0abfc)",
-              clipPath: "inset(45% 10% round 1rem)",
+                'linear-gradient(135deg, #4a044e, #c026d3 55%, #f0abfc)',
+              clipPath: 'inset(45% 10% round 1rem)',
             }}
             aria-hidden
           />
@@ -51,8 +51,8 @@ export function ImageMaskRevealPage() {
         </section>
 
         <section className="mx-auto max-w-2xl px-6 py-32 text-center text-white/60">
-          되감으면 다시 좁은 띠로 닫힙니다. 실제 서비스에서는 배경 div 대신
-          제품 스크린샷·영상을 넣습니다.
+          되감으면 다시 좁은 띠로 닫힙니다. 실제 서비스에서는 배경 div 대신 제품
+          스크린샷·영상을 넣습니다.
         </section>
       </ScrollDemoShell>
     </div>

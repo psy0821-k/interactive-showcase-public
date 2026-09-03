@@ -1,16 +1,12 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useRef } from "react";
-import * as THREE from "three";
-import {
-  extend,
-  useFrame,
-  type ThreeElement,
-} from "@react-three/fiber";
-import { shaderMaterial } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useRef } from 'react';
+import * as THREE from 'three';
+import { extend, useFrame, type ThreeElement } from '@react-three/fiber';
+import { shaderMaterial } from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 지오메트리 해상도. 파장 하나에 정점 8~10개가 기준이다. */
 const SPHERE_SEGMENTS = 128;
@@ -38,8 +34,8 @@ const WobblySphereMaterial = shaderMaterial(
     uTime: 0,
     uAmplitude: 0.16,
     uFrequency: 2.6,
-    uColorA: new THREE.Color("#12245c"),
-    uColorB: new THREE.Color("#66e0ff"),
+    uColorA: new THREE.Color('#12245c'),
+    uColorB: new THREE.Color('#66e0ff'),
     uLightDirection: SHADER_LIGHT_DIRECTION.clone(),
   },
   /* glsl */ `
@@ -130,7 +126,7 @@ const WobblySphereMaterial = shaderMaterial(
 
 extend({ WobblySphereMaterial });
 
-declare module "@react-three/fiber" {
+declare module '@react-three/fiber' {
   interface ThreeElements {
     wobblySphereMaterial: ThreeElement<typeof WobblySphereMaterial>;
   }
@@ -166,10 +162,17 @@ export function Scene() {
       */}
       <mesh frustumCulled={false}>
         <sphereGeometry args={[1.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS]} />
-        <wobblySphereMaterial key={WobblySphereMaterial.key} ref={materialRef} />
+        <wobblySphereMaterial
+          key={WobblySphereMaterial.key}
+          ref={materialRef}
+        />
       </mesh>
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.9, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.9, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[24, 24]} />
         <meshStandardMaterial color="#0d1020" roughness={0.9} />
       </mesh>

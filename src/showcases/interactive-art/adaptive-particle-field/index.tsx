@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useMemo, useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import type { Points } from "three";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useMemo, useRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import type { Points } from 'three';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 좁은 화면 기준선. Tailwind md 브레이크포인트와 맞춘다. */
 const NARROW_BREAKPOINT = 768;
@@ -39,7 +39,8 @@ export function Scene() {
 
   // 브레이크포인트를 넘을 때만 값이 바뀌므로 배열 재생성도 그때만 일어난다.
   const count = useMemo(
-    () => (width < NARROW_BREAKPOINT ? PARTICLE_COUNT_NARROW : PARTICLE_COUNT_WIDE),
+    () =>
+      width < NARROW_BREAKPOINT ? PARTICLE_COUNT_NARROW : PARTICLE_COUNT_WIDE,
     [width],
   );
 

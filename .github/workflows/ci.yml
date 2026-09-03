@@ -25,6 +25,9 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      - name: 포맷 검사
+        run: bun run format:check
+
       - name: 맞춤법 검사
         run: bun run spell
 

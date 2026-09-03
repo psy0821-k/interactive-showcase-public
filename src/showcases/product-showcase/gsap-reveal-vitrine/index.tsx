@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useRef } from "react";
-import * as THREE from "three";
-import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
-import { SceneLabel } from "@/components/scene-label";
-import { useGsapScene } from "@/hooks/use-gsap-scene";
+import { useRef } from 'react';
+import * as THREE from 'three';
+import { Environment, Lightformer, PerspectiveCamera } from '@react-three/drei';
+import { SceneLabel } from '@/components/scene-label';
+import { useGsapScene } from '@/hooks/use-gsap-scene';
 
 /** 진열대 위에 오르는 제품 개수. 타임라인에서 stagger로 차례 등장한다. */
 const PRODUCT_COUNT = 3;
@@ -18,9 +18,9 @@ const PRODUCT_SIZE = 0.6;
 /** 진열대 상판 높이(바닥 기준) */
 const PLINTH_TOP_Y = 0;
 
-const PRODUCT_COLORS = ["#4dd4ac", "#6ba6ff", "#ffb454"];
-const PLINTH_COLOR = "#2c3440";
-const LABEL_COLOR = "#e8edf5";
+const PRODUCT_COLORS = ['#4dd4ac', '#6ba6ff', '#ffb454'];
+const PLINTH_COLOR = '#2c3440';
+const LABEL_COLOR = '#e8edf5';
 
 /** 제품의 최종 x 좌표. 가운데 정렬. */
 function productX(index: number): number {
@@ -87,26 +87,31 @@ export function Scene() {
 
     // 자식 트윈 공통값은 생성자 duration이 아니라 defaults로 준다.
     const tl = gsap.timeline({
-      defaults: { duration: 0.6, ease: "power3.out" },
+      defaults: { duration: 0.6, ease: 'power3.out' },
     });
 
     tl
       // 1. 진열대가 바닥에서 솟아오른다.
-      .from(plinth.scale, { x: 0.001, y: 0.001, z: 0.001, ease: "back.out(1.6)" })
+      .from(plinth.scale, {
+        x: 0.001,
+        y: 0.001,
+        z: 0.001,
+        ease: 'back.out(1.6)',
+      })
       // 2. 제품들이 진열대 위로 차례로(stagger) 떨어져 자리 잡는다.
       //    position/scale은 중첩 객체라 Vector3 배열로 펴서 넘긴다.
       .from(
         productPositions,
         { y: PLINTH_TOP_Y + PRODUCT_SIZE / 2 + 1.4, stagger: 0.12 },
-        "-=0.15",
+        '-=0.15',
       )
       .from(
         productScales,
-        { x: 0.4, y: 0.4, z: 0.4, ease: "back.out(1.7)", stagger: 0.12 },
-        "<",
+        { x: 0.4, y: 0.4, z: 0.4, ease: 'back.out(1.7)', stagger: 0.12 },
+        '<',
       )
       // 3. 라벨이 위에서 내려온다.
-      .from(label.position, { y: 2.6, ease: "power2.out" }, "-=0.3");
+      .from(label.position, { y: 2.6, ease: 'power2.out' }, '-=0.3');
   });
 
   return (

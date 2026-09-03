@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /**
  * GSAP 인스턴스·카운터를 `window.__gsapLab`에 노출한다.
@@ -16,12 +16,12 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion";
  */
 function exposeDebugHandle(): void {
   if (
-    process.env.NODE_ENV === "production" &&
-    process.env.NEXT_PUBLIC_E2E !== "1"
+    process.env.NODE_ENV === 'production' &&
+    process.env.NEXT_PUBLIC_E2E !== '1'
   ) {
     return;
   }
-  if (typeof window === "undefined") return;
+  if (typeof window === 'undefined') return;
   const w = window as unknown as {
     __gsapLab?: {
       liveTweenCount: () => number;
@@ -87,7 +87,7 @@ export function useGsapDom(
         gsap,
         reduced,
         // useGSAP가 넘기는 contextSafe는 항상 정의돼 있다.
-        contextSafe: contextSafe as GsapDomContext["contextSafe"],
+        contextSafe: contextSafe as GsapDomContext['contextSafe'],
       });
     },
     { scope, dependencies: [reduced, ...deps], revertOnUpdate: true },

@@ -14,9 +14,9 @@
 // 실행: node scripts/build-luts.mjs
 // 산출물: public/luts/warm-film.cube (16³ = 4096줄, ~40KB, 커밋 대상)
 
-import { writeFileSync, mkdirSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /** LUT 한 변의 격자 수. 16³ = 4096 항목. 데모용으로 충분하다(밴딩은
  *  tetrahedralInterpolation으로 완화). 프로덕션 룩은 32 이상을 권장한다. */
@@ -25,7 +25,7 @@ const LUT_SIZE = 16;
 /** 출력 경로. public/ 아래여야 <LUT>가 fetch할 수 있다. */
 const OUT_PATH = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  "../public/luts/warm-film.cube",
+  '../public/luts/warm-film.cube',
 );
 
 /**
@@ -78,11 +78,11 @@ function applyWarmFilmLook(r, g, b) {
  */
 function buildCubeText(size) {
   const lines = [
-    "# color-grading-lut (ISSUE-41) — 절차 생성 warm-film LUT",
-    "# scripts/build-luts.mjs 로 재생성. 직접 편집하지 말 것.",
+    '# color-grading-lut (ISSUE-41) — 절차 생성 warm-film LUT',
+    '# scripts/build-luts.mjs 로 재생성. 직접 편집하지 말 것.',
     `LUT_3D_SIZE ${size}`,
-    "DOMAIN_MIN 0.0 0.0 0.0",
-    "DOMAIN_MAX 1.0 1.0 1.0",
+    'DOMAIN_MIN 0.0 0.0 0.0',
+    'DOMAIN_MAX 1.0 1.0 1.0',
   ];
 
   const denom = size - 1;
@@ -97,14 +97,14 @@ function buildCubeText(size) {
     }
   }
 
-  return `${lines.join("\n")}\n`;
+  return `${lines.join('\n')}\n`;
 }
 
 const cubeText = buildCubeText(LUT_SIZE);
 mkdirSync(dirname(OUT_PATH), { recursive: true });
-writeFileSync(OUT_PATH, cubeText, "utf8");
+writeFileSync(OUT_PATH, cubeText, 'utf8');
 
-const byteLength = Buffer.byteLength(cubeText, "utf8");
+const byteLength = Buffer.byteLength(cubeText, 'utf8');
 console.log(
   `warm-film.cube 생성 완료 — ${LUT_SIZE}³ = ${LUT_SIZE ** 3}개 항목, ` +
     `${(byteLength / 1024).toFixed(1)} KB`,

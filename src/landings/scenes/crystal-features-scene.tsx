@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import type { LandingSceneContext } from "../landing-shell";
-import { useEasedProgress } from "./use-eased-progress";
+import { useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import type { LandingSceneContext } from '../landing-shell';
+import { useEasedProgress } from './use-eased-progress';
 
 /** 바깥을 도는 작은 결정 수(기능 항목에 대응). */
 const SATELLITE_COUNT = 5;
@@ -18,13 +18,7 @@ const SWAY_SPEED = 0.4;
  * 길쭉한 육각기둥 + 위아래 뿔로 결정 하나를 만든다.
  * procedural-geometry: CylinderGeometry(6각) + ConeGeometry 조합.
  */
-function Crystal({
-  scale = 1,
-  color,
-}: {
-  scale?: number;
-  color: string;
-}) {
+function Crystal({ scale = 1, color }: { scale?: number; color: string }) {
   return (
     <group scale={scale}>
       <mesh castShadow>
@@ -55,7 +49,10 @@ function Crystal({
  * 모여 scale 0.2로 닫혀 있다. 스크롤 진행률에 따라 하나씩(스태거) 바깥으로
  * 밀려나며 scale 1로 열린다. 결정은 상시 미세하게 자전.
  */
-export function CrystalFeaturesScene({ progress, reduced }: LandingSceneContext) {
+export function CrystalFeaturesScene({
+  progress,
+  reduced,
+}: LandingSceneContext) {
   const groupRef = useRef<THREE.Group>(null);
   const satelliteRefs = useRef<(THREE.Group | null)[]>([]);
   const eased = useEasedProgress(progress);
@@ -72,7 +69,7 @@ export function CrystalFeaturesScene({ progress, reduced }: LandingSceneContext)
             Math.sin(angle) * 2.4,
             0,
           ),
-          color: ["#a78bfa", "#c4b5fd", "#8b5cf6", "#ddd6fe", "#7c3aed"][i],
+          color: ['#a78bfa', '#c4b5fd', '#8b5cf6', '#ddd6fe', '#7c3aed'][i],
           stagger: i * 0.16,
         };
       }),
@@ -97,11 +94,7 @@ export function CrystalFeaturesScene({ progress, reduced }: LandingSceneContext)
         0,
         1,
       );
-      node.position.lerpVectors(
-        new THREE.Vector3(0, 0, 0),
-        sat.open,
-        local,
-      );
+      node.position.lerpVectors(new THREE.Vector3(0, 0, 0), sat.open, local);
       node.scale.setScalar(THREE.MathUtils.lerp(0.2, 1, local));
       node.rotation.z = (1 - local) * Math.PI;
     });
@@ -119,7 +112,12 @@ export function CrystalFeaturesScene({ progress, reduced }: LandingSceneContext)
 
       <ambientLight intensity={0.4} />
       <directionalLight position={[4, 7, 4]} intensity={2.2} castShadow />
-      <pointLight position={[0, 0, 2]} intensity={6} distance={10} color="#c4b5fd" />
+      <pointLight
+        position={[0, 0, 2]}
+        intensity={6}
+        distance={10}
+        color="#c4b5fd"
+      />
 
       <group ref={groupRef}>
         {/* 중심 결정 */}

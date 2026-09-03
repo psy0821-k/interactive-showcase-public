@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Environment, Lightformer } from "@react-three/drei";
-import type { Group } from "three";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Environment, Lightformer } from '@react-three/drei';
+import type { Group } from 'three';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 회전 속도(라디안/초). 반사가 흐르는 것을 보여주기 위해 느리게 돈다. */
 const ROTATION_SPEED = 0.25;
@@ -64,18 +64,30 @@ export function Scene() {
         {/* 거울에 가까운 금속 — 환경맵이 없으면 검게 보인다 */}
         <mesh position={[-1.3, 0, 0]} castShadow>
           <sphereGeometry args={[0.9, 64, 64]} />
-          <meshStandardMaterial color="#ffffff" metalness={1} roughness={0.08} />
+          <meshStandardMaterial
+            color="#ffffff"
+            metalness={1}
+            roughness={0.08}
+          />
         </mesh>
 
         {/* 거친 금속 — 같은 환경맵이 흐릿하게 반사된다 */}
         <mesh position={[1.3, 0, 0]} castShadow>
           <sphereGeometry args={[0.9, 64, 64]} />
-          <meshStandardMaterial color="#ffffff" metalness={1} roughness={0.35} />
+          <meshStandardMaterial
+            color="#ffffff"
+            metalness={1}
+            roughness={0.35}
+          />
         </mesh>
       </group>
 
       {/* 그림자가 보일 만큼 밝되 구체보다 튀지 않는 중간 톤 */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.1, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.1, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[24, 24]} />
         <meshStandardMaterial color="#1f1f1f" roughness={0.8} metalness={0.1} />
       </mesh>

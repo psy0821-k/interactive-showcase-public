@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useCountUp, useRevealOnScroll } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { useCountUp, useRevealOnScroll } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 const BARS = [
-  { label: "1월", value: 42, background: "#166534" },
-  { label: "2월", value: 68, background: "#15803d" },
-  { label: "3월", value: 55, background: "#16a34a" },
-  { label: "4월", value: 91, background: "#22c55e" },
-  { label: "5월", value: 74, background: "#4ade80" },
-  { label: "6월", value: 100, background: "#86efac" },
+  { label: '1월', value: 42, background: '#166534' },
+  { label: '2월', value: 68, background: '#15803d' },
+  { label: '3월', value: 55, background: '#16a34a' },
+  { label: '4월', value: 91, background: '#22c55e' },
+  { label: '5월', value: 74, background: '#4ade80' },
+  { label: '6월', value: 100, background: '#86efac' },
 ];
 
 /**
@@ -23,22 +23,22 @@ export function ChartBarGrowPage() {
   const container = useRef<HTMLDivElement>(null);
 
   useRevealOnScroll(container, {
-    target: ".chart-bar",
-    trigger: ".chart-stage",
-    start: "top 70%",
+    target: '.chart-bar',
+    trigger: '.chart-stage',
+    start: 'top 70%',
     from: { scaleY: 0 },
     duration: 0.8,
-    ease: "power2.out",
+    ease: 'power2.out',
     stagger: 0.1,
     reversible: false,
   });
 
   useCountUp(container, {
-    target: ".chart-num",
-    trigger: ".chart-stage",
+    target: '.chart-num',
+    trigger: '.chart-stage',
     targets: BARS.map((b) => ({ value: b.value })),
     duration: 0.8,
-    start: "top 70%",
+    start: 'top 70%',
   });
 
   return (
@@ -50,13 +50,19 @@ export function ChartBarGrowPage() {
         <section className="chart-stage mx-auto max-w-3xl px-6 py-40">
           <div className="flex h-72 items-end justify-between gap-3 border-b border-white/20 pb-0">
             {BARS.map((bar) => (
-              <div key={bar.label} className="flex flex-1 flex-col items-center gap-2">
+              <div
+                key={bar.label}
+                className="flex flex-1 flex-col items-center gap-2"
+              >
                 <span className="chart-num text-sm font-semibold tabular-nums text-white">
                   0
                 </span>
                 <div
                   className="chart-bar w-full origin-bottom rounded-t-md"
-                  style={{ height: `${bar.value * 2.2}px`, background: bar.background }}
+                  style={{
+                    height: `${bar.value * 2.2}px`,
+                    background: bar.background,
+                  }}
                   aria-hidden
                 />
                 <span className="text-xs text-white/60">{bar.label}</span>

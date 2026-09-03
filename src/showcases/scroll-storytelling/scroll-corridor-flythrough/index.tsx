@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
-import { ScrollControls, useScroll } from "@react-three/drei";
+import { useEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
+import { ScrollControls, useScroll } from '@react-three/drei';
 
 /**
  * 스크롤 컨테이너의 길이. 캔버스 높이의 배수다.
@@ -32,7 +32,7 @@ const LOOK_AHEAD = 0.06;
  * 통로 끝 기둥이 "다른 색 실루엣"이 아니라 배경으로 매끄럽게 사라진다.
  * 같은 상수를 둘이 공유한다. (fog-and-atmosphere 참조)
  */
-const FOG_COLOR = "#0b0f18";
+const FOG_COLOR = '#0b0f18';
 
 /** 안개가 시작/완료되는 카메라 거리. far(34)는 카메라 far clip보다 작다. */
 const FOG_NEAR = 6;
@@ -132,7 +132,10 @@ function ScrollDrivenCamera({ curve }: { curve: THREE.CatmullRomCurve3 }) {
     } else {
       curve.getPointAt(1, targetLookAt.current);
       curve.getTangentAt(1, tangent.current);
-      targetLookAt.current.addScaledVector(tangent.current, LOOK_AHEAD * curveLength);
+      targetLookAt.current.addScaledVector(
+        tangent.current,
+        LOOK_AHEAD * curveLength,
+      );
     }
 
     // 프레임률과 무관한 지수 감쇠. delta를 지수에 넣어야 저프레임에서도 같다.

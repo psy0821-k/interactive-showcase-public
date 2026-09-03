@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 /**
  * sdf-text-rendering(ISSUE-39) — 3D 씬 텍스트 공용 래퍼.
@@ -20,10 +20,10 @@
  * `<Text>` 래퍼다.
  */
 
-import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Text } from "@react-three/drei";
-import type { TextProps } from "@react-three/drei";
+import { useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Text } from '@react-three/drei';
+import type { TextProps } from '@react-three/drei';
 
 /**
  * 자체 호스팅 폰트 경로. `scripts/build-font-subset.mjs`가 생성한
@@ -33,7 +33,7 @@ import type { TextProps } from "@react-three/drei";
  * **WOFF1(.woff)이다 — troika 파서는 WOFF2를 못 읽는다**(`wOF2` 시그니처에서
  * `Error: woff2 fonts not supported`). WOFF1은 내장 woff2otf로 변환해 파싱한다.
  */
-export const FONT_URL = "/fonts/pretendard-subset.woff";
+export const FONT_URL = '/fonts/pretendard-subset.woff';
 
 /**
  * `characters` 기본 프리로드 집합.
@@ -44,12 +44,12 @@ export const FONT_URL = "/fonts/pretendard-subset.woff";
  * 넣어 FOUC를 완화한다. 나머지 한글은 렌더될 때 troika가 채운다.
  */
 export const LABEL_CHARACTERS =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" +
-  " .,:;!?()[]{}/-+=%·×→⇄↔≈°±…‘’“”\n" +
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' +
+  ' .,:;!?()[]{}/-+=%·×→⇄↔≈°±…‘’“”\n' +
   // 계기판·라벨 빈출 한글
-  "측정중로딩완료개수거리드로우콜삼각형건물동종류별인스턴싱지오메트리병합" +
-  "재질코팅유리간맑은말세광학센서돔구동휠냉각흡기구고이득안테나" +
-  "강체던진공프레임의존정규화방식클릭바뀐다같다이전후시작정지";
+  '측정중로딩완료개수거리드로우콜삼각형건물동종류별인스턴싱지오메트리병합' +
+  '재질코팅유리간맑은말세광학센서돔구동휠냉각흡기구고이득안테나' +
+  '강체던진공프레임의존정규화방식클릭바뀐다같다이전후시작정지';
 
 /** troika 텍스트 메시 중 이 래퍼가 쓰는 부분만 좁힌 타입. drei ref 타입은 any다. */
 interface TroikaTextMesh {
@@ -59,24 +59,24 @@ interface TroikaTextMesh {
 /** `<Text>`에 그대로 넘기는 prop 부분집합 + 래퍼 공통. */
 type PassthroughTextProps = Pick<
   TextProps,
-  | "position"
-  | "rotation"
-  | "scale"
-  | "fontSize"
-  | "fontWeight"
-  | "color"
-  | "anchorX"
-  | "anchorY"
-  | "maxWidth"
-  | "textAlign"
-  | "lineHeight"
-  | "letterSpacing"
-  | "outlineWidth"
-  | "outlineColor"
-  | "outlineBlur"
-  | "sdfGlyphSize"
-  | "characters"
-  | "renderOrder"
+  | 'position'
+  | 'rotation'
+  | 'scale'
+  | 'fontSize'
+  | 'fontWeight'
+  | 'color'
+  | 'anchorX'
+  | 'anchorY'
+  | 'maxWidth'
+  | 'textAlign'
+  | 'lineHeight'
+  | 'letterSpacing'
+  | 'outlineWidth'
+  | 'outlineColor'
+  | 'outlineBlur'
+  | 'sdfGlyphSize'
+  | 'characters'
+  | 'renderOrder'
 >;
 
 export interface SceneLabelProps extends PassthroughTextProps {
@@ -90,8 +90,8 @@ export interface SceneLabelProps extends PassthroughTextProps {
 }
 
 /** 배경 위 가독성 기본값. 개별 prop으로 override 가능. */
-const DEFAULT_OUTLINE_WIDTH = "6%";
-const DEFAULT_OUTLINE_COLOR = "#0b0e14";
+const DEFAULT_OUTLINE_WIDTH = '6%';
+const DEFAULT_OUTLINE_COLOR = '#0b0e14';
 
 /**
  * 정적 라벨·헤드라인.
@@ -105,7 +105,7 @@ export function SceneLabel({
   children,
   raycastable = false,
   characters = LABEL_CHARACTERS,
-  anchorX = "center",
+  anchorX = 'center',
   outlineWidth = DEFAULT_OUTLINE_WIDTH,
   outlineColor = DEFAULT_OUTLINE_COLOR,
   ...rest
@@ -165,12 +165,12 @@ export function SceneReadout({
   getText,
   interval = 0.3,
   backdrop,
-  backdropColor = "#0b0e14",
+  backdropColor = '#0b0e14',
   backdropOpacity = 0.72,
-  placeholder = "측정 중",
+  placeholder = '측정 중',
   characters = LABEL_CHARACTERS,
-  anchorX = "center",
-  anchorY = "middle",
+  anchorX = 'center',
+  anchorY = 'middle',
   ...rest
 }: SceneReadoutProps) {
   const textRef = useRef<TroikaTextMesh>(null);

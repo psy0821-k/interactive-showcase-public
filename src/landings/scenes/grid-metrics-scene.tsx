@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useLayoutEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import type { LandingSceneContext } from "../landing-shell";
-import { useEasedProgress } from "./use-eased-progress";
+import { useLayoutEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import type { LandingSceneContext } from '../landing-shell';
+import { useEasedProgress } from './use-eased-progress';
 
 /** 그리드 한 변의 막대 수. 12×12 = 144개. */
 const GRID = 12;
@@ -89,7 +89,11 @@ export function GridMetricsScene({ progress, reduced }: LandingSceneContext) {
 
       <ambientLight intensity={0.45} />
       <directionalLight position={[5, 9, 4]} intensity={2.2} castShadow />
-      <directionalLight position={[-5, 3, -3]} intensity={0.5} color="#fcd34d" />
+      <directionalLight
+        position={[-5, 3, -3]}
+        intensity={0.5}
+        color="#fcd34d"
+      />
 
       <instancedMesh
         ref={meshRef}

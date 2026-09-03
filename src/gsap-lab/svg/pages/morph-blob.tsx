@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import type gsap from "gsap";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { DemoShell } from "@/gsap-lab/demo-shell";
+import { useRef, useState } from 'react';
+import type gsap from 'gsap';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { DemoShell } from '@/gsap-lab/demo-shell';
 
 /**
  * 블롭 모양들. **네 path 모두 커맨드 구조가 동일**하다 —
@@ -15,10 +15,10 @@ import { DemoShell } from "@/gsap-lab/demo-shell";
  * 경로 리샘플링 라이브러리가 필요하다.
  */
 const SHAPES = [
-  "M100,20 C140,20 175,55 175,100 C175,150 140,180 100,180 C55,180 25,150 25,100 C25,55 60,20 100,20 Z",
-  "M100,30 C155,15 180,70 165,110 C150,160 110,175 75,165 C30,150 20,95 40,60 C55,30 75,40 100,30 Z",
-  "M100,25 C130,35 170,50 170,105 C170,145 135,170 95,175 C50,180 30,140 30,95 C30,50 65,15 100,25 Z",
-  "M100,20 C150,30 165,65 175,110 C180,155 130,180 90,175 C45,170 25,135 30,90 C35,45 55,10 100,20 Z",
+  'M100,20 C140,20 175,55 175,100 C175,150 140,180 100,180 C55,180 25,150 25,100 C25,55 60,20 100,20 Z',
+  'M100,30 C155,15 180,70 165,110 C150,160 110,175 75,165 C30,150 20,95 40,60 C55,30 75,40 100,30 Z',
+  'M100,25 C130,35 170,50 170,105 C170,145 135,170 95,175 C50,180 30,140 30,95 C30,50 65,15 100,25 Z',
+  'M100,20 C150,30 165,65 175,110 C180,155 130,180 90,175 C45,170 25,135 30,90 C35,45 55,10 100,20 Z',
 ];
 
 /**
@@ -33,28 +33,25 @@ export function MorphBlobPage() {
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const [paused, setPaused] = useState(false);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      const path = container.current?.querySelector<SVGPathElement>(".blob-path");
-      if (!path) return;
+  useGsapDom(({ gsap: g, reduced }) => {
+    const path = container.current?.querySelector<SVGPathElement>('.blob-path');
+    if (!path) return;
 
-      if (reduced) {
-        g.set(path, { attr: { d: SHAPES[0] } });
-        return;
-      }
+    if (reduced) {
+      g.set(path, { attr: { d: SHAPES[0] } });
+      return;
+    }
 
-      const tl = g.timeline({
-        repeat: -1,
-        yoyo: true,
-        defaults: { duration: 1.6, ease: "sine.inOut" },
-      });
-      SHAPES.slice(1).forEach((d) => {
-        tl.to(path, { attr: { d } });
-      });
-      tlRef.current = tl;
-    },
-    container,
-  );
+    const tl = g.timeline({
+      repeat: -1,
+      yoyo: true,
+      defaults: { duration: 1.6, ease: 'sine.inOut' },
+    });
+    SHAPES.slice(1).forEach((d) => {
+      tl.to(path, { attr: { d } });
+    });
+    tlRef.current = tl;
+  }, container);
 
   const toggle = () => {
     const tl = tlRef.current;
@@ -87,7 +84,7 @@ export function MorphBlobPage() {
           onClick={toggle}
           className="rounded-full border border-white/20 px-5 py-2 text-sm font-medium hover:bg-white/10"
         >
-          {paused ? "재개" : "일시정지"}
+          {paused ? '재개' : '일시정지'}
         </button>
       </div>
       <p className="pb-10 text-center text-sm text-white/50">

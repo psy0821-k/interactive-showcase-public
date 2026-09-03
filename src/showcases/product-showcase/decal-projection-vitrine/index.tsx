@@ -1,15 +1,27 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { Suspense, useMemo, useState, type CSSProperties, type ReactNode } from "react";
-import * as THREE from "three";
-import { Decal, Html, PerspectiveCamera, useGLTF, useTexture } from "@react-three/drei";
+import {
+  Suspense,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
+import * as THREE from 'three';
+import {
+  Decal,
+  Html,
+  PerspectiveCamera,
+  useGLTF,
+  useTexture,
+} from '@react-three/drei';
 
 /** public/ 기준 절대 경로. 상세 페이지 중첩 URL에서도 안전하다. */
-const MUG_URL = "/models/mug.glb";
-const LOGO_URL = "/decals/logo-mark.webp";
-const STICKER_URL = "/decals/sticker.webp";
+const MUG_URL = '/models/mug.glb';
+const LOGO_URL = '/decals/logo-mark.webp';
+const STICKER_URL = '/decals/sticker.webp';
 
 /** generate-mug-glb.mjs와 맞춘 치수. */
 const BODY_RADIUS = 0.85;
@@ -31,7 +43,13 @@ interface MugGLTF {
  * 지오메트리를 만든다. 여기서는 glb의 nodes.mug.geometry를 부모 <mesh>에
  * 넘긴다(gltf-model-loading 소관).
  */
-function DecoratedMug({ debug, thinBox }: { debug: boolean; thinBox: boolean }) {
+function DecoratedMug({
+  debug,
+  thinBox,
+}: {
+  debug: boolean;
+  thinBox: boolean;
+}) {
   const { nodes } = useGLTF(MUG_URL) as unknown as MugGLTF;
 
   // 데칼 텍스처는 "색 데이터"라 sRGB로 읽어야 물빠지지 않는다.
@@ -52,11 +70,7 @@ function DecoratedMug({ debug, thinBox }: { debug: boolean; thinBox: boolean }) 
       {/* 데칼 1 — 정면 왼쪽. 조명 받는 meshStandardMaterial. 권장.
           rotation을 number로 주면 <Decal>이 가장 가까운 정점의 법선으로 자동
           정렬한다(z는 그 축 기준 회전). 곡면에서는 이게 늘어남이 가장 적다. */}
-      <Decal
-        position={[-0.34, 0.2, BODY_RADIUS]}
-        rotation={0}
-        scale={0.5}
-      >
+      <Decal position={[-0.34, 0.2, BODY_RADIUS]} rotation={0} scale={0.5}>
         <meshStandardMaterial
           map={logo}
           transparent
@@ -106,29 +120,29 @@ function Caption({
   children,
 }: {
   position: [number, number, number];
-  tone: "good" | "bad" | "note";
+  tone: 'good' | 'bad' | 'note';
   children: ReactNode;
 }) {
   const border =
-    tone === "good"
-      ? "rgba(120, 220, 170, 0.5)"
-      : tone === "bad"
-        ? "rgba(240, 130, 110, 0.5)"
-        : "rgba(150, 180, 220, 0.4)";
+    tone === 'good'
+      ? 'rgba(120, 220, 170, 0.5)'
+      : tone === 'bad'
+        ? 'rgba(240, 130, 110, 0.5)'
+        : 'rgba(150, 180, 220, 0.4)';
   return (
     <Html position={position} center distanceFactor={7} zIndexRange={[110, 0]}>
       <div
         style={{
-          padding: "5px 9px",
+          padding: '5px 9px',
           borderRadius: 6,
-          background: "rgba(9, 12, 18, 0.85)",
+          background: 'rgba(9, 12, 18, 0.85)',
           border: `1px solid ${border}`,
-          color: "#e8edf5",
+          color: '#e8edf5',
           fontSize: 12,
           lineHeight: 1.3,
-          whiteSpace: "nowrap",
-          pointerEvents: "none",
-          userSelect: "none",
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
+          userSelect: 'none',
         }}
       >
         {children}
@@ -143,14 +157,14 @@ export function Scene() {
 
   const buttonStyle = useMemo<CSSProperties>(
     () => ({
-      padding: "6px 12px",
+      padding: '6px 12px',
       borderRadius: 6,
-      border: "1px solid rgba(138, 180, 255, 0.4)",
-      background: "rgba(15, 20, 30, 0.9)",
-      color: "#e8edf5",
+      border: '1px solid rgba(138, 180, 255, 0.4)',
+      background: 'rgba(15, 20, 30, 0.9)',
+      color: '#e8edf5',
       fontSize: 13,
-      cursor: "pointer",
-      userSelect: "none",
+      cursor: 'pointer',
+      userSelect: 'none',
     }),
     [],
   );
@@ -165,15 +179,23 @@ export function Scene() {
         position={[1.6, 1.4, 5.2]}
       />
 
-      <color attach="background" args={["#0b0d13"]} />
+      <color attach="background" args={['#0b0d13']} />
 
       {/* standard-scene-setup: key + fill + rim 3점 조명. <Environment> 없음. */}
       <ambientLight intensity={0.35} />
       <directionalLight position={[4, 6, 4]} intensity={2.2} castShadow />
-      <directionalLight position={[-5, 2, -3]} intensity={0.5} color="#8fb4ff" />
+      <directionalLight
+        position={[-5, 2, -3]}
+        intensity={0.5}
+        color="#8fb4ff"
+      />
       <directionalLight position={[0, 3, -6]} intensity={0.6} color="#ffd9a8" />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.95, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.95, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[30, 30]} />
         <meshStandardMaterial color="#14171f" roughness={0.95} />
       </mesh>
@@ -198,20 +220,20 @@ export function Scene() {
         distanceFactor={10}
         zIndexRange={[120, 0]}
       >
-        <div style={{ display: "flex", gap: 8, whiteSpace: "nowrap" }}>
+        <div style={{ display: 'flex', gap: 8, whiteSpace: 'nowrap' }}>
           <button
             type="button"
             style={buttonStyle}
             onClick={() => setDebug((value) => !value)}
           >
-            {debug ? "투영 상자 숨기기" : "투영 상자 보기(debug)"}
+            {debug ? '투영 상자 숨기기' : '투영 상자 보기(debug)'}
           </button>
           <button
             type="button"
             style={buttonStyle}
             onClick={() => setThinBox((value) => !value)}
           >
-            {thinBox ? "투영 상자 두껍게(bleeding)" : "투영 상자 얇게"}
+            {thinBox ? '투영 상자 두껍게(bleeding)' : '투영 상자 얇게'}
           </button>
         </div>
       </Html>

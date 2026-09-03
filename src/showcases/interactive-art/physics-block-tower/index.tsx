@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { useThree, type ThreeEvent } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useThree, type ThreeEvent } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
 import {
   CuboidCollider,
   Physics,
   RigidBody,
   useRapier,
   type RapierRigidBody,
-} from "@react-three/rapier";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneLabel, SceneReadout } from "@/components/scene-label";
+} from '@react-three/rapier';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneLabel, SceneReadout } from '@/components/scene-label';
 
 /** 블록 탑 — 5층 × 3×2 격자. 초기 위치는 결정적 함수(Math.random 금지). */
 const BLOCK_ROWS = 5;
@@ -111,7 +111,7 @@ function BlockTower({ blocks }: { blocks: BlockPlacement[] }) {
           <mesh castShadow receiveShadow>
             <boxGeometry args={[BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE]} />
             <meshStandardMaterial
-              color={block.base ? "#8b93a3" : "#c2c7d0"}
+              color={block.base ? '#8b93a3' : '#c2c7d0'}
               roughness={0.8}
             />
           </mesh>
@@ -168,7 +168,7 @@ function PhysicsStats({
       if (body.isSleeping()) sleeping += 1;
     });
     return (
-      `${paused ? "[ PAUSED ]  " : ""}강체 ${world.bodies.len()}  ·  ` +
+      `${paused ? '[ PAUSED ]  ' : ''}강체 ${world.bodies.len()}  ·  ` +
       `sleeping ${sleeping}\n` +
       `던진 공 ${ballCount} / ${MAX_BALLS}`
     );
@@ -223,7 +223,9 @@ function PhysicsWorld({
         const id = nextId.current;
         nextId.current += 1;
         const next = [...current, { id, direction }];
-        return next.length > MAX_BALLS ? next.slice(next.length - MAX_BALLS) : next;
+        return next.length > MAX_BALLS
+          ? next.slice(next.length - MAX_BALLS)
+          : next;
       });
     },
     [camera, reducedMotion],
@@ -260,7 +262,10 @@ function PhysicsWorld({
           <meshStandardMaterial color="#2c2f38" roughness={0.95} />
         </mesh>
         {/* planeGeometry 자동 콜라이더는 두께 0이라 명시한다. */}
-        <CuboidCollider args={[FLOOR_HALF, 0.1, FLOOR_HALF]} position={[0, -0.1, 0]} />
+        <CuboidCollider
+          args={[FLOOR_HALF, 0.1, FLOOR_HALF]}
+          position={[0, -0.1, 0]}
+        />
       </RigidBody>
 
       <BlockTower key={towerKey} blocks={blocks} />
@@ -296,7 +301,11 @@ export function Scene() {
         shadow-mapSize={[2048, 2048]}
         shadow-normalBias={0.035}
       />
-      <directionalLight position={[-5, 3, -3]} intensity={0.5} color="#8fb4ff" />
+      <directionalLight
+        position={[-5, 3, -3]}
+        intensity={0.5}
+        color="#8fb4ff"
+      />
 
       <PhysicsWorld paused={reducedMotion} reducedMotion={reducedMotion} />
     </>

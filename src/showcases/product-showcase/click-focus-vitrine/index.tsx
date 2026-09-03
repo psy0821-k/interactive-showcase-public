@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
-import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
+import { Environment, Lightformer, PerspectiveCamera } from '@react-three/drei';
 
 /** 전시물 하나의 정의. 모듈 스코프에는 순수 데이터만 둔다(계약 7번). */
 interface Exhibit {
@@ -14,7 +14,7 @@ interface Exhibit {
   position: [number, number, number];
   color: string;
   /** 지오메트리 종류 — 크기가 서로 다르게 만들어 거리 유도를 드러낸다. */
-  kind: "tall" | "wide" | "small";
+  kind: 'tall' | 'wide' | 'small';
 }
 
 /**
@@ -25,9 +25,9 @@ interface Exhibit {
  * Box3로 실측해 거리를 유도해야 한다는 점이 눈으로 드러난다.
  */
 const EXHIBITS: readonly Exhibit[] = [
-  { id: "tower", position: [-2.6, 0, 0], color: "#f0a35e", kind: "tall" },
-  { id: "slab", position: [0, 0, 0.4], color: "#7ecfff", kind: "wide" },
-  { id: "gem", position: [2.5, 0, -0.2], color: "#b6f08a", kind: "small" },
+  { id: 'tower', position: [-2.6, 0, 0], color: '#f0a35e', kind: 'tall' },
+  { id: 'slab', position: [0, 0, 0.4], color: '#7ecfff', kind: 'wide' },
+  { id: 'gem', position: [2.5, 0, -0.2], color: '#b6f08a', kind: 'small' },
 ];
 
 /** 포커스가 없을 때(전체 뷰)의 카메라 위치와 타깃. */
@@ -62,7 +62,7 @@ const FOCUS_TARGET_LIFT = 0.05;
 const APPROACH_DIRECTION: [number, number, number] = [0.35, 0.42, 1];
 
 /** 지오메트리 종류별 크기. Box3 실측 결과를 눈으로 대조하기 위한 값이다. */
-const EXHIBIT_SIZES: Record<Exhibit["kind"], [number, number, number]> = {
+const EXHIBIT_SIZES: Record<Exhibit['kind'], [number, number, number]> = {
   tall: [0.5, 2.4, 0.5],
   wide: [2.0, 0.5, 0.9],
   small: [0.34, 0.34, 0.34],
@@ -82,11 +82,11 @@ function dampFactor(delta: number, rate: number): number {
 function isOrbitLikeControls(
   value: unknown,
 ): value is { target: THREE.Vector3; update: () => void } {
-  if (typeof value !== "object" || value === null) return false;
+  if (typeof value !== 'object' || value === null) return false;
   const candidate = value as { target?: unknown; update?: unknown };
   return (
     candidate.target instanceof THREE.Vector3 &&
-    typeof candidate.update === "function"
+    typeof candidate.update === 'function'
   );
 }
 
@@ -140,7 +140,14 @@ function ExhibitMesh({ exhibit, focused, onFocus }: ExhibitMeshProps) {
     <group position={exhibit.position}>
       {/* 좌대. 클릭 대상이 아니므로 레이캐스팅에서 뺀다. */}
       <mesh position={[0, -0.06, 0]} receiveShadow raycast={() => null}>
-        <cylinderGeometry args={[Math.max(size[0], size[2]) * 0.8, Math.max(size[0], size[2]) * 0.9, 0.12, 24]} />
+        <cylinderGeometry
+          args={[
+            Math.max(size[0], size[2]) * 0.8,
+            Math.max(size[0], size[2]) * 0.9,
+            0.12,
+            24,
+          ]}
+        />
         <meshStandardMaterial color="#2a2f38" roughness={0.8} />
       </mesh>
 
@@ -196,9 +203,7 @@ function FocusCameraRig({ focusedId, focusedObject }: FocusCameraRigProps) {
   const desiredTarget = useRef(new THREE.Vector3(...OVERVIEW_TARGET));
   const scratchBox = useRef(new THREE.Box3());
   const scratchSphere = useRef(new THREE.Sphere());
-  const approach = useRef(
-    new THREE.Vector3(...APPROACH_DIRECTION).normalize(),
-  );
+  const approach = useRef(new THREE.Vector3(...APPROACH_DIRECTION).normalize());
 
   /** 전환 중인지. setState로 두면 프레임마다 리렌더가 나므로 ref다. */
   const isTransitioning = useRef(false);
@@ -273,7 +278,9 @@ function FocusCameraRig({ focusedId, focusedObject }: FocusCameraRigProps) {
     }
 
     // 도착 판정 — 지수 감쇠는 목표에 영원히 닿지 않으므로 임계값으로 끊는다.
-    const positionGap = state.camera.position.distanceTo(desiredPosition.current);
+    const positionGap = state.camera.position.distanceTo(
+      desiredPosition.current,
+    );
     const targetGap = isOrbitLikeControls(controls)
       ? controls.target.distanceTo(desiredTarget.current)
       : 0;

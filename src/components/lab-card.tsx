@@ -1,5 +1,5 @@
-import Link from "next/link";
-import type { LabEntry } from "@/gsap-lab/registry";
+import Link from 'next/link';
+import type { LabEntry } from '@/gsap-lab/registry';
 
 interface Props {
   entry: LabEntry;
@@ -14,8 +14,13 @@ interface Props {
  */
 export function LabCard({ entry }: Props) {
   // 클라이언트 필터가 대소문자 무시 부분일치로 검색하는 대상.
-  const haystack = [entry.title, entry.tag, entry.description, ...entry.usedSkills]
-    .join(" ")
+  const haystack = [
+    entry.title,
+    entry.tag,
+    entry.description,
+    ...entry.usedSkills,
+  ]
+    .join(' ')
     .toLowerCase();
 
   return (

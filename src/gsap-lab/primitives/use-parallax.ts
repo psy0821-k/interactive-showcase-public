@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { refreshAfterLayout } from "@/gsap-lab/scroll/scroll-trigger-setup";
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { refreshAfterLayout } from '@/gsap-lab/scroll/scroll-trigger-setup';
 
 /** `useParallax` 옵션. */
 export interface ParallaxOptions {
@@ -18,7 +18,7 @@ export interface ParallaxOptions {
    * 축. `"y"`(기본) 또는 `"x"`. 이동량 = `innerHeight × speed`(y) /
    * `innerWidth × speed`(x).
    */
-  axis?: "x" | "y";
+  axis?: 'x' | 'y';
   /** 시작 위치. 기본 `"top bottom"`. */
   start?: string;
   /** 끝 위치. 기본 `"bottom top"`. */
@@ -45,45 +45,42 @@ export function useParallax(
   const {
     target,
     trigger,
-    speedAttr = "speed",
-    axis = "y",
-    start = "top bottom",
-    end = "bottom top",
+    speedAttr = 'speed',
+    axis = 'y',
+    start = 'top bottom',
+    end = 'bottom top',
   } = options;
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      refreshAfterLayout();
-      const layers = scope.current?.querySelectorAll<HTMLElement>(target);
-      if (!layers || layers.length === 0) return;
+  useGsapDom(({ gsap: g, reduced }) => {
+    refreshAfterLayout();
+    const layers = scope.current?.querySelectorAll<HTMLElement>(target);
+    if (!layers || layers.length === 0) return;
 
-      if (reduced) {
-        g.set(target, { x: 0, y: 0 });
-        return;
-      }
+    if (reduced) {
+      g.set(target, { x: 0, y: 0 });
+      return;
+    }
 
-      layers.forEach((layer) => {
-        const speed = Number(layer.dataset[speedAttr] ?? 0);
-        const distance = () =>
-          (axis === "y" ? window.innerHeight : window.innerWidth) * speed;
+    layers.forEach((layer) => {
+      const speed = Number(layer.dataset[speedAttr] ?? 0);
+      const distance = () =>
+        (axis === 'y' ? window.innerHeight : window.innerWidth) * speed;
 
-        g.fromTo(
-          layer,
-          { [axis]: 0 },
-          {
-            [axis]: distance,
-            ease: "none",
-            scrollTrigger: {
-              trigger,
-              start,
-              end,
-              scrub: true,
-              invalidateOnRefresh: true,
-            },
+      g.fromTo(
+        layer,
+        { [axis]: 0 },
+        {
+          [axis]: distance,
+          ease: 'none',
+          scrollTrigger: {
+            trigger,
+            start,
+            end,
+            scrub: true,
+            invalidateOnRefresh: true,
           },
-        );
-      });
-    },
-    scope,
-  );
+        },
+      );
+    });
+  }, scope);
 }

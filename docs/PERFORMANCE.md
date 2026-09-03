@@ -22,15 +22,15 @@ Playwright·헤드리스 Chrome 등 백그라운드 컨텍스트에서는 `reque
 
 ## 3. 측정 환경
 
-| 항목 | 값 |
-|---|---|
-| OS | Windows 11 Pro |
-| GPU | NVIDIA GeForce RTX 3060 Laptop GPU |
-| 디스플레이 | 240Hz (FPS 상한이 vsync로 240에 고정) |
-| 브라우저 | Chrome 151.0.7922.174 (Stable, 64bit) |
-| 빌드 | 프로덕션 (`bun run build && bun run start`) |
-| 확장 프로그램 | 비활성화 |
-| CPU/네트워크 스로틀 | 없음 |
+| 항목                | 값                                          |
+| ------------------- | ------------------------------------------- |
+| OS                  | Windows 11 Pro                              |
+| GPU                 | NVIDIA GeForce RTX 3060 Laptop GPU          |
+| 디스플레이          | 240Hz (FPS 상한이 vsync로 240에 고정)       |
+| 브라우저            | Chrome 151.0.7922.174 (Stable, 64bit)       |
+| 빌드                | 프로덕션 (`bun run build && bun run start`) |
+| 확장 프로그램       | 비활성화                                    |
+| CPU/네트워크 스로틀 | 없음                                        |
 
 ## 4. 측정 방법
 
@@ -45,11 +45,11 @@ Playwright·헤드리스 Chrome 등 백그라운드 컨텍스트에서는 `reque
 
 ## 5. 결과
 
-| 쇼케이스 | 평균 FPS | 부하 시 최저 FPS | GPU memory (used) | Load (3회 평균) |
-|---|---|---|---|---|
-| `gesture-guide-viewer` | 240 (상한) | 235 | ~122 MB | ~697 ms (782 / 670 / 640) |
-| `depth-of-field-rack` | 220–235 | **190** (autofocus ON) | ~122 MB | ~727 ms (732 / 692 / 756) |
-| `physics-block-tower` | 240 (상한) | ~230 (탑 붕괴 중) | ~122 MB | ~691 ms (650 / 720 / 702) |
+| 쇼케이스               | 평균 FPS   | 부하 시 최저 FPS       | GPU memory (used) | Load (3회 평균)           |
+| ---------------------- | ---------- | ---------------------- | ----------------- | ------------------------- |
+| `gesture-guide-viewer` | 240 (상한) | 235                    | ~122 MB           | ~697 ms (782 / 670 / 640) |
+| `depth-of-field-rack`  | 220–235    | **190** (autofocus ON) | ~122 MB           | ~727 ms (732 / 692 / 756) |
+| `physics-block-tower`  | 240 (상한) | ~230 (탑 붕괴 중)      | ~122 MB           | ~691 ms (650 / 720 / 702) |
 
 ### 5-1. 읽는 법
 
@@ -64,10 +64,10 @@ Playwright·헤드리스 Chrome 등 백그라운드 컨텍스트에서는 `reque
 
 ### 5-2. autofocus의 비용 (`depth-of-field-rack`)
 
-| 상태 | FPS |
-|---|---|
-| 마우스 autofocus **OFF** | 220–235 |
-| 마우스 autofocus **ON** | 최저 **190** |
+| 상태                     | FPS          |
+| ------------------------ | ------------ |
+| 마우스 autofocus **OFF** | 220–235      |
+| 마우스 autofocus **ON**  | 최저 **190** |
 
 `depth-of-field-focus` 기법 문서가 "`focusDistance` [0,1] 범위가 직관적이지
 않으니 Autofocus 훅으로 자동화"라고 안내하는데, 그 자동화는 매 프레임

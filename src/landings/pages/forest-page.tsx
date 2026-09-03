@@ -5,7 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useGsapDom } from '@/hooks/use-gsap-dom';
 import { useParallax } from '@/gsap-lab/primitives';
-import { refreshAfterLayout, ScrollTrigger } from '@/gsap-lab/scroll/scroll-trigger-setup';
+import {
+  refreshAfterLayout,
+  ScrollTrigger,
+} from '@/gsap-lab/scroll/scroll-trigger-setup';
 import { findLanding } from '../registry';
 
 const KINETIC_TEXT1 = 'LANDING';
@@ -31,7 +34,13 @@ function SplitKineticLine({ text, line }: { text: string; line: number }) {
       aria-label={text}
     >
       {text.split('').map((ch, index) => (
-        <span key={`${ch}-${index}`} aria-hidden data-line={line} className="char inline-block" style={{ whiteSpace: 'pre' }}>
+        <span
+          key={`${ch}-${index}`}
+          aria-hidden
+          data-line={line}
+          className="char inline-block"
+          style={{ whiteSpace: 'pre' }}
+        >
           {ch}
         </span>
       ))}
@@ -66,10 +75,16 @@ export function ForestPage() {
     // 부족하다 — hero 이미지가 모두 decode된 뒤 한 번 더 refresh해, 이미지가
     // 늦게 뜨든 캐시돼 있든 트리거 위치가 항상 같은 지점에 오게 한다.
     refreshAfterLayout();
-    const heroImages = Array.from(container.current?.querySelectorAll<HTMLImageElement>('.hero-section img') ?? []);
-    void Promise.all(heroImages.map(img => (img.complete ? Promise.resolve() : img.decode().catch(() => undefined)))).then(() =>
-      ScrollTrigger.refresh()
+    const heroImages = Array.from(
+      container.current?.querySelectorAll<HTMLImageElement>(
+        '.hero-section img',
+      ) ?? [],
     );
+    void Promise.all(
+      heroImages.map((img) =>
+        img.complete ? Promise.resolve() : img.decode().catch(() => undefined),
+      ),
+    ).then(() => ScrollTrigger.refresh());
 
     // 진행 인디케이터: 문서 전체 스크롤 진행률을 바 scaleX로.
     // width가 아니라 transform이라 매 프레임 리플로우가 없다.
@@ -161,7 +176,7 @@ export function ForestPage() {
           end: 'bottom top',
           scrub: 1,
         },
-      }
+      },
     );
 
     // (b) 글자 단위 — 각 줄이 통째로 한 방향으로 기울었다가, 섹션이 중앙에
@@ -184,7 +199,7 @@ export function ForestPage() {
     if (allChars) {
       // 줄 단위로 글자를 묶는다 — 진행률·방향을 각 줄 안에서 따로 계산한다.
       const byLine = new Map<string, HTMLElement[]>();
-      allChars.forEach(char => {
+      allChars.forEach((char) => {
         const key = char.dataset.line ?? '0';
         const group = byLine.get(key) ?? [];
         group.push(char);
@@ -216,7 +231,7 @@ export function ForestPage() {
                 end: 'center center',
                 scrub: 1,
               },
-            }
+            },
           );
         });
       });
@@ -231,7 +246,10 @@ export function ForestPage() {
       </div>
 
       {/* breadcrumb — 다른 landings와 동일한 상단 맥락 */}
-      <nav aria-label="탐색 위치" className="relative z-40 border-b border-neutral-200 bg-white/90 px-6 py-3 text-sm backdrop-blur">
+      <nav
+        aria-label="탐색 위치"
+        className="relative z-40 border-b border-neutral-200 bg-white/90 px-6 py-3 text-sm backdrop-blur"
+      >
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1">
           <Link href="/landings" className="text-neutral-500 hover:underline">
             ← Landings
@@ -239,8 +257,11 @@ export function ForestPage() {
           <span className="text-neutral-400">/</span>
           <span className="font-medium">FOREST</span>
           <span className="ml-auto flex flex-wrap gap-1.5">
-            {entry.usedSkills.map(skill => (
-              <code key={skill} className="rounded bg-neutral-100 px-1.5 py-0.5 text-xs text-neutral-600">
+            {entry.usedSkills.map((skill) => (
+              <code
+                key={skill}
+                className="rounded bg-neutral-100 px-1.5 py-0.5 text-xs text-neutral-600"
+              >
                 {skill}
               </code>
             ))}
@@ -266,12 +287,25 @@ export function ForestPage() {
       >
         {/* 중앙: 제목 — 산(z-0)보다 앞, 나무(z-20)보다 뒤(z-10). 스크롤하면
             아래로 처지며(속도 0.8) 하단의 나무 뒤로 파고든다. */}
-        <h1 className="forest-title relative z-10 px-6 text-6xl font-semibold tracking-tight text-neutral-900 sm:text-8xl md:text-9xl">FOREST</h1>
+        <h1 className="forest-title relative z-10 px-6 text-6xl font-semibold tracking-tight text-neutral-900 sm:text-8xl md:text-9xl">
+          FOREST
+        </h1>
 
         {/* 산 레이어 — hero 전체를 덮는 배경(z-0), 낮은 opacity. data-speed
             +0.5로 아래로 처지므로 위로 60% 여유를 둬 상단에 빈틈이 없게 한다. */}
-        <div className="forest-layer pointer-events-none absolute -top-[60%] bottom-0 left-0 right-0 z-0 opacity-20" data-speed={0.5} aria-hidden>
-          <Image src="/forest/mountain-demo.webp" alt="" fill priority sizes="100vw" className="object-cover object-bottom" />
+        <div
+          className="forest-layer pointer-events-none absolute -top-[60%] bottom-0 left-0 right-0 z-0 opacity-20"
+          data-speed={0.5}
+          aria-hidden
+        >
+          <Image
+            src="/forest/mountain-demo.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-bottom"
+          />
         </div>
 
         {/* 나무 레이어 — 가장 앞(z-20). 제목이 스크롤로 내려오면 이 나무 뒤로
@@ -281,8 +315,18 @@ export function ForestPage() {
             있다. 폭을 100%로 채우고(object-cover) object-bottom으로 정렬하면
             세로로 넘치는 만큼은 위쪽 하늘부터 잘리므로 나무 자체는 잘리지 않는다.
             높이는 45vh — 좌우 큰 나무 꼭대기까지 들어오는 값. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[100vh]" aria-hidden>
-          <Image src="/forest/trees-demo.webp" alt="" fill priority sizes="100vw" className="object-cover object-bottom" />
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[100vh]"
+          aria-hidden
+        >
+          <Image
+            src="/forest/trees-demo.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-bottom"
+          />
         </div>
 
         {/* 스크롤 유도 큐 */}
@@ -302,7 +346,8 @@ export function ForestPage() {
             숲의 하루를 담다
           </h2>
           <p className="mx-auto mt-4 max-w-md text-neutral-600 md:mx-0">
-            아침 안개가 걷히고 능선을 따라 빛이 번지는 순간을 그대로 옮겼습니다. 스크롤을 내리면 왼쪽 이야기와 오른쪽 영상이 각각 자리로 미끄러져
+            아침 안개가 걷히고 능선을 따라 빛이 번지는 순간을 그대로 옮겼습니다.
+            스크롤을 내리면 왼쪽 이야기와 오른쪽 영상이 각각 자리로 미끄러져
             들어옵니다.
           </p>
         </div>
@@ -337,14 +382,20 @@ export function ForestPage() {
       </section>
 
       {/* ── 4. 이 페이지를 만들 때 정의한 요구사항 ───────────────── */}
-      <section aria-labelledby="prompt-heading" className="mx-auto max-w-3xl px-6 py-24 text-center">
+      <section
+        aria-labelledby="prompt-heading"
+        className="mx-auto max-w-3xl px-6 py-24 text-center"
+      >
         <h2 id="prompt-heading" className="text-2xl font-semibold sm:text-3xl">
           이 페이지를 만들 때 정의한 요구사항
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-neutral-600">
-          섹션별 연출과 제약(모바일 레이아웃, 접근성, 스크롤 트리거 안정성)을 아래처럼
-          명세로 정리하고, 참고할{' '}
-          <code className="rounded bg-neutral-100 px-1.5 py-0.5 text-sm">/gsap-lab</code> 데모를 지정해 지금 화면을 구현했습니다.
+          섹션별 연출과 제약(모바일 레이아웃, 접근성, 스크롤 트리거 안정성)을
+          아래처럼 명세로 정리하고, 참고할{' '}
+          <code className="rounded bg-neutral-100 px-1.5 py-0.5 text-sm">
+            /gsap-lab
+          </code>{' '}
+          데모를 지정해 지금 화면을 구현했습니다.
         </p>
         <pre className="mt-8 overflow-x-auto whitespace-pre-wrap rounded-xl bg-neutral-100 p-6 text-left text-xs leading-relaxed text-neutral-800">
           {entry.prompt}

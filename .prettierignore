@@ -1,0 +1,9 @@
+.next/
+out/
+build/
+next-env.d.ts
+node_modules/
+bun.lock
+public/draco/
+public/thumbnails/
+*.min.js

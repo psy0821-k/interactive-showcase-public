@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { PerspectiveCamera } from "@react-three/drei";
+import { PerspectiveCamera } from '@react-three/drei';
 
 export function Scene() {
   return (

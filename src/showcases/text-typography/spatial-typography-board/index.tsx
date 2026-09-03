@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useRef } from "react";
-import type { RefObject } from "react";
-import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
-import { Billboard, PerspectiveCamera } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneLabel, SceneReadout } from "@/components/scene-label";
+import { useCallback, useRef } from 'react';
+import type { RefObject } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
+import { Billboard, PerspectiveCamera } from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneLabel, SceneReadout } from '@/components/scene-label';
 
 /** 배경 오브젝트 색. */
-const SPHERE_COLOR = "#8ab4f8";
-const CUBE_COLOR = "#f7a072";
-const CYL_COLOR = "#9be7c4";
+const SPHERE_COLOR = '#8ab4f8';
+const CUBE_COLOR = '#f7a072';
+const CYL_COLOR = '#9be7c4';
 
 /** 텍스트 색 — 어두운 배경 위 밝은 회백색. */
-const TEXT_COLOR = "#e8eaf0";
+const TEXT_COLOR = '#e8eaf0';
 
 /** 뒤에 놓는 3개 오브젝트. 각자 옆에 Billboard 이름표가 붙는다. */
 const OBJECTS: ReadonlyArray<{
@@ -24,9 +24,9 @@ const OBJECTS: ReadonlyArray<{
   position: [number, number, number];
   color: string;
 }> = [
-  { name: "구", position: [-2.6, 0.4, -1], color: SPHERE_COLOR },
-  { name: "정육면체", position: [0, 0.4, -2], color: CUBE_COLOR },
-  { name: "원기둥", position: [2.6, 0.4, -1], color: CYL_COLOR },
+  { name: '구', position: [-2.6, 0.4, -1], color: SPHERE_COLOR },
+  { name: '정육면체', position: [0, 0.4, -2], color: CUBE_COLOR },
+  { name: '원기둥', position: [2.6, 0.4, -1], color: CYL_COLOR },
 ];
 
 /** 배경 오브젝트 하나 + 카메라를 따라 도는 이름표. */
@@ -42,9 +42,9 @@ function LabeledObject({
   return (
     <group position={position}>
       <mesh castShadow receiveShadow>
-        {name === "구" && <sphereGeometry args={[0.6, 32, 32]} />}
-        {name === "정육면체" && <boxGeometry args={[1, 1, 1]} />}
-        {name === "원기둥" && <cylinderGeometry args={[0.5, 0.5, 1.2, 32]} />}
+        {name === '구' && <sphereGeometry args={[0.6, 32, 32]} />}
+        {name === '정육면체' && <boxGeometry args={[1, 1, 1]} />}
+        {name === '원기둥' && <cylinderGeometry args={[0.5, 0.5, 1.2, 32]} />}
         <meshStandardMaterial color={color} roughness={0.5} metalness={0.15} />
       </mesh>
       {/* Billboard — 자식이 항상 카메라를 향한다. 이름표는 어느 각도에서도 읽힌다. */}
@@ -117,14 +117,28 @@ export function Scene() {
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 1.9, 7.6]} fov={48} near={0.5} far={60} />
+      <PerspectiveCamera
+        makeDefault
+        position={[0, 1.9, 7.6]}
+        fov={48}
+        near={0.5}
+        far={60}
+      />
 
-      <color attach="background" args={["#0d1017"]} />
+      <color attach="background" args={['#0d1017']} />
       <ambientLight intensity={0.45} />
       <directionalLight position={[6, 10, 6]} intensity={1.3} castShadow />
-      <directionalLight position={[-5, 3, -4]} intensity={0.3} color="#c8d6ff" />
+      <directionalLight
+        position={[-5, 3, -4]}
+        intensity={0.3}
+        color="#c8d6ff"
+      />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.1, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.1, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[40, 40]} />
         <meshStandardMaterial color="#161b28" roughness={0.95} />
       </mesh>
@@ -152,7 +166,8 @@ export function Scene() {
         lineHeight={1.55}
         outlineWidth={0.006}
       >
-        SDF 텍스트는 폰트를 거리장 텍스처로 구워 어떤 크기·각도에서도 선명하다. maxWidth를 주면 그 폭에서 자동으로 줄바꿈된다.
+        SDF 텍스트는 폰트를 거리장 텍스처로 구워 어떤 크기·각도에서도 선명하다.
+        maxWidth를 주면 그 폭에서 자동으로 줄바꿈된다.
       </SceneLabel>
 
       {/* 회전 리그 — 배경 오브젝트와 고정 라벨이 함께 돈다. 카메라는 고정. */}

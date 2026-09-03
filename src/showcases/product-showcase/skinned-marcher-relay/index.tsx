@@ -1,15 +1,28 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { SkeletonUtils } from "three/examples/jsm/Addons.js";
-import { useFrame } from "@react-three/fiber";
-import { Environment, Lightformer, PerspectiveCamera, useAnimations, useGLTF } from "@react-three/drei";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import * as THREE from 'three';
+import { SkeletonUtils } from 'three/examples/jsm/Addons.js';
+import { useFrame } from '@react-three/fiber';
+import {
+  Environment,
+  Lightformer,
+  PerspectiveCamera,
+  useAnimations,
+  useGLTF,
+} from '@react-three/drei';
 
 /** public/ 기준 절대 경로. 상세 페이지 URL이 중첩이어도 기준점이 흔들리지 않는다. */
-const MODEL_URL = "/models/marcher.glb";
+const MODEL_URL = '/models/marcher.glb';
 
 /** 인형을 놓을 x 좌표. 개수를 바꾸면 배치가 따라간다. */
 const MARCHER_OFFSETS = [-1.5, 0, 1.5] as const;
@@ -18,15 +31,15 @@ const MARCHER_OFFSETS = [-1.5, 0, 1.5] as const;
 const FADE_DURATION = 0.45;
 
 /** 이 모델에 들어 있는 클립 이름. 생성 스크립트와 짝을 이룬다. */
-const CLIP_IDLE = "idle";
-const CLIP_MARCH = "march";
+const CLIP_IDLE = 'idle';
+const CLIP_MARCH = 'march';
 
 /** march 클립을 재생할 때 곱하는 속도 배수. 인형마다 살짝 어긋나게 준다. */
 const MARCH_TIME_SCALES = [0.85, 1, 1.15] as const;
 
 /** 선택된 인형의 발판 색. 어떤 인형이 march 중인지 눈으로 구분한다. */
-const PAD_ACTIVE_COLOR = "#6ee7b7";
-const PAD_IDLE_COLOR = "#37415160";
+const PAD_ACTIVE_COLOR = '#6ee7b7';
+const PAD_IDLE_COLOR = '#37415160';
 
 interface MarcherProps {
   position: [number, number, number];
@@ -50,7 +63,12 @@ interface MarcherProps {
  * 2. 복제한 트리를 root로 넘겨 `useAnimations`를 건다.
  *    인형마다 훅을 따로 호출하므로 믹서도 액션도 인형마다 독립이다.
  */
-function Marcher({ position, clipName, marchTimeScale, onSelect }: MarcherProps) {
+function Marcher({
+  position,
+  clipName,
+  marchTimeScale,
+  onSelect,
+}: MarcherProps) {
   const { scene, animations } = useGLTF(MODEL_URL);
 
   // 복제는 인스턴스당 한 번이면 충분하다. 매 렌더 복제하면 스켈레톤이 매번 새로 생긴다.
@@ -83,7 +101,9 @@ function Marcher({ position, clipName, marchTimeScale, onSelect }: MarcherProps)
     const next = actions[clipName];
     if (!next) return;
 
-    next.reset().setEffectiveTimeScale(clipName === CLIP_MARCH ? marchTimeScale : 1);
+    next
+      .reset()
+      .setEffectiveTimeScale(clipName === CLIP_MARCH ? marchTimeScale : 1);
     next.fadeIn(FADE_DURATION).play();
 
     // 정리 함수에서 페이드아웃한다. clipName이 바뀌면 새 액션의 fadeIn과
@@ -104,8 +124,8 @@ function Marcher({ position, clipName, marchTimeScale, onSelect }: MarcherProps)
     const handleFinished = (event: { action: THREE.AnimationAction }) => {
       event.action.paused = true;
     };
-    mixer.addEventListener("finished", handleFinished);
-    return () => mixer.removeEventListener("finished", handleFinished);
+    mixer.addEventListener('finished', handleFinished);
+    return () => mixer.removeEventListener('finished', handleFinished);
   }, [mixer]);
 
   return (
@@ -116,7 +136,13 @@ function Marcher({ position, clipName, marchTimeScale, onSelect }: MarcherProps)
 }
 
 /** 인형 아래 발판. 어떤 인형이 march 중인지 색으로 알린다. */
-function SelectionPad({ position, active }: { position: [number, number, number]; active: boolean }) {
+function SelectionPad({
+  position,
+  active,
+}: {
+  position: [number, number, number];
+  active: boolean;
+}) {
   return (
     <mesh position={position} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
       <circleGeometry args={[0.55, 32]} />
@@ -194,10 +220,22 @@ export function Scene() {
 
   return (
     <>
-      <PerspectiveCamera makeDefault fov={40} near={0.5} far={40} position={[0, 1.9, 5.6]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={40}
+        near={0.5}
+        far={40}
+        position={[0, 1.9, 5.6]}
+      />
 
       <Environment resolution={256} environmentIntensity={0.55}>
-        <Lightformer form="rect" intensity={4} scale={[10, 5]} position={[0, 5, -4]} color="#dce9ff" />
+        <Lightformer
+          form="rect"
+          intensity={4}
+          scale={[10, 5]}
+          position={[0, 5, -4]}
+          color="#dce9ff"
+        />
       </Environment>
 
       <ambientLight intensity={0.25} />

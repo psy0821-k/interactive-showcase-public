@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { usePinnedTimeline } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { usePinnedTimeline } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 /**
  * `/gsap-lab/hero-to-section` — 히어로 이미지가 축소되며 다음 섹션 카드로.
@@ -43,42 +43,42 @@ export function HeroToSectionPage() {
   usePinnedTimeline(
     container,
     {
-      trigger: ".morph-stage",
+      trigger: '.morph-stage',
       // 고정은 CSS `position: sticky`가 담당한다 → GSAP pin 끔.
       pin: false,
-      length: "bottom bottom",
-      defaults: { ease: "none" },
+      length: 'bottom bottom',
+      defaults: { ease: 'none' },
     },
     ({ tl }) => {
       tl.fromTo(
-        ".morph-image",
+        '.morph-image',
         {
           scaleX: startScaleX,
           scaleY: startScaleY,
           x: startX,
           y: startY,
-          transformOrigin: "left top",
+          transformOrigin: 'left top',
           // 시작 시 x축이 startScaleX배 확대되므로 radius를 그만큼 나눠
           // 화면에서 12px로 보이게 한다.
-          "--r": () => 12 / startScaleX() + "px",
+          '--r': () => 12 / startScaleX() + 'px',
         },
         {
           scaleX: 1,
           scaleY: 1,
           x: endInset,
           y: endInset,
-          "--r": "12px",
+          '--r': '12px',
           duration: 0.7,
         },
       )
         .fromTo(
-          ".hero-copy",
+          '.hero-copy',
           { autoAlpha: 1, y: 0 },
           { autoAlpha: 0, y: -40, duration: 0.35 },
           0,
         )
         .fromTo(
-          ".card-body",
+          '.card-body',
           { autoAlpha: 0, x: 30 },
           { autoAlpha: 1, x: 0, duration: 0.3 },
           0.45,
@@ -88,15 +88,15 @@ export function HeroToSectionPage() {
     (g) => {
       // 모션 축소: 이미지를 최종(썸네일) 상태로 고정.
       const inset = window.innerWidth < 768 ? 24 : 40;
-      g.set(".morph-image", {
+      g.set('.morph-image', {
         scaleX: 1,
         scaleY: 1,
         x: inset,
         y: inset,
-        transformOrigin: "left top",
-        "--r": "12px",
+        transformOrigin: 'left top',
+        '--r': '12px',
       });
-      g.set(".card-body", { autoAlpha: 1, x: 0 });
+      g.set('.card-body', { autoAlpha: 1, x: 0 });
     },
   );
 
@@ -118,8 +118,8 @@ export function HeroToSectionPage() {
               style={{
                 width: 160,
                 height: 160,
-                borderRadius: "var(--r, 12px)",
-                background: "linear-gradient(135deg, #1e1b4b, #be185d)",
+                borderRadius: 'var(--r, 12px)',
+                background: 'linear-gradient(135deg, #1e1b4b, #be185d)',
               }}
               aria-hidden
             />
@@ -141,9 +141,9 @@ export function HeroToSectionPage() {
             <div className="card-body absolute left-6 top-44 max-w-md pr-6 sm:left-[13rem] sm:top-8">
               <h3 className="text-2xl font-semibold">아티클 카드</h3>
               <p className="mt-3 text-white/75">
-                히어로에서 넘어온 이미지가 이 카드의 썸네일이 됩니다. 크기·위치가
-                스크롤 진행에 직결되어 있어, 되감으면 다시 전체 화면으로
-                커집니다.
+                히어로에서 넘어온 이미지가 이 카드의 썸네일이 됩니다.
+                크기·위치가 스크롤 진행에 직결되어 있어, 되감으면 다시 전체
+                화면으로 커집니다.
               </p>
             </div>
           </div>

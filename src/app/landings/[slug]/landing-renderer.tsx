@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import type { ComponentType } from "react";
-import dynamic from "next/dynamic";
+import type { ComponentType } from 'react';
+import dynamic from 'next/dynamic';
 
 /**
  * slug → 랜딩 페이지 컴포넌트. registry와 1:1 대응.
@@ -15,73 +15,74 @@ const PAGE_COMPONENTS: Record<string, ComponentType> = {
   // 순수 DOM + GSAP 페이지. R3F가 없어 SSR 가능하지만, useGsapDom이
   // 클라이언트 훅이라 나머지와 동일하게 dynamic 로드한다.
   forest: dynamic(
-    () => import("@/landings/pages/forest-page").then((m) => m.ForestPage),
+    () => import('@/landings/pages/forest-page').then((m) => m.ForestPage),
     { ssr: false },
   ),
-  "cloud-sync": dynamic(
-    () => import("@/landings/pages/cloud-sync-page").then((m) => m.CloudSyncPage),
-    { ssr: false },
-  ),
-  "orbit-launch": dynamic(
+  'cloud-sync': dynamic(
     () =>
-      import("@/landings/pages/orbit-launch-page").then(
+      import('@/landings/pages/cloud-sync-page').then((m) => m.CloudSyncPage),
+    { ssr: false },
+  ),
+  'orbit-launch': dynamic(
+    () =>
+      import('@/landings/pages/orbit-launch-page').then(
         (m) => m.OrbitLaunchPage,
       ),
     { ssr: false },
   ),
-  "prism-pricing": dynamic(
+  'prism-pricing': dynamic(
     () =>
-      import("@/landings/pages/prism-pricing-page").then(
+      import('@/landings/pages/prism-pricing-page').then(
         (m) => m.PrismPricingPage,
       ),
     { ssr: false },
   ),
-  "grid-metrics": dynamic(
+  'grid-metrics': dynamic(
     () =>
-      import("@/landings/pages/grid-metrics-page").then(
+      import('@/landings/pages/grid-metrics-page').then(
         (m) => m.GridMetricsPage,
       ),
     { ssr: false },
   ),
-  "ribbon-story": dynamic(
+  'ribbon-story': dynamic(
     () =>
-      import("@/landings/pages/ribbon-story-page").then(
+      import('@/landings/pages/ribbon-story-page').then(
         (m) => m.RibbonStoryPage,
       ),
     { ssr: false },
   ),
-  "crystal-features": dynamic(
+  'crystal-features': dynamic(
     () =>
-      import("@/landings/pages/crystal-features-page").then(
+      import('@/landings/pages/crystal-features-page').then(
         (m) => m.CrystalFeaturesPage,
       ),
     { ssr: false },
   ),
   // 순수 DOM + GSAP 랜딩(원래 /gsap-lab landing 카테고리).
-  "scroll-story": dynamic(
+  'scroll-story': dynamic(
     () =>
-      import("@/landings/pages/scroll-story-page").then(
+      import('@/landings/pages/scroll-story-page').then(
         (m) => m.ScrollStoryLandingPage,
       ),
     { ssr: false },
   ),
-  "pricing-reveal": dynamic(
+  'pricing-reveal': dynamic(
     () =>
-      import("@/landings/pages/pricing-reveal-page").then(
+      import('@/landings/pages/pricing-reveal-page').then(
         (m) => m.PricingRevealLandingPage,
       ),
     { ssr: false },
   ),
-  "pointer-play": dynamic(
+  'pointer-play': dynamic(
     () =>
-      import("@/landings/pages/pointer-play-page").then(
+      import('@/landings/pages/pointer-play-page').then(
         (m) => m.PointerPlayLandingPage,
       ),
     { ssr: false },
   ),
-  "tab-transition": dynamic(
+  'tab-transition': dynamic(
     () =>
-      import("@/landings/pages/tab-transition-page").then(
+      import('@/landings/pages/tab-transition-page').then(
         (m) => m.TabTransitionLandingPage,
       ),
     { ssr: false },

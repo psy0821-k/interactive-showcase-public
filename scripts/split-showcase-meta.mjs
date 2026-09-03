@@ -18,29 +18,29 @@
 // 사용: node scripts/split-showcase-meta.mjs
 // 멱등: index.tsx가 이미 re-export 하고 있으면 건너뛴다.
 
-import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 
-const ROOT = join(process.cwd(), "src", "showcases");
+const ROOT = join(process.cwd(), 'src', 'showcases');
 
 /** "export const meta ... };" 블록을 중괄호 균형으로 잘라낸다. */
 function extractMetaBlock(source) {
-  const start = source.indexOf("export const meta");
+  const start = source.indexOf('export const meta');
   if (start === -1) return null;
 
-  const braceStart = source.indexOf("{", start);
+  const braceStart = source.indexOf('{', start);
   let depth = 0;
   let i = braceStart;
   for (; i < source.length; i += 1) {
     const ch = source[i];
-    if (ch === "{") depth += 1;
-    else if (ch === "}") {
+    if (ch === '{') depth += 1;
+    else if (ch === '}') {
       depth -= 1;
       if (depth === 0) break;
     }
   }
   let end = i + 1;
-  while (end < source.length && source[end] !== ";") end += 1;
+  while (end < source.length && source[end] !== ';') end += 1;
   end += 1;
 
   return { block: source.slice(start, end), start, end };
@@ -58,14 +58,14 @@ for (const category of readdirSync(ROOT, { withFileTypes: true })) {
     if (!showcase.isDirectory()) continue;
 
     const dir = join(ROOT, category.name, showcase.name);
-    const indexPath = join(dir, "index.tsx");
-    const metaPath = join(dir, "meta.ts");
+    const indexPath = join(dir, 'index.tsx');
+    const metaPath = join(dir, 'meta.ts');
     if (!existsSync(indexPath)) continue;
 
-    let src = readFileSync(indexPath, "utf8");
+    let src = readFileSync(indexPath, 'utf8');
 
     // 줄바꿈을 LF로 정규화해 처리 (파일 쓸 때도 LF로 통일).
-    src = src.replace(/\r\n/g, "\n");
+    src = src.replace(/\r\n/g, '\n');
 
     if (src.includes('export { meta } from "./meta"')) {
       skipped += 1;
@@ -82,7 +82,7 @@ for (const category of readdirSync(ROOT, { withFileTypes: true })) {
     writeFileSync(
       metaPath,
       `import type { ShowcaseMeta } from "@/domain/showcase";\n\n${extracted.block}\n`,
-      "utf8",
+      'utf8',
     );
 
     // 2. index.tsx에서 meta 블록 제거
@@ -91,16 +91,16 @@ for (const category of readdirSync(ROOT, { withFileTypes: true })) {
     // 3. 이제 안 쓰는 ShowcaseMeta 타입 import 제거 (홑/겹따옴표·줄바꿈 허용)
     body = body.replace(
       /import type \{\s*ShowcaseMeta\s*\} from ["']@\/domain\/showcase["'];\n?/g,
-      "",
+      '',
     );
 
     // 4. "use client" 지시어를 걷어내고, 맨 위에 use client + re-export 재구성
-    body = body.replace(/^\s*["']use client["'];\s*\n/, "");
-    body = body.replace(/^\n+/, "");
+    body = body.replace(/^\s*["']use client["'];\s*\n/, '');
+    body = body.replace(/^\n+/, '');
     body = `"use client";\n\nexport { meta } from "./meta";\n\n${body}`;
-    body = body.replace(/\n{3,}/g, "\n\n");
+    body = body.replace(/\n{3,}/g, '\n\n');
 
-    writeFileSync(indexPath, body, "utf8");
+    writeFileSync(indexPath, body, 'utf8');
     changed += 1;
     console.log(`분리: ${category.name}/${showcase.name}`);
   }

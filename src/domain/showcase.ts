@@ -1,4 +1,4 @@
-import type { TechniqueCategory } from "./technique-category";
+import type { TechniqueCategory } from './technique-category';
 
 /**
  * 셸(`showcase-canvas.tsx`)의 `<Canvas frameloop>` 값.
@@ -8,7 +8,7 @@ import type { TechniqueCategory } from "./technique-category";
  *   화면이 변하는 씬(제품 뷰어, 차트). 이 값을 쓰는 쇼케이스는 모든 시각
  *   변화가 상태 파생이거나 `invalidate()`를 명시적으로 부르도록 짜여 있어야 한다.
  */
-export type ShowcaseFrameloop = "always" | "demand";
+export type ShowcaseFrameloop = 'always' | 'demand';
 
 /**
  * 셸이 공통 `<OrbitControls makeDefault />`를 렌더할지 여부.
@@ -18,7 +18,7 @@ export type ShowcaseFrameloop = "always" | "demand";
  *   쇼케이스(스크롤-카메라 등)가 `controls.enabled = false` 회피 없이
  *   카메라 소유권을 온전히 갖는다.
  */
-export type ShowcaseControlsMode = "orbit" | "none";
+export type ShowcaseControlsMode = 'orbit' | 'none';
 
 /**
  * 쇼케이스가 속한 갤러리 트랙. 생략하면 `"3d"`.
@@ -27,10 +27,10 @@ export type ShowcaseControlsMode = "orbit" | "none";
  * - `"gsap"`: `/gsap` 갤러리. GSAP 애니메이션 쇼케이스. 셸 Contract는 3D와
  *   동일하고 구현 수단만 다르다(`usedSkills`에 `gsap-*` 포함).
  */
-export type ShowcaseTrack = "3d" | "gsap";
+export type ShowcaseTrack = '3d' | 'gsap';
 
 /** 알려진 트랙 목록. */
-export const SHOWCASE_TRACKS = ["3d", "gsap"] as const;
+export const SHOWCASE_TRACKS = ['3d', 'gsap'] as const;
 
 /** 쇼케이스 index.tsx가 named export 하는 메타데이터. */
 export interface ShowcaseMeta {
@@ -73,7 +73,7 @@ export interface ShowcaseMeta {
 
 /** `meta.track`을 읽되 생략 시 `"3d"`로 본다. */
 export function resolveTrack(meta: ShowcaseMeta): ShowcaseTrack {
-  return meta.track ?? "3d";
+  return meta.track ?? '3d';
 }
 
 /**

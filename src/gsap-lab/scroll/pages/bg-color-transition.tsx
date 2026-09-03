@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import type gsapType from "gsap";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useRef } from 'react';
+import type gsapType from 'gsap';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 import {
   refreshAfterLayout,
   ScrollTrigger,
-} from "@/gsap-lab/scroll/scroll-trigger-setup";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+} from '@/gsap-lab/scroll/scroll-trigger-setup';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 /** 섹션별 (배경색, 글자색). 스크롤 진행에 따라 인접 색끼리 보간된다. */
 const SECTIONS = [
-  { id: "a", title: "캡처", bg: "#0c4a6e", fg: "#e0f2fe" },
-  { id: "b", title: "정리", bg: "#134e4a", fg: "#ccfbf1" },
-  { id: "c", title: "공유", bg: "#713f12", fg: "#fef3c7" },
-  { id: "d", title: "게시", bg: "#581c87", fg: "#f3e8ff" },
+  { id: 'a', title: '캡처', bg: '#0c4a6e', fg: '#e0f2fe' },
+  { id: 'b', title: '정리', bg: '#134e4a', fg: '#ccfbf1' },
+  { id: 'c', title: '공유', bg: '#713f12', fg: '#fef3c7' },
+  { id: 'd', title: '게시', bg: '#581c87', fg: '#f3e8ff' },
 ];
 
 /**
@@ -28,40 +28,39 @@ const SECTIONS = [
 export function BgColorTransitionPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      refreshAfterLayout();
-      const layer = container.current?.querySelector<HTMLElement>(".bg-layer");
-      if (!layer) return;
+  useGsapDom(({ gsap: g, reduced }) => {
+    refreshAfterLayout();
+    const layer = container.current?.querySelector<HTMLElement>('.bg-layer');
+    if (!layer) return;
 
-      const bgAt = (t: number) => interpolateStops(g, t, (s) => s.bg);
-      const fgAt = (t: number) => interpolateStops(g, t, (s) => s.fg);
+    const bgAt = (t: number) => interpolateStops(g, t, (s) => s.bg);
+    const fgAt = (t: number) => interpolateStops(g, t, (s) => s.fg);
 
-      if (reduced) {
-        g.set(layer, { backgroundColor: bgAt(0) });
-        g.set(".bg-fg", { color: fgAt(0) });
-        return;
-      }
+    if (reduced) {
+      g.set(layer, { backgroundColor: bgAt(0) });
+      g.set('.bg-fg', { color: fgAt(0) });
+      return;
+    }
 
-      // quickSetter로 매 프레임 값만 갱신 (트윈 생성 없음).
-      const setBg = g.quickSetter(layer, "backgroundColor") as (v: string) => void;
-      const setFgList = [...(container.current?.querySelectorAll(".bg-fg") ?? [])].map(
-        (el) => g.quickSetter(el, "color") as (v: string) => void,
-      );
+    // quickSetter로 매 프레임 값만 갱신 (트윈 생성 없음).
+    const setBg = g.quickSetter(layer, 'backgroundColor') as (
+      v: string,
+    ) => void;
+    const setFgList = [
+      ...(container.current?.querySelectorAll('.bg-fg') ?? []),
+    ].map((el) => g.quickSetter(el, 'color') as (v: string) => void);
 
-      ScrollTrigger.create({
-        trigger: container.current,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          setBg(bgAt(self.progress));
-          const fg = fgAt(self.progress);
-          setFgList.forEach((set) => set(fg));
-        },
-      });
-    },
-    container,
-  );
+    ScrollTrigger.create({
+      trigger: container.current,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        setBg(bgAt(self.progress));
+        const fg = fgAt(self.progress);
+        setFgList.forEach((set) => set(fg));
+      },
+    });
+  }, container);
 
   return (
     <div ref={container} className="relative">
@@ -86,7 +85,10 @@ export function BgColorTransitionPage() {
             // false positive도 없앤다.
             style={{ backgroundColor: section.bg }}
           >
-            <h2 className="bg-fg text-5xl font-semibold" style={{ color: SECTIONS[0].fg }}>
+            <h2
+              className="bg-fg text-5xl font-semibold"
+              style={{ color: SECTIONS[0].fg }}
+            >
               {section.title}
             </h2>
             <div

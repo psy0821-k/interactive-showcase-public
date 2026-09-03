@@ -63,22 +63,22 @@ CI e2e 잡에 포함.
 
 ## 2. 코드로 확인된 구현
 
-| 항목 | 상태 | 근거 |
-|---|---|---|
-| `bun run build` (타입) | ✅ | exit 0 |
-| `bun run lint` | ✅ | 0 errors / 0 warnings |
-| `bun run spell` | ✅ | 0 issues |
-| 캔버스 `role="img"` + `aria-label` (상태 포함 설명) | ✅ | `showcase-canvas.tsx`, axe 검증 |
-| WebGL 폴백 `role="status"` | ✅ | `CanvasFallback` 기본값 |
-| 에러 폴백 `role="alert"` | ✅ | `SceneErrorBoundary` fallback |
-| `prefers-reduced-motion` 구독 | ✅ | `src/hooks/use-reduced-motion.ts` (`useSyncExternalStore`) |
-| reduced-motion → OrbitControls 관성 off | ✅ | `enableDamping={!reducedMotion}` |
-| reduced-motion → `useFrame` delta 0 | ✅ | 19개 쇼케이스 |
-| 모바일 터치 ↔ 스크롤 | ✅ 코드 | `touch-action: pan-y` + `<OrbitControls touches>` — **실기기 확인은 §3** |
-| `lang="ko"` | ✅ | `src/app/layout.tsx` |
-| 검색 input `<label>` 래핑 | ✅ | `gallery-browser.tsx` |
-| 카드 링크 `:focus-visible` 링 | ✅ | `focus-visible:outline-2` |
-| 필터 칩 `aria-pressed` | ✅ | `gallery-browser.tsx` |
+| 항목                                                | 상태    | 근거                                                                     |
+| --------------------------------------------------- | ------- | ------------------------------------------------------------------------ |
+| `bun run build` (타입)                              | ✅      | exit 0                                                                   |
+| `bun run lint`                                      | ✅      | 0 errors / 0 warnings                                                    |
+| `bun run spell`                                     | ✅      | 0 issues                                                                 |
+| 캔버스 `role="img"` + `aria-label` (상태 포함 설명) | ✅      | `showcase-canvas.tsx`, axe 검증                                          |
+| WebGL 폴백 `role="status"`                          | ✅      | `CanvasFallback` 기본값                                                  |
+| 에러 폴백 `role="alert"`                            | ✅      | `SceneErrorBoundary` fallback                                            |
+| `prefers-reduced-motion` 구독                       | ✅      | `src/hooks/use-reduced-motion.ts` (`useSyncExternalStore`)               |
+| reduced-motion → OrbitControls 관성 off             | ✅      | `enableDamping={!reducedMotion}`                                         |
+| reduced-motion → `useFrame` delta 0                 | ✅      | 19개 쇼케이스                                                            |
+| 모바일 터치 ↔ 스크롤                                | ✅ 코드 | `touch-action: pan-y` + `<OrbitControls touches>` — **실기기 확인은 §3** |
+| `lang="ko"`                                         | ✅      | `src/app/layout.tsx`                                                     |
+| 검색 input `<label>` 래핑                           | ✅      | `gallery-browser.tsx`                                                    |
+| 카드 링크 `:focus-visible` 링                       | ✅      | `focus-visible:outline-2`                                                |
+| 필터 칩 `aria-pressed`                              | ✅      | `gallery-browser.tsx`                                                    |
 
 ---
 
@@ -126,13 +126,22 @@ dev 서버(`bun run dev`)를 띄우고, 브라우저 콘솔에서:
 const s = document.createElement('script');
 s.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js';
 document.head.appendChild(s);
-await new Promise(r => s.onload = r);
+await new Promise((r) => (s.onload = r));
 
 // 스캔
 const r = await axe.run(document, {
-  runOnly: { type: 'tag', values: ['wcag2a','wcag2aa','wcag21a','wcag21aa'] }
+  runOnly: {
+    type: 'tag',
+    values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'],
+  },
 });
-console.table(r.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length })));
+console.table(
+  r.violations.map((v) => ({
+    id: v.id,
+    impact: v.impact,
+    nodes: v.nodes.length,
+  })),
+);
 ```
 
 `@axe-core/playwright` 하네스(`bun run a11y`)는 이후 작업.

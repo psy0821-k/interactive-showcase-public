@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /**
  * 캔버스 자리를 채우는 로딩 표시.

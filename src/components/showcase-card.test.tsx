@@ -19,7 +19,9 @@ describe('ShowcaseCard', () => {
   it('제목·설명과 상세 링크를 렌더한다', () => {
     render(<ShowcaseCard entry={entry} />);
 
-    expect(screen.getByRole('heading', { name: '테스트 씬' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: '테스트 씬' }),
+    ).toBeInTheDocument();
     expect(screen.getByText('설명 문구')).toBeInTheDocument();
     expect(screen.getByRole('link')).toHaveAttribute(
       'href',

@@ -23,11 +23,11 @@
  *   → public/models/marcher.glb
  */
 
-import { writeFileSync, mkdirSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import * as THREE from "three";
-import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import * as THREE from 'three';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 
 /**
  * GLTFExporter는 브라우저 API인 `FileReader`로 Blob을 ArrayBuffer로 바꾼다.
@@ -35,7 +35,7 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
  * (three가 쓰는 것은 `readAsArrayBuffer` + `onloadend`뿐이지만, 버전에 따라
  * `onload`를 보는 코드 경로도 있어 둘 다 호출한다.)
  */
-if (typeof globalThis.FileReader === "undefined") {
+if (typeof globalThis.FileReader === 'undefined') {
   globalThis.FileReader = class NodeFileReader {
     constructor() {
       this.result = null;
@@ -58,7 +58,7 @@ if (typeof globalThis.FileReader === "undefined") {
 }
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
-const OUTPUT_PATH = resolve(SCRIPT_DIR, "../public/models/marcher.glb");
+const OUTPUT_PATH = resolve(SCRIPT_DIR, '../public/models/marcher.glb');
 
 /** 본 개수. 루트를 포함한다. */
 const BONE_COUNT = 5;
@@ -108,7 +108,10 @@ function applySkinWeights(geometry) {
   for (let i = 0; i < position.count; i += 1) {
     // 지오메트리는 원점 중심이므로 바닥이 0이 되도록 올린다.
     const y = position.getY(i) + totalHeight / 2;
-    const normalized = Math.min(Math.max(y / BONE_LENGTH, 0), BONE_COUNT - 1.001);
+    const normalized = Math.min(
+      Math.max(y / BONE_LENGTH, 0),
+      BONE_COUNT - 1.001,
+    );
 
     const lowerBone = Math.floor(normalized);
     const upperWeight = normalized - lowerBone;
@@ -118,11 +121,11 @@ function applySkinWeights(geometry) {
   }
 
   geometry.setAttribute(
-    "skinIndex",
+    'skinIndex',
     new THREE.Uint16BufferAttribute(skinIndices, 4),
   );
   geometry.setAttribute(
-    "skinWeight",
+    'skinWeight',
     new THREE.Float32BufferAttribute(skinWeights, 4),
   );
 }
@@ -139,7 +142,11 @@ function createJointTrack(boneName, times, anglesZ, anglesX) {
     values.push(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
   }
 
-  return new THREE.QuaternionKeyframeTrack(`${boneName}.quaternion`, times, values);
+  return new THREE.QuaternionKeyframeTrack(
+    `${boneName}.quaternion`,
+    times,
+    values,
+  );
 }
 
 /**
@@ -156,7 +163,7 @@ function createIdleClip(bones) {
     return createJointTrack(bone.name, times, anglesZ, anglesX);
   });
 
-  return new THREE.AnimationClip("idle", 4, tracks);
+  return new THREE.AnimationClip('idle', 4, tracks);
 }
 
 /**
@@ -174,7 +181,7 @@ function createMarchClip(bones) {
     return createJointTrack(bone.name, times, anglesZ, anglesX);
   });
 
-  return new THREE.AnimationClip("march", 1.2, tracks);
+  return new THREE.AnimationClip('march', 1.2, tracks);
 }
 
 function buildScene() {
@@ -191,21 +198,21 @@ function buildScene() {
   applySkinWeights(geometry);
 
   const material = new THREE.MeshStandardMaterial({
-    name: "MarcherBody",
-    color: new THREE.Color("#c9d4e6"),
+    name: 'MarcherBody',
+    color: new THREE.Color('#c9d4e6'),
     metalness: 0.15,
     roughness: 0.55,
   });
 
   const mesh = new THREE.SkinnedMesh(geometry, material);
-  mesh.name = "MarcherBody";
+  mesh.name = 'MarcherBody';
   // 지오메트리 중심이 원점이므로 바닥(y=0)에 세우려면 절반만큼 올린다.
   mesh.position.y = (BONE_LENGTH * (BONE_COUNT - 1)) / 2;
   mesh.add(bones[0]);
   mesh.bind(skeleton);
 
   const root = new THREE.Group();
-  root.name = "Marcher";
+  root.name = 'Marcher';
   root.add(mesh);
 
   return { root, bones };

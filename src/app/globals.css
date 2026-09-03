@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -22,8 +22,15 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    var(--font-geist-sans),
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
 }
 
 /*
@@ -51,7 +58,7 @@ body {
 
 /* 스크롤 유도 큐: 위아래로 살짝 튀는 표시. 모션 축소 시 정지. */
 .scroll-cue::before {
-  content: "";
+  content: '';
   display: block;
   width: 4px;
   height: 8px;

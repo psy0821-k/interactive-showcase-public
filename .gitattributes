@@ -1,0 +1,16 @@
+# 모든 텍스트 파일을 LF로 고정한다. Prettier endOfLine: lf 와 일치시켜
+# Windows 체크아웃에서도 CRLF 재기록이 일어나지 않게 한다.
+* text=auto eol=lf
+
+# 바이너리 — Git이 손대지 않는다.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.glb binary
+*.hdr binary
+*.mp4 binary

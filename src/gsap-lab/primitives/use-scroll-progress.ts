@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 import {
   refreshAfterLayout,
   ScrollTrigger,
-} from "@/gsap-lab/scroll/scroll-trigger-setup";
+} from '@/gsap-lab/scroll/scroll-trigger-setup';
 
 /** `useScrollProgress` 옵션. */
 export interface ScrollProgressOptions {
@@ -53,51 +53,46 @@ export function useScrollProgress(
     bar,
     tocLink,
     section,
-    sectionIdAttr = "id",
-    activeClass = "toc-active",
+    sectionIdAttr = 'id',
+    activeClass = 'toc-active',
   } = options;
 
-  useGsapDom(
-    ({ gsap: g }) => {
-      refreshAfterLayout();
-      const root = scope.current;
-      if (!root) return;
+  useGsapDom(({ gsap: g }) => {
+    refreshAfterLayout();
+    const root = scope.current;
+    if (!root) return;
 
-      // 1) 진행바.
-      ScrollTrigger.create({
-        trigger: root,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          g.set(bar, { scaleX: self.progress });
-        },
-      });
+    // 1) 진행바.
+    ScrollTrigger.create({
+      trigger: root,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        g.set(bar, { scaleX: self.progress });
+      },
+    });
 
-      // 2) 현재 섹션 (선택).
-      if (!tocLink || !section) return;
-      const links = new Map(
-        [...root.querySelectorAll<HTMLElement>(tocLink)].map((el) => [
-          el.dataset[sectionIdAttr],
-          el,
-        ]),
-      );
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            const id = (entry.target as HTMLElement).id;
-            links
-              .get(id)
-              ?.classList.toggle(activeClass, entry.isIntersecting);
-          }
-        },
-        { rootMargin: "-40% 0px -55% 0px", threshold: 0 },
-      );
-      root
-        .querySelectorAll<HTMLElement>(section)
-        .forEach((el) => observer.observe(el));
+    // 2) 현재 섹션 (선택).
+    if (!tocLink || !section) return;
+    const links = new Map(
+      [...root.querySelectorAll<HTMLElement>(tocLink)].map((el) => [
+        el.dataset[sectionIdAttr],
+        el,
+      ]),
+    );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = (entry.target as HTMLElement).id;
+          links.get(id)?.classList.toggle(activeClass, entry.isIntersecting);
+        }
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 },
+    );
+    root
+      .querySelectorAll<HTMLElement>(section)
+      .forEach((el) => observer.observe(el));
 
-      return () => observer.disconnect();
-    },
-    scope,
-  );
+    return () => observer.disconnect();
+  }, scope);
 }

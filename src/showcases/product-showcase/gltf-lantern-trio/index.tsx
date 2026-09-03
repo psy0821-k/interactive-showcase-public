@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { Suspense, useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+import { Suspense, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import {
   Clone,
   Environment,
   Lightformer,
   PerspectiveCamera,
   useGLTF,
-} from "@react-three/drei";
+} from '@react-three/drei';
 
 /**
  * public/ 기준 절대 경로.
@@ -20,7 +20,7 @@ import {
  * `./models/...` 같은 상대 경로를 쓰면 상세 페이지 URL이 중첩 경로일 때
  * 기준점이 달라져 404가 난다.
  */
-const MODEL_URL = "/models/lantern.glb";
+const MODEL_URL = '/models/lantern.glb';
 
 /** 랜턴을 놓을 x 좌표 3곳. 개수를 바꾸면 배치가 그대로 따라간다. */
 const LANTERN_OFFSETS = [-1.9, 0, 1.9] as const;
@@ -29,7 +29,7 @@ const LANTERN_OFFSETS = [-1.9, 0, 1.9] as const;
 const TARGET_HEIGHT = 1.6;
 
 /** 세 번째 랜턴에 덮어씌울 재질 색. 원본 BrassFrame 대신 쓴다. */
-const OVERRIDE_FRAME_COLOR = "#7fdcc0";
+const OVERRIDE_FRAME_COLOR = '#7fdcc0';
 
 /** 부유 운동의 진폭과 각속도. delta 기반이라 프레임률과 무관하다. */
 const BOB_AMPLITUDE = 0.08;
@@ -82,7 +82,10 @@ function Lantern({ position, phase, frameColor }: LanternProps) {
   const { scene, materials } = useGLTF(MODEL_URL);
 
   // 스케일 실측은 모델당 한 번이면 충분하다.
-  const { scale, offsetY } = useMemo(() => measureNormalization(scene), [scene]);
+  const { scale, offsetY } = useMemo(
+    () => measureNormalization(scene),
+    [scene],
+  );
 
   /**
    * 그림자 플래그는 glTF에 저장되지 않으므로 로드 후 직접 켠다.
@@ -151,7 +154,10 @@ function Lantern({ position, phase, frameColor }: LanternProps) {
           원본 재질을 유지할 때는 inject 없이 그대로 둔다.
         */}
         {overriddenFrame ? (
-          <Clone object={scene} inject={<primitive object={overriddenFrame} attach="material" />} />
+          <Clone
+            object={scene}
+            inject={<primitive object={overriddenFrame} attach="material" />}
+          />
         ) : (
           <Clone object={scene} />
         )}

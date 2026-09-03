@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useRef } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 import {
   refreshAfterLayout,
   ScrollTrigger,
-} from "@/gsap-lab/scroll/scroll-trigger-setup";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+} from '@/gsap-lab/scroll/scroll-trigger-setup';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 const ROWS = Array.from({ length: 20 }, (_, i) => ({
   title: `콘텐츠 블록 ${i + 1}`,
@@ -23,48 +23,45 @@ const ROWS = Array.from({ length: 20 }, (_, i) => ({
 export function ScrollDirectionHeaderPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      refreshAfterLayout();
+  useGsapDom(({ gsap: g, reduced }) => {
+    refreshAfterLayout();
 
-      const bar = container.current?.querySelector<HTMLElement>(".dir-header");
-      if (!bar) return;
+    const bar = container.current?.querySelector<HTMLElement>('.dir-header');
+    if (!bar) return;
 
-      if (reduced) {
-        g.set(bar, { yPercent: 0 });
-        return;
-      }
+    if (reduced) {
+      g.set(bar, { yPercent: 0 });
+      return;
+    }
 
-      let hidden = false;
-      const setHidden = (next: boolean) => {
-        if (next === hidden) return;
-        hidden = next;
-        g.to(bar, {
-          // -110%: 바 자기 높이의 110%만큼 위로 = 완전히 밖 + 그림자까지 클리어.
-          // yPercent라 바 높이가 달라져도 항상 정확히 사라진다(실측 불필요).
-          yPercent: next ? -110 : 0,
-          duration: 0.4,
-          ease: "power3.out",
-          overwrite: true,
-        });
-      };
-
-      ScrollTrigger.create({
-        trigger: container.current,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          // 맨 위 근처거나 위로 스크롤 중이면 보이게, 아래로 스크롤 중이면 숨김.
-          if (self.scroll() < 140 || self.direction === -1) {
-            setHidden(false);
-          } else {
-            setHidden(true);
-          }
-        },
+    let hidden = false;
+    const setHidden = (next: boolean) => {
+      if (next === hidden) return;
+      hidden = next;
+      g.to(bar, {
+        // -110%: 바 자기 높이의 110%만큼 위로 = 완전히 밖 + 그림자까지 클리어.
+        // yPercent라 바 높이가 달라져도 항상 정확히 사라진다(실측 불필요).
+        yPercent: next ? -110 : 0,
+        duration: 0.4,
+        ease: 'power3.out',
+        overwrite: true,
       });
-    },
-    container,
-  );
+    };
+
+    ScrollTrigger.create({
+      trigger: container.current,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        // 맨 위 근처거나 위로 스크롤 중이면 보이게, 아래로 스크롤 중이면 숨김.
+        if (self.scroll() < 140 || self.direction === -1) {
+          setHidden(false);
+        } else {
+          setHidden(true);
+        }
+      },
+    });
+  }, container);
 
   return (
     <div ref={container}>
@@ -86,7 +83,10 @@ export function ScrollDirectionHeaderPage() {
               className="flex items-center gap-4 rounded-xl p-5 text-white"
               style={{ background: row.background }}
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-white/20" aria-hidden />
+              <div
+                className="h-12 w-12 shrink-0 rounded-lg bg-white/20"
+                aria-hidden
+              />
               <span className="text-sm font-medium">{row.title}</span>
             </div>
           ))}

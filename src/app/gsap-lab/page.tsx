@@ -1,24 +1,24 @@
-import { Suspense } from "react";
-import type { Metadata } from "next";
-import { GalleryBrowser } from "@/components/gallery-browser";
-import { LabCard } from "@/components/lab-card";
+import { Suspense } from 'react';
+import type { Metadata } from 'next';
+import { GalleryBrowser } from '@/components/gallery-browser';
+import { LabCard } from '@/components/lab-card';
 import {
   getLabEntriesInDisplayOrder,
   LAB_CATEGORY_FILTERS,
-} from "@/gsap-lab/registry";
-import { SITE_URL } from "@/lib/site";
+} from '@/gsap-lab/registry';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: "GSAP Lab",
+  title: 'GSAP Lab',
   description:
-    "순수 DOM GSAP로 만든 스크롤 효과·랜딩페이지 랩. 패럴랙스·스크롤 스크럽·" +
-    "순차/동시 등장·핀·가로 스크롤 등을 가상 SaaS 제품 Fluxnote를 소재로 시연한다.",
-  alternates: { canonical: "/gsap-lab" },
+    '순수 DOM GSAP로 만든 스크롤 효과·랜딩페이지 랩. 패럴랙스·스크롤 스크럽·' +
+    '순차/동시 등장·핀·가로 스크롤 등을 가상 SaaS 제품 Fluxnote를 소재로 시연한다.',
+  alternates: { canonical: '/gsap-lab' },
   openGraph: {
-    type: "website",
-    url: "/gsap-lab",
-    title: "GSAP Lab",
-    description: "DOM GSAP 랩 — 스크롤 효과 데모 + 랜딩페이지.",
+    type: 'website',
+    url: '/gsap-lab',
+    title: 'GSAP Lab',
+    description: 'DOM GSAP 랩 — 스크롤 효과 데모 + 랜딩페이지.',
   },
 };
 
@@ -35,16 +35,16 @@ export default function GsapLabIndexPage() {
   const pageUrl = `${SITE_URL}/gsap-lab`;
 
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": pageUrl,
-    name: "GSAP Lab",
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': pageUrl,
+    name: 'GSAP Lab',
     url: pageUrl,
     mainEntity: {
-      "@type": "ItemList",
+      '@type': 'ItemList',
       numberOfItems: entries.length,
       itemListElement: entries.map((entry, index) => ({
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: index + 1,
         url: `${SITE_URL}/gsap-lab/${entry.slug}`,
         name: entry.title,
@@ -62,9 +62,9 @@ export default function GsapLabIndexPage() {
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold">GSAP Lab</h1>
         <p className="text-neutral-600 dark:text-neutral-400">
-          캔버스 없이 순수 HTML/CSS + GSAP DOM 애니메이션으로 만든 데모 모음입니다.
-          가상 SaaS 제품 <strong>Fluxnote</strong>를 소재로 하며, 이미지가 들어갈
-          자리는 배경색만 다른 블록으로 대체했습니다.
+          캔버스 없이 순수 HTML/CSS + GSAP DOM 애니메이션으로 만든 데모
+          모음입니다. 가상 SaaS 제품 <strong>Fluxnote</strong>를 소재로 하며,
+          이미지가 들어갈 자리는 배경색만 다른 블록으로 대체했습니다.
         </p>
       </header>
 

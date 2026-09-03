@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore } from 'react';
 
-const QUERY = "(prefers-reduced-motion: reduce)";
+const QUERY = '(prefers-reduced-motion: reduce)';
 
 /** matchMedia 구독을 등록하고 해제 함수를 돌려준다. */
 function subscribe(onChange: () => void): () => void {
   const query = window.matchMedia(QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
 }
 
 /** 현재 모션 축소 여부. 클라이언트에서만 호출된다. */

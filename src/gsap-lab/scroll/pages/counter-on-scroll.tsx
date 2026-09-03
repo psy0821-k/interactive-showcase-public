@@ -1,14 +1,20 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useCountUp } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { useCountUp } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 const STATS = [
-  { label: "활성 팀", value: 12_400, suffix: "+", background: "#14532d" },
-  { label: "생성된 노트", value: 3_200_000, suffix: "", background: "#15602f" },
-  { label: "가동률", value: 99.98, suffix: "%", decimals: 2, background: "#166534" },
-  { label: "지원 언어", value: 27, suffix: "", background: "#176b39" },
+  { label: '활성 팀', value: 12_400, suffix: '+', background: '#14532d' },
+  { label: '생성된 노트', value: 3_200_000, suffix: '', background: '#15602f' },
+  {
+    label: '가동률',
+    value: 99.98,
+    suffix: '%',
+    decimals: 2,
+    background: '#166534',
+  },
+  { label: '지원 언어', value: 27, suffix: '', background: '#176b39' },
 ];
 
 /**
@@ -20,8 +26,8 @@ export function CounterOnScrollPage() {
   const container = useRef<HTMLDivElement>(null);
 
   useCountUp(container, {
-    target: ".stat-value",
-    trigger: ".stat-grid",
+    target: '.stat-value',
+    trigger: '.stat-grid',
     targets: STATS.map((s) => ({ value: s.value, decimals: s.decimals })),
   });
 
@@ -38,7 +44,10 @@ export function CounterOnScrollPage() {
               className="rounded-2xl p-8 text-white"
               style={{ background: stat.background }}
             >
-              <div className="mb-4 h-16 w-16 rounded-lg bg-white/15" aria-hidden />
+              <div
+                className="mb-4 h-16 w-16 rounded-lg bg-white/15"
+                aria-hidden
+              />
               <p className="text-4xl font-bold tabular-nums">
                 <span className="stat-value">0</span>
                 {stat.suffix}

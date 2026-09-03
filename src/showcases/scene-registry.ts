@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import type { ComponentType } from "react";
+import type { ComponentType } from 'react';
 
 /** 쇼케이스 모듈이 반드시 named export 해야 하는 형태. */
 export interface ShowcaseModule {
@@ -13,8 +13,9 @@ export interface ShowcaseModule {
 // 연결한다. registry.ts(meta만)와 분리해, 갤러리 홈이 이 파일을 import 하지
 // 않도록 한다. lazy glob이므로 각 index.tsx는 개별 청크가 되고, 상세 진입
 // 시에만 로드된다.
-const sceneModules: Record<string, () => Promise<unknown>> =
-  import.meta.glob("./*/*/index.tsx");
+const sceneModules: Record<string, () => Promise<unknown>> = import.meta.glob(
+  './*/*/index.tsx',
+);
 
 // './{category}/{slug}/index.tsx' 에서 slug를 뽑는다.
 const PATH_PATTERN = /^\.\/[^/]+\/([^/]+)\/index\.tsx$/;
@@ -37,7 +38,7 @@ export function getSceneLoader(
   return async () => {
     const loaded = await load();
     const scene = (loaded as Partial<ShowcaseModule>).Scene;
-    if (typeof scene !== "function") {
+    if (typeof scene !== 'function') {
       throw new Error(
         `[showcase] ${path}\n  - Scene을 named export 하지 않았다 (export function Scene).`,
       );

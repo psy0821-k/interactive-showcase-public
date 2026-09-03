@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import * as THREE from "three";
-import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import * as THREE from 'three';
+import { useFrame, type ThreeEvent } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
 import {
   Bloom,
   EffectComposer,
   Outline,
   Select,
   Selection,
-} from "@react-three/postprocessing";
+} from '@react-three/postprocessing';
 
 /** 진열 반지름. 세 오브젝트를 원호 위에 놓아 앞뒤 겹침을 만든다. */
 const PODIUM_RADIUS = 2.05;
@@ -22,16 +22,16 @@ const PEDESTAL_HEIGHT = 0.34;
 const PEDESTAL_RADIUS = 0.62;
 
 /** 보이는 부분의 외곽선 색. 밝을수록 눈에 띈다. */
-const VISIBLE_EDGE_COLOR = "#ffd479";
+const VISIBLE_EDGE_COLOR = '#ffd479';
 /** 가려진 부분의 외곽선 색. xRay가 켜져야 실제로 그려진다. */
-const HIDDEN_EDGE_COLOR = "#8a4a1c";
+const HIDDEN_EDGE_COLOR = '#8a4a1c';
 /** 외곽선 굵기·밝기. 2 아래는 실제 화면에서 거의 안 보인다. */
 const EDGE_STRENGTH = 8;
 /** 외곽선 밝기의 맥동 속도(rad/s 계열). 0이면 정지한다. */
 const PULSE_SPEED = 0.32;
 
 /** 앞을 가로지르는 기둥의 색. 외곽선이 가려지는 상황을 만든다. */
-const PILLAR_COLOR = "#2b3240";
+const PILLAR_COLOR = '#2b3240';
 /** 기둥이 서는 x 좌표 두 곳 */
 const PILLAR_X_POSITIONS = [-1.05, 1.05] as const;
 
@@ -40,23 +40,26 @@ const TURNTABLE_SPEED = 0.07;
 
 /** 진열 품목. id는 호버 상태 비교에 쓰는 키다. */
 const DISPLAY_ITEMS = [
-  { id: "torus", color: "#d94f5c" },
-  { id: "knot", color: "#4fb0d9" },
-  { id: "octa", color: "#8bd94f" },
+  { id: 'torus', color: '#d94f5c' },
+  { id: 'knot', color: '#4fb0d9' },
+  { id: 'octa', color: '#8bd94f' },
 ] as const;
 
-type DisplayItemId = (typeof DISPLAY_ITEMS)[number]["id"];
+type DisplayItemId = (typeof DISPLAY_ITEMS)[number]['id'];
 
 /** 원호 위 index번째 자리의 위치를 만든다. */
-function podiumPosition(index: number, total: number): [number, number, number] {
+function podiumPosition(
+  index: number,
+  total: number,
+): [number, number, number] {
   const angle = (index / total) * Math.PI * 2;
   return [Math.sin(angle) * PODIUM_RADIUS, 0, Math.cos(angle) * PODIUM_RADIUS];
 }
 
 /** id에 대응하는 지오메트리. 형태가 서로 달라야 외곽선 모양으로도 구분된다. */
 function ItemGeometry({ id }: { id: DisplayItemId }) {
-  if (id === "torus") return <torusGeometry args={[0.42, 0.17, 24, 64]} />;
-  if (id === "knot") return <torusKnotGeometry args={[0.36, 0.12, 128, 20]} />;
+  if (id === 'torus') return <torusGeometry args={[0.42, 0.17, 24, 64]} />;
+  if (id === 'knot') return <torusKnotGeometry args={[0.36, 0.12, 128, 20]} />;
   return <octahedronGeometry args={[0.55, 0]} />;
 }
 
@@ -109,7 +112,11 @@ function DisplayItem({
         <cylinderGeometry
           args={[PEDESTAL_RADIUS, PEDESTAL_RADIUS + 0.08, PEDESTAL_HEIGHT, 32]}
         />
-        <meshStandardMaterial color="#20242e" roughness={0.85} metalness={0.05} />
+        <meshStandardMaterial
+          color="#20242e"
+          roughness={0.85}
+          metalness={0.05}
+        />
       </mesh>
 
       <Select enabled={hovered}>
@@ -120,7 +127,11 @@ function DisplayItem({
           onPointerOut={onUnhover}
         >
           <ItemGeometry id={id} />
-          <meshStandardMaterial color={color} roughness={0.35} metalness={0.35} />
+          <meshStandardMaterial
+            color={color}
+            roughness={0.35}
+            metalness={0.35}
+          />
         </mesh>
       </Select>
     </group>
@@ -170,9 +181,9 @@ export function Scene() {
   useEffect(() => {
     if (hoveredId === null) return;
 
-    document.body.style.cursor = "pointer";
+    document.body.style.cursor = 'pointer';
     return () => {
-      document.body.style.cursor = "auto";
+      document.body.style.cursor = 'auto';
     };
   }, [hoveredId]);
 
@@ -197,11 +208,15 @@ export function Scene() {
       />
 
       {/* 어두운 배경이라야 밝은 외곽선이 또렷하게 읽힌다. */}
-      <color attach="background" args={["#0b0d13"]} />
+      <color attach="background" args={['#0b0d13']} />
 
       <ambientLight intensity={0.35} />
       <directionalLight position={[4, 6, 4]} intensity={2.1} castShadow />
-      <directionalLight position={[-5, 2, -3]} intensity={0.6} color="#8fb4ff" />
+      <directionalLight
+        position={[-5, 2, -3]}
+        intensity={0.6}
+        color="#8fb4ff"
+      />
 
       {/* 바닥. 선택 대상이 아니므로 레이캐스팅에서 제외한다. */}
       <mesh
@@ -240,7 +255,11 @@ export function Scene() {
           onPointerOver={(event) => event.stopPropagation()}
         >
           <boxGeometry args={[0.5, 1.7, 0.32]} />
-          <meshStandardMaterial color={PILLAR_COLOR} roughness={0.6} metalness={0.2} />
+          <meshStandardMaterial
+            color={PILLAR_COLOR}
+            roughness={0.6}
+            metalness={0.2}
+          />
         </mesh>
       ))}
 

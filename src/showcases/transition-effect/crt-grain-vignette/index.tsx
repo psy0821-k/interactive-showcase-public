@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
 import { useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -160,7 +160,9 @@ class CrtEffect extends Effect {
    */
   getIntensityUniform(): THREE.Uniform<number> | undefined {
     const uniform = this.uniforms.get('uIntensity');
-    return typeof uniform?.value === 'number' ? (uniform as THREE.Uniform<number>) : undefined;
+    return typeof uniform?.value === 'number'
+      ? (uniform as THREE.Uniform<number>)
+      : undefined;
   }
 }
 
@@ -196,7 +198,7 @@ function CrtPass({ enabled }: CrtPassProps) {
         aberration: ABERRATION_AMOUNT,
         barrel: BARREL_AMOUNT,
       }),
-    []
+    [],
   );
 
   useFrame((_, delta) => {
@@ -229,7 +231,7 @@ interface SpinningCubeProps {
 function SpinningCube({ position, color, phase, onToggle }: SpinningCubeProps) {
   const meshRef = useRef<THREE.Mesh>(null);
 
-  useFrame(state => {
+  useFrame((state) => {
     const mesh = meshRef.current;
     if (!mesh) return;
 
@@ -254,26 +256,47 @@ function SpinningCube({ position, color, phase, onToggle }: SpinningCubeProps) {
 
 /** 격자 바닥. 주사선·비네트가 걸린 것을 읽기 쉬운 규칙적 패턴을 제공한다. */
 function GridFloor() {
-  return <gridHelper args={[26, 26, '#2f6f86', '#1b3b4a']} position={[0, -1.35, 0]} />;
+  return (
+    <gridHelper
+      args={[26, 26, '#2f6f86', '#1b3b4a']}
+      position={[0, -1.35, 0]}
+    />
+  );
 }
 
 export function Scene() {
   const [effectEnabled, setEffectEnabled] = useState(true);
 
-  const toggleEffect = () => setEffectEnabled(previous => !previous);
+  const toggleEffect = () => setEffectEnabled((previous) => !previous);
 
   return (
     <>
-      <PerspectiveCamera makeDefault fov={45} near={0.5} far={60} position={[0, 1.1, 7]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={45}
+        near={0.5}
+        far={60}
+        position={[0, 1.1, 7]}
+      />
 
       <color attach="background" args={['#080b12']} />
 
       <ambientLight intensity={0.55} />
       <directionalLight position={[4, 5, 4]} intensity={2.1} />
-      <directionalLight position={[-4, 2, -3]} intensity={0.6} color="#7fb0ff" />
+      <directionalLight
+        position={[-4, 2, -3]}
+        intensity={0.6}
+        color="#7fb0ff"
+      />
 
       {CUBE_COLORS.map((color, index) => (
-        <SpinningCube key={color} color={color} position={[(index - 1) * CUBE_SPACING, 0.2, 0]} phase={index * 1.4} onToggle={toggleEffect} />
+        <SpinningCube
+          key={color}
+          color={color}
+          position={[(index - 1) * CUBE_SPACING, 0.2, 0]}
+          phase={index * 1.4}
+          onToggle={toggleEffect}
+        />
       ))}
 
       <GridFloor />

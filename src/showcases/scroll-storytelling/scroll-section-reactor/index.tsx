@@ -1,12 +1,17 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
-import { PerspectiveCamera, Scroll, ScrollControls, useScroll } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
+import {
+  PerspectiveCamera,
+  Scroll,
+  ScrollControls,
+  useScroll,
+} from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 섹션 수. <ScrollControls>의 pages와 같아야 한다(뷰포트 1개 높이 = 1섹션). */
 const SECTION_COUNT = 4;
@@ -25,8 +30,8 @@ const EXPLODE_DISTANCE = 1.35;
 /** 코어를 둘러싼 링 개수. */
 const RING_COUNT = 4;
 
-const RING_BASE_COLOR = new THREE.Color("#3d6ff2");
-const RING_HOT_COLOR = new THREE.Color("#ffd166");
+const RING_BASE_COLOR = new THREE.Color('#3d6ff2');
+const RING_HOT_COLOR = new THREE.Color('#ffd166');
 
 /**
  * 스크롤에서 파생된 씬 상태. SectionDirector가 매 프레임 갱신하고,
@@ -88,7 +93,12 @@ function Ring({ index, assembly }: RingProps) {
   return (
     <mesh ref={meshRef} rotation={[tilt, tilt * 0.5, 0]} castShadow>
       <torusGeometry args={[radius, 0.06, 16, 64]} />
-      <meshStandardMaterial ref={materialRef} color={RING_BASE_COLOR} roughness={0.4} metalness={0.3} />
+      <meshStandardMaterial
+        ref={materialRef}
+        color={RING_BASE_COLOR}
+        roughness={0.4}
+        metalness={0.3}
+      />
     </mesh>
   );
 }
@@ -159,7 +169,11 @@ function ReactorAssembly() {
     state.highlightAmount += (highlightTarget - state.highlightAmount) * factor;
 
     // 강조 대상 링은 섹션 3 안에서 순서대로 옮겨간다.
-    const withinSection3 = THREE.MathUtils.clamp((scroll.offset - 0.75) / 0.25, 0, 1);
+    const withinSection3 = THREE.MathUtils.clamp(
+      (scroll.offset - 0.75) / 0.25,
+      0,
+      1,
+    );
     state.highlightIndex = Math.min(
       RING_COUNT - 1,
       Math.floor(withinSection3 * RING_COUNT),
@@ -170,7 +184,11 @@ function ReactorAssembly() {
     group.rotation.y += (targetRotation - group.rotation.y) * factor;
 
     // 카메라 — 분해되면 살짝 물러나고, 강조 섹션에서 약간 위로.
-    targetPos.current.set(0, 0.6 + state.highlightAmount * 0.5, 6.2 + state.explode * 1.4);
+    targetPos.current.set(
+      0,
+      0.6 + state.highlightAmount * 0.5,
+      6.2 + state.explode * 1.4,
+    );
     camera.position.lerp(targetPos.current, factor);
     camera.lookAt(0, 0, 0);
   });
@@ -187,10 +205,22 @@ function ReactorAssembly() {
 
 /** 섹션 카피. 순수 데이터라 모듈 스코프에 둔다. */
 const SECTIONS = [
-  { title: "01 · 코어 모듈", body: "리액터 코어와 4중 차폐 링. 스크롤해 구조를 분해합니다." },
-  { title: "02 · 분해 뷰", body: "차폐 링이 축을 따라 펼쳐지며 코어가 드러납니다." },
-  { title: "03 · 회전 점검", body: "조립체를 한 바퀴 돌려 각 링의 정렬을 확인합니다." },
-  { title: "04 · 링 진단", body: "스크롤 위치에 따라 각 링이 순서대로 가열 시험을 거칩니다." },
+  {
+    title: '01 · 코어 모듈',
+    body: '리액터 코어와 4중 차폐 링. 스크롤해 구조를 분해합니다.',
+  },
+  {
+    title: '02 · 분해 뷰',
+    body: '차폐 링이 축을 따라 펼쳐지며 코어가 드러납니다.',
+  },
+  {
+    title: '03 · 회전 점검',
+    body: '조립체를 한 바퀴 돌려 각 링의 정렬을 확인합니다.',
+  },
+  {
+    title: '04 · 링 진단',
+    body: '스크롤 위치에 따라 각 링이 순서대로 가열 시험을 거칩니다.',
+  },
 ] as const;
 
 /** <Scroll html>에 들어갈 섹션 카피. 스크롤 컨테이너에 포털되어 각 페이지가 쌓인다. */
@@ -201,22 +231,31 @@ function SectionCopy() {
         <section
           key={section.title}
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: `${index * 100}vh`,
             // 좌우 번갈아 배치해 3D 오브젝트(중앙)와 겹치지 않게 한다.
-            left: index % 2 === 0 ? "7%" : "auto",
-            right: index % 2 === 0 ? "auto" : "7%",
-            width: "min(340px, 38%)",
-            transform: "translateY(38vh)",
-            color: "#e8edf5",
+            left: index % 2 === 0 ? '7%' : 'auto',
+            right: index % 2 === 0 ? 'auto' : '7%',
+            width: 'min(340px, 38%)',
+            transform: 'translateY(38vh)',
+            color: '#e8edf5',
             // 카피는 표시 전용 — 포인터를 통과시켜 스크롤을 막지 않는다.
-            pointerEvents: "none",
+            pointerEvents: 'none',
           }}
         >
-          <h2 style={{ margin: "0 0 8px", fontSize: 22, letterSpacing: "0.02em" }}>
+          <h2
+            style={{ margin: '0 0 8px', fontSize: 22, letterSpacing: '0.02em' }}
+          >
             {section.title}
           </h2>
-          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: "#9fb2cc" }}>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 14,
+              lineHeight: 1.6,
+              color: '#9fb2cc',
+            }}
+          >
             {section.body}
           </p>
         </section>
@@ -228,14 +267,28 @@ function SectionCopy() {
 export function Scene() {
   return (
     <ScrollControls pages={SECTION_COUNT} damping={SCROLL_DAMPING}>
-      <PerspectiveCamera makeDefault fov={44} near={0.5} far={40} position={[0, 0.6, 6.2]} />
-      <color attach="background" args={["#080b12"]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={44}
+        near={0.5}
+        far={40}
+        position={[0, 0.6, 6.2]}
+      />
+      <color attach="background" args={['#080b12']} />
 
       <ambientLight intensity={0.4} />
       <directionalLight position={[4, 6, 4]} intensity={2.1} castShadow />
-      <directionalLight position={[-5, 2, -3]} intensity={0.55} color="#8fb4ff" />
+      <directionalLight
+        position={[-5, 2, -3]}
+        intensity={0.55}
+        color="#8fb4ff"
+      />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2.2, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -2.2, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[40, 40]} />
         <meshStandardMaterial color="#12151d" roughness={0.95} />
       </mesh>

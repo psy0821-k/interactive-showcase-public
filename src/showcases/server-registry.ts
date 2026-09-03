@@ -1,12 +1,12 @@
-import { readdirSync } from "node:fs";
-import { join } from "node:path";
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   resolveTrack,
   type ShowcaseEntry,
   type ShowcaseMeta,
   type ShowcaseTrack,
-} from "@/domain/showcase";
-import { isTechniqueCategory } from "@/domain/technique-category";
+} from '@/domain/showcase';
+import { isTechniqueCategory } from '@/domain/technique-category';
 
 /**
  * 서버(RSC·generateMetadata·generateStaticParams·sitemap) 전용 쇼케이스 목록.
@@ -21,7 +21,7 @@ import { isTechniqueCategory } from "@/domain/technique-category";
  * 동적 import로 충분하다.
  */
 
-const SHOWCASES_ROOT = join(process.cwd(), "src", "showcases");
+const SHOWCASES_ROOT = join(process.cwd(), 'src', 'showcases');
 
 /** `src/showcases/{category}/{slug}` 를 걷어 (category, slug) 쌍을 만든다. */
 function readShowcasePaths(): { category: string; slug: string }[] {
@@ -55,7 +55,7 @@ async function loadMeta(category: string, slug: string): Promise<ShowcaseMeta> {
     !Array.isArray(meta.usedSkills) ||
     meta.usedSkills.length === 0 ||
     !isTechniqueCategory(meta.category) ||
-    (meta.track !== undefined && meta.track !== "3d" && meta.track !== "gsap")
+    (meta.track !== undefined && meta.track !== '3d' && meta.track !== 'gsap')
   ) {
     throw new Error(
       `[server-registry] ${category}/${slug}/meta.ts 형태가 올바르지 않다.`,
@@ -91,7 +91,7 @@ export async function getShowcaseEntries(options?: {
   );
 
   const sorted = entries.sort((a, b) =>
-    a.meta.title.localeCompare(b.meta.title, "ko"),
+    a.meta.title.localeCompare(b.meta.title, 'ko'),
   );
 
   return options?.track

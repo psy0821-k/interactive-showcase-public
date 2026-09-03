@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { refreshAfterLayout } from "@/gsap-lab/scroll/scroll-trigger-setup";
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { refreshAfterLayout } from '@/gsap-lab/scroll/scroll-trigger-setup';
 
 /** 카운트업 대상 하나. */
 export interface CountUpTarget {
@@ -29,7 +29,7 @@ export interface CountUpOptions {
 
 /** 천 단위 구분 + 소수 자릿수 포맷. */
 export function formatCountValue(value: number, decimals = 0): string {
-  return value.toLocaleString("en-US", {
+  return value.toLocaleString('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });
@@ -57,42 +57,39 @@ export function useCountUp(
     targets,
     duration = 1.8,
     stagger = 0.1,
-    start = "top 75%",
+    start = 'top 75%',
   } = options;
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      refreshAfterLayout();
-      const els = scope.current?.querySelectorAll<HTMLElement>(target);
-      if (!els) return;
+  useGsapDom(({ gsap: g, reduced }) => {
+    refreshAfterLayout();
+    const els = scope.current?.querySelectorAll<HTMLElement>(target);
+    if (!els) return;
 
-      els.forEach((el, index) => {
-        const spec = targets[index];
-        if (!spec) return;
-        const decimals = spec.decimals ?? 0;
+    els.forEach((el, index) => {
+      const spec = targets[index];
+      if (!spec) return;
+      const decimals = spec.decimals ?? 0;
 
-        if (reduced) {
-          el.textContent = formatCountValue(spec.value, decimals);
-          return;
-        }
+      if (reduced) {
+        el.textContent = formatCountValue(spec.value, decimals);
+        return;
+      }
 
-        const proxy = { n: 0 };
-        g.to(proxy, {
-          n: spec.value,
-          duration,
-          ease: "power2.out",
-          delay: index * stagger,
-          onUpdate: () => {
-            el.textContent = formatCountValue(proxy.n, decimals);
-          },
-          scrollTrigger: {
-            trigger,
-            start,
-            toggleActions: "play none none none",
-          },
-        });
+      const proxy = { n: 0 };
+      g.to(proxy, {
+        n: spec.value,
+        duration,
+        ease: 'power2.out',
+        delay: index * stagger,
+        onUpdate: () => {
+          el.textContent = formatCountValue(proxy.n, decimals);
+        },
+        scrollTrigger: {
+          trigger,
+          start,
+          toggleActions: 'play none none none',
+        },
       });
-    },
-    scope,
-  );
+    });
+  }, scope);
 }

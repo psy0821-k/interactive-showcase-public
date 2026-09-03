@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 import {
   pinnedTriggerDefaults,
   refreshAfterLayout,
   viewportScrollLength,
-} from "@/gsap-lab/scroll/scroll-trigger-setup";
+} from '@/gsap-lab/scroll/scroll-trigger-setup';
 
 /** `usePinnedTimeline` 콜백이 받는 인자. */
 export interface PinnedTimelineContext {
   /** 새로 만든 스크럽 타임라인. 여기에 트윈을 add 한다. */
   tl: gsap.core.Timeline;
   /** gsap 인스턴스. */
-  gsap: typeof import("gsap").default;
+  gsap: typeof import('gsap').default;
   /** 현재 뷰포트가 모바일(<768px)인지. */
   isMobile: boolean;
 }
@@ -61,7 +61,7 @@ export function usePinnedTimeline(
   scope: React.RefObject<HTMLElement | null>,
   options: PinnedTimelineOptions,
   build: (ctx: PinnedTimelineContext) => void,
-  onReduced?: (gsap: typeof import("gsap").default) => void,
+  onReduced?: (gsap: typeof import('gsap').default) => void,
 ): void {
   const {
     trigger,
@@ -82,7 +82,7 @@ export function usePinnedTimeline(
       }
 
       const end =
-        typeof length === "string"
+        typeof length === 'string'
           ? length
           : viewportScrollLength(length[0], length[1]);
 
@@ -91,7 +91,7 @@ export function usePinnedTimeline(
         scrollTrigger: {
           ...pinnedTriggerDefaults,
           trigger,
-          start: "top top",
+          start: 'top top',
           end,
           // pin: false면 아예 넘기지 않는다(CSS sticky로 고정하는 경우).
           ...(pin === false ? {} : { pin }),

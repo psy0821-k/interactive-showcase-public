@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import type { ThreeEvent } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneLabel, SceneReadout } from "@/components/scene-label";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import type { ThreeEvent } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneLabel, SceneReadout } from '@/components/scene-label';
 
 /**
  * fog 색이자 배경색. **같은 상수를 <color attach="background">와 <fog>가 공유한다.**
  * 이 일치가 fog의 1번 규칙 — 다르면 원경이 다른 색 실루엣으로 남는다.
  */
-const FOG_COLOR = "#9fb0c4";
+const FOG_COLOR = '#9fb0c4';
 
 /** THREE.Fog(선형)의 near / far. 카메라 far clip(60)보다 작아야 "절벽"이 안 된다. */
 const FOG_NEAR = 9;
@@ -29,7 +29,7 @@ const ARCH_SPACING = 3.4;
 /** 첫 아치의 z (카메라 앞). 이후 -z 방향으로 후퇴한다. */
 const ARCH_START_Z = 2;
 
-type FogMode = "fog" | "fogExp2";
+type FogMode = 'fog' | 'fogExp2';
 
 /** 아치 하나의 위치. z가 작을수록(음수로 갈수록) 카메라에서 멀다. */
 function archPosition(index: number): [number, number, number] {
@@ -91,9 +91,9 @@ function FogModeToggle({ mode, onToggle }: FogModeToggleProps) {
 
   useEffect(() => {
     if (!hovered) return;
-    document.body.style.cursor = "pointer";
+    document.body.style.cursor = 'pointer';
     return () => {
-      document.body.style.cursor = "auto";
+      document.body.style.cursor = 'auto';
     };
   }, [hovered]);
 
@@ -118,7 +118,7 @@ function FogModeToggle({ mode, onToggle }: FogModeToggleProps) {
       >
         <planeGeometry args={[2.4, 0.5]} />
         <meshBasicMaterial
-          color={hovered ? "#1c2740" : "#111a2e"}
+          color={hovered ? '#1c2740' : '#111a2e'}
           transparent
           opacity={0.9}
           toneMapped={false}
@@ -131,7 +131,7 @@ function FogModeToggle({ mode, onToggle }: FogModeToggleProps) {
         anchorY="middle"
         outlineWidth={0}
       >
-        {mode === "fog" ? "THREE.Fog  ⇄  FogExp2" : "FogExp2  ⇄  THREE.Fog"}
+        {mode === 'fog' ? 'THREE.Fog  ⇄  FogExp2' : 'FogExp2  ⇄  THREE.Fog'}
       </SceneLabel>
     </group>
   );
@@ -145,7 +145,7 @@ interface FogReadoutProps {
 function FogReadout({ mode }: FogReadoutProps) {
   const getText = useCallback(
     () =>
-      mode === "fog"
+      mode === 'fog'
         ? `THREE.Fog (선형)   near ${FOG_NEAR} · far ${FOG_FAR}\n` +
           `near까지 선명, far에서 완전히 안개 색`
         : `THREE.FogExp2 (지수)   density ${FOG_DENSITY}\n` +
@@ -169,12 +169,12 @@ function FogReadout({ mode }: FogReadoutProps) {
 
 export function Scene() {
   const reducedMotion = useReducedMotion();
-  const [mode, setMode] = useState<FogMode>("fog");
+  const [mode, setMode] = useState<FogMode>('fog');
   const rigRef = useRef<THREE.Group>(null);
 
   const toggleMode = useCallback(() => {
     // fog 종류 변경은 셰이더 재컴파일이라 한 프레임 끊긴다 — 사용자 액션에만.
-    setMode((current) => (current === "fog" ? "fogExp2" : "fog"));
+    setMode((current) => (current === 'fog' ? 'fogExp2' : 'fog'));
   }, []);
 
   useFrame((state) => {
@@ -200,7 +200,7 @@ export function Scene() {
         같은 상수 FOG_COLOR를 공유한다.
       */}
       <color attach="background" args={[FOG_COLOR]} />
-      {mode === "fog" ? (
+      {mode === 'fog' ? (
         <fog attach="fog" args={[FOG_COLOR, FOG_NEAR, FOG_FAR]} />
       ) : (
         <fogExp2 attach="fog" args={[FOG_COLOR, FOG_DENSITY]} />
@@ -208,9 +208,17 @@ export function Scene() {
 
       <ambientLight intensity={0.4} />
       <directionalLight position={[8, 14, 6]} intensity={1.4} castShadow />
-      <directionalLight position={[-6, 4, -4]} intensity={0.35} color="#c8d6ff" />
+      <directionalLight
+        position={[-6, 4, -4]}
+        intensity={0.35}
+        color="#c8d6ff"
+      />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -18]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0, -18]}
+        receiveShadow
+      >
         <planeGeometry args={[60, 80]} />
         <meshStandardMaterial color="#6b7686" roughness={0.95} />
       </mesh>

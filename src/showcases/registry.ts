@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
 import {
   resolveTrack,
   type ShowcaseEntry,
   type ShowcaseMeta,
   type ShowcaseTrack,
-} from "@/domain/showcase";
-import { isTechniqueCategory } from "@/domain/technique-category";
+} from '@/domain/showcase';
+import { isTechniqueCategory } from '@/domain/technique-category';
 
 /**
  * meta는 `meta.ts`에서 eager로 걷는다 — `index.tsx`가 아니다.
@@ -24,19 +24,19 @@ import { isTechniqueCategory } from "@/domain/technique-category";
  * Turbopack의 glob 타입은 제네릭을 받지 않고 `unknown`을 돌려주므로
  * (node_modules/next/types/global.d.ts), 값은 아래 타입 가드로 좁힌다.
  */
-const metaModules: Record<string, unknown> = import.meta.glob("./*/*/meta.ts", {
+const metaModules: Record<string, unknown> = import.meta.glob('./*/*/meta.ts', {
   eager: true,
-  import: "meta",
+  import: 'meta',
 });
 
 /** eager glob이 돌려준 값이 ShowcaseMeta 형태인지 확인한다. */
 function isShowcaseMeta(value: unknown): value is ShowcaseMeta {
-  if (typeof value !== "object" || value === null) return false;
+  if (typeof value !== 'object' || value === null) return false;
   const candidate = value as Partial<ShowcaseMeta>;
   return (
-    typeof candidate.title === "string" &&
-    typeof candidate.category === "string" &&
-    typeof candidate.description === "string" &&
+    typeof candidate.title === 'string' &&
+    typeof candidate.category === 'string' &&
+    typeof candidate.description === 'string' &&
     Array.isArray(candidate.usedSkills)
   );
 }
@@ -52,21 +52,21 @@ function collectMetaViolations(meta: ShowcaseMeta): string[] {
   const violations: string[] = [];
 
   if (!meta.title?.trim()) {
-    violations.push("title이 비어 있다");
+    violations.push('title이 비어 있다');
   }
   if (!meta.description?.trim()) {
-    violations.push("description이 비어 있다");
+    violations.push('description이 비어 있다');
   }
   if (!Array.isArray(meta.usedSkills) || meta.usedSkills.length === 0) {
-    violations.push("usedSkills가 비어 있다 (최소 1개)");
+    violations.push('usedSkills가 비어 있다 (최소 1개)');
   }
   if (!isTechniqueCategory(meta.category)) {
     violations.push(`category '${meta.category}'가 기법 카테고리 목록에 없다`);
   }
   if (
     meta.frameloop !== undefined &&
-    meta.frameloop !== "always" &&
-    meta.frameloop !== "demand"
+    meta.frameloop !== 'always' &&
+    meta.frameloop !== 'demand'
   ) {
     violations.push(
       `frameloop '${meta.frameloop}'는 "always" | "demand" 중 하나여야 한다`,
@@ -74,14 +74,18 @@ function collectMetaViolations(meta: ShowcaseMeta): string[] {
   }
   if (
     meta.controlsMode !== undefined &&
-    meta.controlsMode !== "orbit" &&
-    meta.controlsMode !== "none"
+    meta.controlsMode !== 'orbit' &&
+    meta.controlsMode !== 'none'
   ) {
     violations.push(
       `controlsMode '${meta.controlsMode}'는 "orbit" | "none" 중 하나여야 한다`,
     );
   }
-  if (meta.track !== undefined && meta.track !== "3d" && meta.track !== "gsap") {
+  if (
+    meta.track !== undefined &&
+    meta.track !== '3d' &&
+    meta.track !== 'gsap'
+  ) {
     violations.push(`track '${meta.track}'는 "3d" | "gsap" 중 하나여야 한다`);
   }
 
@@ -103,7 +107,7 @@ function buildRegistry(): ShowcaseEntry[] {
     if (!matched) {
       throw new Error(
         `[showcase] 경로 규칙 위반: ${path}\n` +
-          "  src/showcases/{기법-카테고리}/{slug}/meta.ts 형태여야 한다.",
+          '  src/showcases/{기법-카테고리}/{slug}/meta.ts 형태여야 한다.',
       );
     }
 
@@ -113,8 +117,8 @@ function buildRegistry(): ShowcaseEntry[] {
     if (!isShowcaseMeta(rawMeta)) {
       throw new Error(
         `[showcase] ${path}\n` +
-          "  - meta를 named export 하지 않았거나 형태가 다르다.\n" +
-          "    export const meta: ShowcaseMeta = { title, category, usedSkills, description }",
+          '  - meta를 named export 하지 않았거나 형태가 다르다.\n' +
+          '    export const meta: ShowcaseMeta = { title, category, usedSkills, description }',
       );
     }
 
@@ -130,7 +134,7 @@ function buildRegistry(): ShowcaseEntry[] {
 
     if (violations.length > 0) {
       throw new Error(
-        `[showcase] ${path}\n` + violations.map((v) => `  - ${v}`).join("\n"),
+        `[showcase] ${path}\n` + violations.map((v) => `  - ${v}`).join('\n'),
       );
     }
 
@@ -140,7 +144,7 @@ function buildRegistry(): ShowcaseEntry[] {
       throw new Error(
         `[showcase] slug '${slug}'가 중복됐다.\n` +
           `  ${duplicatedIn}\n  ${path}\n` +
-          "  slug는 URL 키이므로 전역에서 유일해야 한다.",
+          '  slug는 URL 키이므로 전역에서 유일해야 한다.',
       );
     }
     seenSlugs.set(slug, path);
@@ -152,7 +156,7 @@ function buildRegistry(): ShowcaseEntry[] {
     entries.push({ slug, meta, thumbnail });
   }
 
-  return entries.sort((a, b) => a.meta.title.localeCompare(b.meta.title, "ko"));
+  return entries.sort((a, b) => a.meta.title.localeCompare(b.meta.title, 'ko'));
 }
 
 /** 갤러리·상세·검색이 모두 이 배열 하나를 소비한다. */

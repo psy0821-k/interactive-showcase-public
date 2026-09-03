@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useRef } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 import {
   pinnedTriggerDefaults,
   refreshAfterLayout,
-} from "@/gsap-lab/scroll/scroll-trigger-setup";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+} from '@/gsap-lab/scroll/scroll-trigger-setup';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 const PANELS = [
-  { title: "01 · 캡처", background: "#500724" },
-  { title: "02 · 정리", background: "#831843" },
-  { title: "03 · 연결", background: "#9d174d" },
-  { title: "04 · 공유", background: "#be185d" },
-  { title: "05 · 게시", background: "#db2777" },
+  { title: '01 · 캡처', background: '#500724' },
+  { title: '02 · 정리', background: '#831843' },
+  { title: '03 · 연결', background: '#9d174d' },
+  { title: '04 · 공유', background: '#be185d' },
+  { title: '05 · 게시', background: '#db2777' },
 ];
 
 /**
@@ -25,38 +25,35 @@ const PANELS = [
 export function HorizontalScrollPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      refreshAfterLayout();
+  useGsapDom(({ gsap: g, reduced }) => {
+    refreshAfterLayout();
 
-      const track = container.current?.querySelector<HTMLElement>(".h-track");
-      if (!track) return;
+    const track = container.current?.querySelector<HTMLElement>('.h-track');
+    if (!track) return;
 
-      if (reduced) {
-        // 모션 축소: 가로 트랙을 세로로 쌓아 그냥 스크롤되게 한다.
-        track.classList.remove("flex-row");
-        track.classList.add("flex-col");
-        g.set(track, { xPercent: 0 });
-        return;
-      }
+    if (reduced) {
+      // 모션 축소: 가로 트랙을 세로로 쌓아 그냥 스크롤되게 한다.
+      track.classList.remove('flex-row');
+      track.classList.add('flex-col');
+      g.set(track, { xPercent: 0 });
+      return;
+    }
 
-      // 트랙이 뷰포트보다 넘치는 만큼(픽셀)이 곧 스크롤 구간이자 이동량이다.
-      // refresh 때 다시 재므로 함수형으로.
-      g.to(track, {
-        x: () => -(track.scrollWidth - window.innerWidth),
-        ease: "none",
-        scrollTrigger: {
-          ...pinnedTriggerDefaults,
-          trigger: ".h-stage",
-          start: "top top",
-          end: () => "+=" + (track.scrollWidth - window.innerWidth),
-          pin: true,
-          scrub: 1,
-        },
-      });
-    },
-    container,
-  );
+    // 트랙이 뷰포트보다 넘치는 만큼(픽셀)이 곧 스크롤 구간이자 이동량이다.
+    // refresh 때 다시 재므로 함수형으로.
+    g.to(track, {
+      x: () => -(track.scrollWidth - window.innerWidth),
+      ease: 'none',
+      scrollTrigger: {
+        ...pinnedTriggerDefaults,
+        trigger: '.h-stage',
+        start: 'top top',
+        end: () => '+=' + (track.scrollWidth - window.innerWidth),
+        pin: true,
+        scrub: 1,
+      },
+    });
+  }, container);
 
   return (
     <div ref={container}>

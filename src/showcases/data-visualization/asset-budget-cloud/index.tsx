@@ -1,29 +1,30 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { Suspense, useCallback, useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
+import { Suspense, useCallback, useEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
 import {
   Clone,
   Environment,
   PerspectiveCamera,
   useGLTF,
-} from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneReadout } from "@/components/scene-label";
+} from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneReadout } from '@/components/scene-label';
 
 /** public/ 기준 절대 경로. optimize-assets.mjs 산출물. */
-const CLOUD_URL = "/models/cloud-opt.glb";
-const HDRI_URL = "/hdri/classroom-1k.hdr";
+const CLOUD_URL = '/models/cloud-opt.glb';
+const HDRI_URL = '/hdri/classroom-1k.hdr';
 /** Draco 디코더 자체 호스팅 경로. optimize-assets.mjs가 복사한다. */
-const DRACO_PATH = "/draco/";
+const DRACO_PATH = '/draco/';
 
 /** 최적화 전 원본 크기(디스크 기준, 상수). 계기판 상단 줄. */
-const ORIGINAL_LABEL = "원본  cloud.glb 71.3 MB · classroom.hdr 93.7 MB";
+const ORIGINAL_LABEL = '원본  cloud.glb 71.3 MB · classroom.hdr 93.7 MB';
 /** 최적화본 크기(실측, 상수). dev 서버 gzip 때문에 Network 값은 신뢰 못 하므로 병기. */
-const OPTIMIZED_LABEL = "최적화  cloud-opt.glb 5.4 MB · classroom-1k.hdr 2.0 MB";
+const OPTIMIZED_LABEL =
+  '최적화  cloud-opt.glb 5.4 MB · classroom-1k.hdr 2.0 MB';
 
 /** 모델을 정규화할 목표 크기(월드 유닛). */
 const TARGET_SIZE = 3.2;
@@ -60,10 +61,7 @@ function CloudModel() {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF(CLOUD_URL, DRACO_PATH);
 
-  const { scale, offset } = useMemo(
-    () => measureNormalization(scene),
-    [scene],
-  );
+  const { scale, offset } = useMemo(() => measureNormalization(scene), [scene]);
 
   const reducedMotion = useReducedMotion();
 
@@ -100,7 +98,7 @@ function BudgetMeter() {
       `${OPTIMIZED_LABEL}\n` +
       `\n` +
       `GPU  geometries ${geometries} · textures ${textures}\n` +
-      `render  삼각형 ${triangles.toLocaleString("ko-KR")} · 드로우콜 ${calls}`
+      `render  삼각형 ${triangles.toLocaleString('ko-KR')} · 드로우콜 ${calls}`
     );
   }, [gl]);
 

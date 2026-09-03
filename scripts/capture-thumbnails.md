@@ -9,20 +9,23 @@ API 라우트**로 캡처하고, sharp로 변환한다.
 `src/app/api/capture-thumb/route.ts` (커밋하지 않는다 — 캡처 후 삭제):
 
 ```ts
-import { writeFile, mkdir } from "node:fs/promises";
-import { join } from "node:path";
-import { NextResponse } from "next/server";
+import { writeFile, mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
+import { NextResponse } from 'next/server';
 
-const SRC_DIR = "<scratchpad>/thumb-src"; // 절대 경로로 지정
+const SRC_DIR = '<scratchpad>/thumb-src'; // 절대 경로로 지정
 
 export async function POST(request: Request): Promise<NextResponse> {
-  if (process.env.NEXT_PUBLIC_CAPTURE !== "1") {
-    return NextResponse.json({ error: "capture disabled" }, { status: 404 });
+  if (process.env.NEXT_PUBLIC_CAPTURE !== '1') {
+    return NextResponse.json({ error: 'capture disabled' }, { status: 404 });
   }
   const body = (await request.json()) as { slug: string; dataUrl: string };
-  const base64 = body.dataUrl.split(",")[1];
+  const base64 = body.dataUrl.split(',')[1];
   await mkdir(SRC_DIR, { recursive: true });
-  await writeFile(join(SRC_DIR, `${body.slug}.png`), Buffer.from(base64, "base64"));
+  await writeFile(
+    join(SRC_DIR, `${body.slug}.png`),
+    Buffer.from(base64, 'base64'),
+  );
   return NextResponse.json({ ok: true });
 }
 ```
@@ -59,6 +62,7 @@ await fetch('/api/capture-thumb', {
 ```
 
 **주의**:
+
 - `browser_batch`에 **여러 씬을 넣지 않는다** — 이전 씬 캡처 후 navigate 하면
   프레임이 날아간다. 1 배치 = 1 씬.
 - 스크롤 씬(`controlsMode: "none"`)은 `left_click_drag` 대신 `scroll`.

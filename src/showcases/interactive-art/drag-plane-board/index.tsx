@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { useThree, type ThreeEvent } from "@react-three/fiber";
-import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useThree, type ThreeEvent } from '@react-three/fiber';
+import { Environment, Lightformer, PerspectiveCamera } from '@react-three/drei';
 
 /** 보드 한 변의 길이. 영역 제약(clamp)의 기준이 된다. */
 const BOARD_SIZE = 6;
@@ -23,12 +23,12 @@ const RAIL_Z = -2.1;
 const RAIL_HALF_LENGTH = 2.4;
 
 /** 말 색. THREE.Color 인스턴스를 공유하면 세 말이 같은 색이 되므로 문자열로 둔다. */
-const PIECE_COLORS = ["#ff8f5c", "#6fd08c", "#7ea6ff"] as const;
+const PIECE_COLORS = ['#ff8f5c', '#6fd08c', '#7ea6ff'] as const;
 /** 잡고 있는 동안 덧입히는 발광 강도 */
 const DRAG_EMISSIVE = 0.85;
 
 /** 드래그 제약 방식. 세 가지를 나란히 보여주는 것이 이 쇼케이스의 목적이다. */
-type DragConstraint = "free" | "axis-x" | "clamped";
+type DragConstraint = 'free' | 'axis-x' | 'clamped';
 
 interface PieceConfig {
   id: number;
@@ -39,9 +39,24 @@ interface PieceConfig {
 
 /** 말 세 개의 초기 배치. 순수 데이터라 모듈 스코프에 둬도 부수효과가 없다. */
 const PIECES: PieceConfig[] = [
-  { id: 0, constraint: "free", color: PIECE_COLORS[0], initialPosition: [-1.9, PIECE_HEIGHT, 1.4] },
-  { id: 1, constraint: "axis-x", color: PIECE_COLORS[1], initialPosition: [0, PIECE_HEIGHT, RAIL_Z] },
-  { id: 2, constraint: "clamped", color: PIECE_COLORS[2], initialPosition: [1.9, PIECE_HEIGHT, 1.4] },
+  {
+    id: 0,
+    constraint: 'free',
+    color: PIECE_COLORS[0],
+    initialPosition: [-1.9, PIECE_HEIGHT, 1.4],
+  },
+  {
+    id: 1,
+    constraint: 'axis-x',
+    color: PIECE_COLORS[1],
+    initialPosition: [0, PIECE_HEIGHT, RAIL_Z],
+  },
+  {
+    id: 2,
+    constraint: 'clamped',
+    color: PIECE_COLORS[2],
+    initialPosition: [1.9, PIECE_HEIGHT, 1.4],
+  },
 ];
 
 /**
@@ -52,10 +67,10 @@ const PIECES: PieceConfig[] = [
  */
 function hasEnabledFlag(value: unknown): value is { enabled: boolean } {
   return (
-    typeof value === "object" &&
+    typeof value === 'object' &&
     value !== null &&
-    "enabled" in value &&
-    typeof (value as { enabled: unknown }).enabled === "boolean"
+    'enabled' in value &&
+    typeof (value as { enabled: unknown }).enabled === 'boolean'
   );
 }
 
@@ -77,11 +92,15 @@ function applyConstraint(
   target: THREE.Vector3,
 ): void {
   switch (constraint) {
-    case "axis-x":
+    case 'axis-x':
       // 축 고정: 자유롭게 둘 축만 남기고 나머지는 시작 값으로 되돌린다.
-      target.set(clampSymmetric(raw.x, RAIL_HALF_LENGTH), initial[1], initial[2]);
+      target.set(
+        clampSymmetric(raw.x, RAIL_HALF_LENGTH),
+        initial[1],
+        initial[2],
+      );
       return;
-    case "clamped":
+    case 'clamped':
       // 영역 제약: 보드 안쪽으로 자른다. 높이는 평면 높이로 고정된다.
       target.set(
         clampSymmetric(raw.x, CLAMP_HALF_EXTENT),
@@ -109,7 +128,12 @@ interface DraggablePieceProps {
  * 초당 수십~수백 번 발생하므로 상태로 들면 그만큼 리렌더가 돈다.
  * 상태로 드는 것은 "지금 잡고 있는가" 하나뿐이고, 그건 전이 시에만 바뀐다.
  */
-function DraggablePiece({ config, dragging, onDragStart, onDragEnd }: DraggablePieceProps) {
+function DraggablePiece({
+  config,
+  dragging,
+  onDragStart,
+  onDragEnd,
+}: DraggablePieceProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
@@ -194,7 +218,12 @@ function DraggablePiece({ config, dragging, onDragStart, onDragEnd }: DraggableP
 
     // 잡은 순간의 오프셋을 더해야 "집은 지점"이 커서를 따라간다.
     hitPoint.add(grabOffset);
-    applyConstraint(config.constraint, hitPoint, config.initialPosition, nextPosition);
+    applyConstraint(
+      config.constraint,
+      hitPoint,
+      config.initialPosition,
+      nextPosition,
+    );
     mesh.position.copy(nextPosition);
   };
 
@@ -207,7 +236,9 @@ function DraggablePiece({ config, dragging, onDragStart, onDragEnd }: DraggableP
       setControlsEnabled(true);
 
       if (event) {
-        (event.target as Element | null)?.releasePointerCapture?.(event.pointerId);
+        (event.target as Element | null)?.releasePointerCapture?.(
+          event.pointerId,
+        );
       }
       onDragEnd();
     },
@@ -270,17 +301,33 @@ function ConstraintGuides() {
   return (
     <>
       {/* X축 레일 — 축 고정 말이 움직일 수 있는 유일한 선 */}
-      <mesh position={[0, 0.011, RAIL_Z]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
+      <mesh
+        position={[0, 0.011, RAIL_Z]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        raycast={() => null}
+      >
         <planeGeometry args={[RAIL_HALF_LENGTH * 2, 0.09]} />
         <meshBasicMaterial color={PIECE_COLORS[1]} transparent opacity={0.55} />
       </mesh>
 
       {/* 영역 제약 경계 — clamp가 허용하는 정사각형의 테두리 네 줄 */}
       {[
-        { position: [0, 0.01, CLAMP_HALF_EXTENT] as const, size: [CLAMP_HALF_EXTENT * 2, 0.05] as const },
-        { position: [0, 0.01, -CLAMP_HALF_EXTENT] as const, size: [CLAMP_HALF_EXTENT * 2, 0.05] as const },
-        { position: [CLAMP_HALF_EXTENT, 0.01, 0] as const, size: [0.05, CLAMP_HALF_EXTENT * 2] as const },
-        { position: [-CLAMP_HALF_EXTENT, 0.01, 0] as const, size: [0.05, CLAMP_HALF_EXTENT * 2] as const },
+        {
+          position: [0, 0.01, CLAMP_HALF_EXTENT] as const,
+          size: [CLAMP_HALF_EXTENT * 2, 0.05] as const,
+        },
+        {
+          position: [0, 0.01, -CLAMP_HALF_EXTENT] as const,
+          size: [CLAMP_HALF_EXTENT * 2, 0.05] as const,
+        },
+        {
+          position: [CLAMP_HALF_EXTENT, 0.01, 0] as const,
+          size: [0.05, CLAMP_HALF_EXTENT * 2] as const,
+        },
+        {
+          position: [-CLAMP_HALF_EXTENT, 0.01, 0] as const,
+          size: [0.05, CLAMP_HALF_EXTENT * 2] as const,
+        },
       ].map((edge) => (
         <mesh
           key={`${edge.position[0]}-${edge.position[2]}`}
@@ -289,7 +336,11 @@ function ConstraintGuides() {
           raycast={() => null}
         >
           <planeGeometry args={[edge.size[0], edge.size[1]]} />
-          <meshBasicMaterial color={PIECE_COLORS[2]} transparent opacity={0.4} />
+          <meshBasicMaterial
+            color={PIECE_COLORS[2]}
+            transparent
+            opacity={0.4}
+          />
         </mesh>
       ))}
     </>
@@ -311,19 +362,31 @@ export function Scene() {
   useEffect(() => {
     if (draggingId === null) return;
 
-    document.body.style.cursor = "grabbing";
+    document.body.style.cursor = 'grabbing';
     return () => {
-      document.body.style.cursor = "auto";
+      document.body.style.cursor = 'auto';
     };
   }, [draggingId]);
 
   return (
     <>
       {/* 보드 전체(6유닛)를 담고 깊이가 읽히도록 비스듬히 내려다본다. far/near = 80. */}
-      <PerspectiveCamera makeDefault fov={45} near={0.5} far={40} position={[0, 6.2, 7.4]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={45}
+        near={0.5}
+        far={40}
+        position={[0, 6.2, 7.4]}
+      />
 
       <Environment resolution={256} environmentIntensity={0.5}>
-        <Lightformer form="rect" intensity={4} scale={[12, 6]} position={[0, 7, -5]} color="#dce8ff" />
+        <Lightformer
+          form="rect"
+          intensity={4}
+          scale={[12, 6]}
+          position={[0, 7, -5]}
+          color="#dce8ff"
+        />
       </Environment>
 
       <ambientLight intensity={0.3} />

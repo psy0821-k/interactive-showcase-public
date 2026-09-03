@@ -31,44 +31,44 @@
  *   draco3dgltf sharp
  */
 
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { NodeIO } from "@gltf-transform/core";
-import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
+import { NodeIO } from '@gltf-transform/core';
+import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import {
   dedup,
   draco,
   prune,
   textureCompress,
   weld,
-} from "@gltf-transform/functions";
-import draco3d from "draco3dgltf";
-import sharp from "sharp";
-import * as THREE from "three";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+} from '@gltf-transform/functions';
+import draco3d from 'draco3dgltf';
+import sharp from 'sharp';
+import * as THREE from 'three';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(HERE, "..");
+const ROOT = path.resolve(HERE, '..');
 
-const MODELS_DIR = path.join(ROOT, "public", "models");
-const HDRI_DIR = path.join(ROOT, "public", "hdri");
-const DRACO_DEST = path.join(ROOT, "public", "draco");
+const MODELS_DIR = path.join(ROOT, 'public', 'models');
+const HDRI_DIR = path.join(ROOT, 'public', 'hdri');
+const DRACO_DEST = path.join(ROOT, 'public', 'draco');
 const DRACO_SRC = path.join(
   ROOT,
-  "node_modules",
-  "three",
-  "examples",
-  "jsm",
-  "libs",
-  "draco",
+  'node_modules',
+  'three',
+  'examples',
+  'jsm',
+  'libs',
+  'draco',
 );
 
-const GLB_INPUT = path.join(MODELS_DIR, "cloud.glb");
-const GLB_OUTPUT = path.join(MODELS_DIR, "cloud-opt.glb");
-const HDR_INPUT = path.join(MODELS_DIR, "classroom.hdr");
-const HDR_OUTPUT = path.join(HDRI_DIR, "classroom-1k.hdr");
+const GLB_INPUT = path.join(MODELS_DIR, 'cloud.glb');
+const GLB_OUTPUT = path.join(MODELS_DIR, 'cloud-opt.glb');
+const HDR_INPUT = path.join(MODELS_DIR, 'classroom.hdr');
+const HDR_OUTPUT = path.join(HDRI_DIR, 'classroom-1k.hdr');
 
 /** 바이트를 MB 문자열로. */
 function mb(bytes) {
@@ -96,8 +96,8 @@ async function optimizeGlb() {
   const io = new NodeIO()
     .registerExtensions(ALL_EXTENSIONS)
     .registerDependencies({
-      "draco3d.encoder": await draco3d.createEncoderModule(),
-      "draco3d.decoder": await draco3d.createDecoderModule(),
+      'draco3d.encoder': await draco3d.createEncoderModule(),
+      'draco3d.decoder': await draco3d.createDecoderModule(),
     });
 
   const document = await io.read(GLB_INPUT);
@@ -108,12 +108,12 @@ async function optimizeGlb() {
     weld(),
     textureCompress({
       encoder: sharp,
-      targetFormat: "webp",
+      targetFormat: 'webp',
       resize: [1024, 1024],
       quality: 85,
     }),
     draco({
-      method: "edgebreaker",
+      method: 'edgebreaker',
       // cloud.glb 는 116만 정점이라 quantizePosition 이 곧 파일 크기다.
       // 12 로 낮춰도 구름의 부드러운 실루엣에는 눈에 띄는 손상이 없다.
       // (14 → 6.07MB, 12 → 목표 6MB 이내. 형태가 각지면 13~14 로 올린다.)
@@ -224,13 +224,16 @@ function optimizeHdr() {
 
   // RADIANCE 헤더 + flat RGBE 스캔라인
   const header =
-    "#?RADIANCE\n" +
-    "FORMAT=32-bit_rle_rgbe\n" +
-    "\n" +
+    '#?RADIANCE\n' +
+    'FORMAT=32-bit_rle_rgbe\n' +
+    '\n' +
     `-Y ${dstH} +X ${dstW}\n`;
 
   fs.mkdirSync(HDRI_DIR, { recursive: true });
-  fs.writeFileSync(HDR_OUTPUT, Buffer.concat([Buffer.from(header, "ascii"), rgbe]));
+  fs.writeFileSync(
+    HDR_OUTPUT,
+    Buffer.concat([Buffer.from(header, 'ascii'), rgbe]),
+  );
 
   const afterBytes = fs.statSync(HDR_OUTPUT).size;
   console.log(
@@ -246,7 +249,12 @@ function optimizeHdr() {
   let maxValue = 0;
   let sumValue = 0;
   for (let i = 0; i < check.data.length; i += 4) {
-    maxValue = Math.max(maxValue, check.data[i], check.data[i + 1], check.data[i + 2]);
+    maxValue = Math.max(
+      maxValue,
+      check.data[i],
+      check.data[i + 1],
+      check.data[i + 2],
+    );
     sumValue += check.data[i] + check.data[i + 1] + check.data[i + 2];
   }
   const avgValue = sumValue / ((check.data.length / 4) * 3);
@@ -262,7 +270,9 @@ function optimizeHdr() {
 // ---------------------------------------------------------------------------
 function copyDracoDecoder() {
   if (!fs.existsSync(DRACO_SRC)) {
-    console.warn(`[draco] 건너뜀 — 소스 없음: ${path.relative(ROOT, DRACO_SRC)}`);
+    console.warn(
+      `[draco] 건너뜀 — 소스 없음: ${path.relative(ROOT, DRACO_SRC)}`,
+    );
     return;
   }
   fs.rmSync(DRACO_DEST, { recursive: true, force: true });

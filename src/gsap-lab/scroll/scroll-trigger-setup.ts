@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 /** `import gsap from "gsap"`의 default export 타입. 헬퍼 시그니처에 쓴다. */
 type Gsap = typeof gsap;
@@ -35,7 +35,10 @@ export function refreshAfterLayout(): void {
  * 뷰포트 비례 스크롤 구간 길이. 모바일에서는 더 짧게 잡는다(스킬 모바일 3절).
  * 핀 섹션의 `end: "+=..."`에 함수형으로 넘긴다.
  */
-export function viewportScrollLength(desktopFactor = 2, mobileFactor = 1.2): () => string {
+export function viewportScrollLength(
+  desktopFactor = 2,
+  mobileFactor = 1.2,
+): () => string {
   return () => {
     const factor = window.innerWidth < 768 ? mobileFactor : desktopFactor;
     return `+=${window.innerHeight * factor}`;
@@ -86,7 +89,9 @@ export function withResponsiveScroll(
   const mm = gsapInstance.matchMedia();
   mm.add(`(min-width: ${SCROLL_BREAKPOINT}px)`, (c) => handlers.desktop(c));
   if (handlers.mobile) {
-    mm.add(`(max-width: ${SCROLL_BREAKPOINT - 1}px)`, (c) => handlers.mobile!(c));
+    mm.add(`(max-width: ${SCROLL_BREAKPOINT - 1}px)`, (c) =>
+      handlers.mobile!(c),
+    );
   }
 }
 

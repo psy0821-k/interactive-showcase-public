@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
 import {
   Suspense,
@@ -9,10 +9,10 @@ import {
   useRef,
   useState,
   type CSSProperties,
-} from "react";
-import * as THREE from "three";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { Html, PerspectiveCamera } from "@react-three/drei";
+} from 'react';
+import * as THREE from 'three';
+import { useFrame, useLoader } from '@react-three/fiber';
+import { Html, PerspectiveCamera } from '@react-three/drei';
 import {
   Bloom,
   BrightnessContrast,
@@ -20,13 +20,13 @@ import {
   HueSaturation,
   LUT,
   ToneMapping,
-} from "@react-three/postprocessing";
-import { LUTCubeLoader, ToneMappingMode } from "postprocessing";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneReadout } from "@/components/scene-label";
+} from '@react-three/postprocessing';
+import { LUTCubeLoader, ToneMappingMode } from 'postprocessing';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneReadout } from '@/components/scene-label';
 
 /** 절차 생성 LUT 경로. `scripts/build-luts.mjs`가 만든다 (identity 16³ + 따뜻한 색변환). */
-const WARM_LUT_URL = "/luts/warm-film.cube";
+const WARM_LUT_URL = '/luts/warm-film.cube';
 
 /** Bloom은 프리셋과 무관하게 고정. 은은한 발광 막대만 살짝 번지게 한다. */
 const BLOOM = {
@@ -40,12 +40,7 @@ const BLOOM = {
 const EMISSIVE_GAIN = 2.4;
 
 type PresetId =
-  | "neutral"
-  | "cinema-agx"
-  | "cinema-aces"
-  | "warm"
-  | "faded"
-  | "lut";
+  'neutral' | 'cinema-agx' | 'cinema-aces' | 'warm' | 'faded' | 'lut';
 
 interface Preset {
   id: PresetId;
@@ -72,49 +67,50 @@ interface Preset {
  */
 const PRESETS: readonly Preset[] = [
   {
-    id: "neutral",
-    label: "중립 (NEUTRAL)",
+    id: 'neutral',
+    label: '중립 (NEUTRAL)',
     toneMode: ToneMappingMode.NEUTRAL,
-    chain: "Bloom → ToneMapping(NEUTRAL)",
+    chain: 'Bloom → ToneMapping(NEUTRAL)',
   },
   {
-    id: "cinema-agx",
-    label: "시네마 AGX",
+    id: 'cinema-agx',
+    label: '시네마 AGX',
     toneMode: ToneMappingMode.AGX,
     bc: { contrast: 0.08 },
-    chain: "Bloom → ToneMapping(AGX) → BrightnessContrast(+0.08 대비)",
+    chain: 'Bloom → ToneMapping(AGX) → BrightnessContrast(+0.08 대비)',
   },
   {
-    id: "cinema-aces",
-    label: "시네마 ACES",
+    id: 'cinema-aces',
+    label: '시네마 ACES',
     toneMode: ToneMappingMode.ACES_FILMIC,
     bc: { contrast: 0.05 },
-    chain: "Bloom → ToneMapping(ACES_FILMIC) → BrightnessContrast(+0.05 대비)",
+    chain: 'Bloom → ToneMapping(ACES_FILMIC) → BrightnessContrast(+0.05 대비)',
   },
   {
-    id: "warm",
-    label: "따뜻 (코드)",
+    id: 'warm',
+    label: '따뜻 (코드)',
     toneMode: ToneMappingMode.AGX,
     // hue를 아주 살짝 주황 쪽으로 틀고 채도를 조금 올린다.
     hueSat: { hue: -0.06, saturation: 0.06 },
     bc: { brightness: 0.02, contrast: -0.04 },
-    chain: "Bloom → ToneMapping(AGX) → HueSaturation → BrightnessContrast",
+    chain: 'Bloom → ToneMapping(AGX) → HueSaturation → BrightnessContrast',
   },
   {
-    id: "faded",
-    label: "빛바랜 필름",
+    id: 'faded',
+    label: '빛바랜 필름',
     toneMode: ToneMappingMode.AGX,
     // 채도를 크게 낮추고 대비도 낮춰 "물 빠진 필름".
     hueSat: { saturation: -0.32 },
     bc: { brightness: 0.05, contrast: -0.14 },
-    chain: "Bloom → ToneMapping(AGX) → HueSaturation(-0.32 채도) → BrightnessContrast",
+    chain:
+      'Bloom → ToneMapping(AGX) → HueSaturation(-0.32 채도) → BrightnessContrast',
   },
   {
-    id: "lut",
-    label: "warm-film.cube LUT",
+    id: 'lut',
+    label: 'warm-film.cube LUT',
     toneMode: ToneMappingMode.AGX,
     lut: true,
-    chain: "Bloom → ToneMapping(AGX) → LUT(warm-film.cube, tetrahedral)",
+    chain: 'Bloom → ToneMapping(AGX) → LUT(warm-film.cube, tetrahedral)',
   },
 ] as const;
 
@@ -134,7 +130,7 @@ function LutFromFile({ url }: { url: string }) {
 /** 채도 있는 절차 소품 3개 + 회색 배경판 + 은은한 발광 막대. */
 function LookbookSubject() {
   const emissiveColor = useMemo(
-    () => new THREE.Color("#ff7a3d").multiplyScalar(EMISSIVE_GAIN),
+    () => new THREE.Color('#ff7a3d').multiplyScalar(EMISSIVE_GAIN),
     [],
   );
 
@@ -145,7 +141,11 @@ function LookbookSubject() {
         <planeGeometry args={[9, 5]} />
         <meshStandardMaterial color="#8a8f96" roughness={0.95} />
       </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.9, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.9, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[12, 8]} />
         <meshStandardMaterial color="#6f747c" roughness={0.95} />
       </mesh>
@@ -153,7 +153,11 @@ function LookbookSubject() {
       {/* 채도 있는 소품 — 색보정이 원색을 어떻게 바꾸는지 드러낸다. */}
       <mesh position={[-1.7, -0.15, 0.3]} castShadow>
         <icosahedronGeometry args={[0.75, 0]} />
-        <meshStandardMaterial color="#2f6bd8" roughness={0.35} metalness={0.1} />
+        <meshStandardMaterial
+          color="#2f6bd8"
+          roughness={0.35}
+          metalness={0.1}
+        />
       </mesh>
       <mesh position={[0.1, -0.3, 0.9]} castShadow>
         <boxGeometry args={[0.9, 0.9, 0.9]} />
@@ -178,7 +182,7 @@ function LookbookSubject() {
 
 export function Scene() {
   const reducedMotion = useReducedMotion();
-  const [presetId, setPresetId] = useState<PresetId>("neutral");
+  const [presetId, setPresetId] = useState<PresetId>('neutral');
   const rigRef = useRef<THREE.Group>(null);
 
   const preset = useMemo(
@@ -188,18 +192,18 @@ export function Scene() {
 
   const buttonStyle = useMemo<CSSProperties>(
     () => ({
-      padding: "5px 10px",
+      padding: '5px 10px',
       borderRadius: 6,
       // border shorthand 대신 분리 속성 — active 스타일이 borderColor만 덮어써도
       // shorthand/non-shorthand 충돌 경고가 안 난다.
       borderWidth: 1,
-      borderStyle: "solid",
-      borderColor: "rgba(138, 180, 255, 0.4)",
-      background: "rgba(15, 20, 30, 0.9)",
-      color: "#e8edf5",
+      borderStyle: 'solid',
+      borderColor: 'rgba(138, 180, 255, 0.4)',
+      background: 'rgba(15, 20, 30, 0.9)',
+      color: '#e8edf5',
       fontSize: 12,
-      cursor: "pointer",
-      userSelect: "none",
+      cursor: 'pointer',
+      userSelect: 'none',
     }),
     [],
   );
@@ -207,8 +211,8 @@ export function Scene() {
   const activeButtonStyle = useMemo<CSSProperties>(
     () => ({
       ...buttonStyle,
-      background: "rgba(90, 130, 220, 0.9)",
-      borderColor: "rgba(180, 205, 255, 0.8)",
+      background: 'rgba(90, 130, 220, 0.9)',
+      borderColor: 'rgba(180, 205, 255, 0.8)',
     }),
     [buttonStyle],
   );
@@ -237,11 +241,15 @@ export function Scene() {
       />
 
       {/* 어두운 배경 — Bloom이 보이는 전제 (bloom-postprocessing 5절). */}
-      <color attach="background" args={["#0c0d12"]} />
+      <color attach="background" args={['#0c0d12']} />
 
       <ambientLight intensity={0.5} />
       <directionalLight position={[4, 6, 5]} intensity={1.9} castShadow />
-      <directionalLight position={[-5, 3, -2]} intensity={0.45} color="#9fb8ff" />
+      <directionalLight
+        position={[-5, 3, -2]}
+        intensity={0.45}
+        color="#9fb8ff"
+      />
 
       <group ref={rigRef}>
         <LookbookSubject />
@@ -261,13 +269,18 @@ export function Scene() {
         프리셋 선택 버튼. <Html>은 <Canvas> 자식이라 계약 위반이 아니다.
         버튼은 presetId만 바꾸고, 아래 <EffectComposer>의 자식이 그에 따라 갈린다.
       */}
-      <Html position={[0, -1.7, 0]} center distanceFactor={9} zIndexRange={[120, 0]}>
+      <Html
+        position={[0, -1.7, 0]}
+        center
+        distanceFactor={9}
+        zIndexRange={[120, 0]}
+      >
         <div
           style={{
-            display: "flex",
+            display: 'flex',
             gap: 6,
-            flexWrap: "wrap",
-            justifyContent: "center",
+            flexWrap: 'wrap',
+            justifyContent: 'center',
             maxWidth: 340,
           }}
         >

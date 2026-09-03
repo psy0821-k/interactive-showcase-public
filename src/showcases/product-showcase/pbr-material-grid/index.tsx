@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { Environment, Lightformer } from "@react-three/drei";
+import { Environment, Lightformer } from '@react-three/drei';
 
 /** 한 행의 칸 수 */
 const GRID_SIZE = 5;
@@ -68,7 +68,7 @@ export function Scene() {
               <sphereGeometry args={[0.58, 64, 64]} />
               <meshStandardMaterial
                 // 금속에서 color는 반사를 물들이고, 비금속에서는 확산광 색이 된다.
-                color={metalness === 1 ? "#dcdcdc" : "#c8452f"}
+                color={metalness === 1 ? '#dcdcdc' : '#c8452f'}
                 metalness={metalness}
                 roughness={roughnessAt(columnIndex)}
               />

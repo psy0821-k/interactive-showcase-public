@@ -1,13 +1,8 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 /** 목업 종류. 랜딩 주제에 맞춰 고른다. */
 export type UiMockKind =
-  | "dashboard"
-  | "note"
-  | "chart"
-  | "sync"
-  | "roadmap"
-  | "grid";
+  'dashboard' | 'note' | 'chart' | 'sync' | 'roadmap' | 'grid';
 
 interface UiMockProps {
   kind: UiMockKind;
@@ -21,7 +16,11 @@ interface UiMockProps {
  * 이미지 에셋 없이 인라인 SVG로 그린 "제품 스크린샷 자리" 목업.
  * `viewBox` 기반이라 어떤 크기로도 늘어난다. 장식이므로 `aria-hidden`.
  */
-export function UiMock({ kind, accent = "#38bdf8", className = "" }: UiMockProps) {
+export function UiMock({
+  kind,
+  accent = '#38bdf8',
+  className = '',
+}: UiMockProps) {
   return (
     <div
       className={`overflow-hidden rounded-xl border border-white/10 bg-neutral-900 ${className}`}
@@ -36,7 +35,7 @@ export function UiMock({ kind, accent = "#38bdf8", className = "" }: UiMockProps
 
 function renderMock(kind: UiMockKind, accent: string): ReactNode {
   switch (kind) {
-    case "dashboard":
+    case 'dashboard':
       return (
         <>
           <rect width="320" height="200" fill="#0f172a" />
@@ -75,7 +74,7 @@ function renderMock(kind: UiMockKind, accent: string): ReactNode {
           />
         </>
       );
-    case "note":
+    case 'note':
       return (
         <>
           <rect width="320" height="200" fill="#0b1220" />
@@ -108,7 +107,7 @@ function renderMock(kind: UiMockKind, accent: string): ReactNode {
           ))}
         </>
       );
-    case "chart":
+    case 'chart':
       return (
         <>
           <rect width="320" height="200" fill="#0f172a" />
@@ -121,21 +120,49 @@ function renderMock(kind: UiMockKind, accent: string): ReactNode {
               width="20"
               height={v * 130}
               rx="3"
-              fill={i === 5 ? accent : "#3b5170"}
+              fill={i === 5 ? accent : '#3b5170'}
             />
           ))}
         </>
       );
-    case "sync":
+    case 'sync':
       return (
         <>
           <rect width="320" height="200" fill="#0b1220" />
           {[70, 250].map((cx) => (
             <g key={cx}>
-              <rect x={cx - 34} y={64} width="68" height="72" rx="8" fill="#1b2a42" />
-              <rect x={cx - 24} y={78} width="48" height="8" rx="2" fill={accent} />
-              <rect x={cx - 24} y={94} width="40" height="6" rx="2" fill="#475569" />
-              <rect x={cx - 24} y={106} width="44" height="6" rx="2" fill="#475569" />
+              <rect
+                x={cx - 34}
+                y={64}
+                width="68"
+                height="72"
+                rx="8"
+                fill="#1b2a42"
+              />
+              <rect
+                x={cx - 24}
+                y={78}
+                width="48"
+                height="8"
+                rx="2"
+                fill={accent}
+              />
+              <rect
+                x={cx - 24}
+                y={94}
+                width="40"
+                height="6"
+                rx="2"
+                fill="#475569"
+              />
+              <rect
+                x={cx - 24}
+                y={106}
+                width="44"
+                height="6"
+                rx="2"
+                fill="#475569"
+              />
             </g>
           ))}
           <path
@@ -144,11 +171,23 @@ function renderMock(kind: UiMockKind, accent: string): ReactNode {
             strokeWidth="3"
             strokeDasharray="6 6"
           />
-          <circle cx="160" cy="100" r="14" fill="#0b1220" stroke={accent} strokeWidth="3" />
-          <path d="M154 100 l4 4 l8 -8" stroke={accent} strokeWidth="3" fill="none" />
+          <circle
+            cx="160"
+            cy="100"
+            r="14"
+            fill="#0b1220"
+            stroke={accent}
+            strokeWidth="3"
+          />
+          <path
+            d="M154 100 l4 4 l8 -8"
+            stroke={accent}
+            strokeWidth="3"
+            fill="none"
+          />
         </>
       );
-    case "roadmap":
+    case 'roadmap':
       return (
         <>
           <rect width="320" height="200" fill="#0f172a" />
@@ -159,7 +198,7 @@ function renderMock(kind: UiMockKind, accent: string): ReactNode {
                 cx={cx}
                 cy="100"
                 r="12"
-                fill={i === 0 ? accent : "#1b2a42"}
+                fill={i === 0 ? accent : '#1b2a42'}
                 stroke={accent}
                 strokeWidth="3"
               />
@@ -175,7 +214,7 @@ function renderMock(kind: UiMockKind, accent: string): ReactNode {
           ))}
         </>
       );
-    case "grid":
+    case 'grid':
       return (
         <>
           <rect width="320" height="200" fill="#0f172a" />

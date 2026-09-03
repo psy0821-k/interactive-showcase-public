@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import {
   Environment,
   Lightformer,
   PerspectiveCamera,
   RoundedBox,
-} from "@react-three/drei";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { SceneLabel, SceneReadout } from "@/components/scene-label";
+} from '@react-three/drei';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { SceneLabel, SceneReadout } from '@/components/scene-label';
 
 /** 셀 하나의 재질 정의. */
 interface CoatCell {
@@ -36,32 +36,32 @@ interface CoatCell {
  */
 const CELLS: CoatCell[] = [
   {
-    label: "자동차 도장\nmetal · coatR 0.05",
-    color: "#8a1a1a",
+    label: '자동차 도장\nmetal · coatR 0.05',
+    color: '#8a1a1a',
     metalness: 1,
     roughness: 0.4,
     clearcoat: 1,
     clearcoatRoughness: 0.05,
   },
   {
-    label: "바니시 목재\nbaseR 0.7 · coatR 0.12",
-    color: "#7a4a24",
+    label: '바니시 목재\nbaseR 0.7 · coatR 0.12',
+    color: '#7a4a24',
     metalness: 0,
     roughness: 0.7,
     clearcoat: 1,
     clearcoatRoughness: 0.12,
   },
   {
-    label: "젖은 표면\nclearcoat 0.85",
-    color: "#3a3a3a",
+    label: '젖은 표면\nclearcoat 0.85',
+    color: '#3a3a3a',
     metalness: 0,
     roughness: 0.9,
     clearcoat: 0.85,
     clearcoatRoughness: 0.18,
   },
   {
-    label: "오렌지필\nclearcoatNormalMap",
-    color: "#d0d0d0",
+    label: '오렌지필\nclearcoatNormalMap',
+    color: '#d0d0d0',
     metalness: 1,
     roughness: 0.3,
     clearcoat: 1,
@@ -100,10 +100,10 @@ function createOrangePeelNormalMap(
   frequency = 18,
   amplitude = 1,
 ): THREE.CanvasTexture {
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
   if (!ctx) return new THREE.CanvasTexture(canvas);
 
   const image = ctx.createImageData(size, size);
@@ -210,8 +210,8 @@ function MaterialReadout() {
   // 정적 요약이지만 troika 초기화 타이밍 문제를 피해 SceneReadout로 갱신한다.
   const getText = useCallback(
     () =>
-      "clearcoat = base 위 얇은 유전체 코팅 · 반사는 항상 흰색(IOR≈1.5)\n" +
-      "이중 로브 = 거친 base 하이라이트 + 매끈한 코팅 하이라이트",
+      'clearcoat = base 위 얇은 유전체 코팅 · 반사는 항상 흰색(IOR≈1.5)\n' +
+      '이중 로브 = 거친 base 하이라이트 + 매끈한 코팅 하이라이트',
     [],
   );
 
@@ -277,7 +277,11 @@ export function Scene() {
       {/* 환경맵은 또렷한 그림자를 안 만들므로 key light 하나 병행. */}
       <directionalLight position={[4, 6, 5]} intensity={1.1} castShadow />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2.6, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -2.6, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[30, 30]} />
         <meshStandardMaterial color="#15161a" roughness={0.95} metalness={0} />
       </mesh>

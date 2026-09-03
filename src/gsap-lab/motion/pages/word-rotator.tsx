@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { DemoShell } from "@/gsap-lab/demo-shell";
+import { useRef } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { DemoShell } from '@/gsap-lab/demo-shell';
 
-const WORDS = ["앱을", "사이트를", "브랜드를", "제품을", "미래를"];
+const WORDS = ['앱을', '사이트를', '브랜드를', '제품을', '미래를'];
 
 /** 각 단어가 화면에 머무는 시간(초). */
 const HOLD = 1.1;
@@ -25,36 +25,33 @@ const SHIFT = 0.55;
 export function WordRotatorPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      const list = container.current?.querySelector<HTMLElement>(".word-list");
-      if (!list) return;
+  useGsapDom(({ gsap: g, reduced }) => {
+    const list = container.current?.querySelector<HTMLElement>('.word-list');
+    if (!list) return;
 
-      const items = [...list.children] as HTMLElement[];
-      // 각 단어를 마스크 상단에 맞추려면 리스트를 이만큼 위로 올려야 한다.
-      const offsets = items.map((el) => -el.offsetTop);
+    const items = [...list.children] as HTMLElement[];
+    // 각 단어를 마스크 상단에 맞추려면 리스트를 이만큼 위로 올려야 한다.
+    const offsets = items.map((el) => -el.offsetTop);
 
-      if (reduced) {
-        g.set(list, { y: 0 });
-        return;
-      }
+    if (reduced) {
+      g.set(list, { y: 0 });
+      return;
+    }
 
-      const tl = g.timeline({ repeat: -1, defaults: { ease: "expo.inOut" } });
+    const tl = g.timeline({ repeat: -1, defaults: { ease: 'expo.inOut' } });
 
-      // 0번 단어에서 시작해 마지막까지, 그다음 다시 0번으로.
-      // 각 전환은 앞 단어가 HOLD만큼 머문 뒤 시작(position parameter `"+="`).
-      const sequence = [...offsets.slice(1), offsets[0]];
-      for (const y of sequence) {
-        tl.to(list, { y, duration: SHIFT }, `+=${HOLD}`);
-      }
-    },
-    container,
-  );
+    // 0번 단어에서 시작해 마지막까지, 그다음 다시 0번으로.
+    // 각 전환은 앞 단어가 HOLD만큼 머문 뒤 시작(position parameter `"+="`).
+    const sequence = [...offsets.slice(1), offsets[0]];
+    for (const y of sequence) {
+      tl.to(list, { y, duration: SHIFT }, `+=${HOLD}`);
+    }
+  }, container);
 
   return (
     <DemoShell
       title="단어 교체 루프"
-      summary='문장의 한 단어가 무한 반복으로 교체된다 (repeat: -1 타임라인 + yPercent 마스크)'
+      summary="문장의 한 단어가 무한 반복으로 교체된다 (repeat: -1 타임라인 + yPercent 마스크)"
     >
       <div
         ref={container}
@@ -74,7 +71,7 @@ export function WordRotatorPage() {
           {/* 한 줄 높이만 보이는 마스크 */}
           <span
             className="relative inline-block overflow-hidden align-bottom"
-            style={{ height: "1.1em" }}
+            style={{ height: '1.1em' }}
           >
             <span className="word-list flex flex-col">
               {WORDS.map((word) => (

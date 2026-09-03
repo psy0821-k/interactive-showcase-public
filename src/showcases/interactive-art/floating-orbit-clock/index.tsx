@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
-import { SceneLabel } from "@/components/scene-label";
+import { useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { Environment, Lightformer, PerspectiveCamera } from '@react-three/drei';
+import { SceneLabel } from '@/components/scene-label';
 
 /** 궤도를 도는 오브젝트 개수. 위상 오프셋으로 서로 어긋나게 움직인다. */
 const ORB_COUNT = 5;
@@ -45,10 +45,10 @@ const STALL_MS = 55;
 /** 부하를 거는 주기(초). 이 간격마다 STALL_MS 만큼 프레임을 막는다. */
 const STALL_INTERVAL = 0.22;
 
-const FRAME_DEPENDENT_COLOR = "#ff6b6b";
-const DELTA_NORMALIZED_COLOR = "#4dd4ac";
-const CORE_COLOR = "#2c3440";
-const LABEL_COLOR = "#e8edf5";
+const FRAME_DEPENDENT_COLOR = '#ff6b6b';
+const DELTA_NORMALIZED_COLOR = '#4dd4ac';
+const CORE_COLOR = '#2c3440';
+const LABEL_COLOR = '#e8edf5';
 
 /**
  * 프레임률과 무관한 지수 감쇠 보간 계수.
@@ -141,7 +141,8 @@ function OrbitRig({ positionX, normalized, color, label }: OrbitRigProps) {
 
     // 코어 스케일은 목표값을 향한 지수 감쇠로 붙인다.
     // 정규화 리그만 delta를 쓰므로, 저프레임에서 수렴 속도 차이도 함께 드러난다.
-    const targetScale = 1 + easeInOutCubic(pingPong(pulseProgress(bobPhaseRef.current))) * 0.12;
+    const targetScale =
+      1 + easeInOutCubic(pingPong(pulseProgress(bobPhaseRef.current))) * 0.12;
     const factor = normalized ? dampFactor(DAMP_RATE, delta) : DAMP_RATE / 60;
     core.scale.setScalar(core.scale.x + (targetScale - core.scale.x) * factor);
   });
@@ -149,13 +150,22 @@ function OrbitRig({ positionX, normalized, color, label }: OrbitRigProps) {
   return (
     <group position={[positionX, 0, 0]}>
       {/* 라벨은 회전 그룹 밖에 둬야 함께 돌지 않는다. */}
-      <SceneLabel position={[0, 1.35, 0]} fontSize={0.19} color={LABEL_COLOR} outlineWidth={0.008}>
+      <SceneLabel
+        position={[0, 1.35, 0]}
+        fontSize={0.19}
+        color={LABEL_COLOR}
+        outlineWidth={0.008}
+      >
         {label}
       </SceneLabel>
 
       <mesh ref={coreRef} castShadow receiveShadow>
         <icosahedronGeometry args={[CORE_RADIUS, 1]} />
-        <meshStandardMaterial color={CORE_COLOR} roughness={0.55} metalness={0.35} />
+        <meshStandardMaterial
+          color={CORE_COLOR}
+          roughness={0.55}
+          metalness={0.35}
+        />
       </mesh>
 
       {/* 이 그룹만 회전시키면 자식 구체 전부가 궤도를 돈다 — 개별 좌표 계산이 필요 없다. */}
@@ -212,7 +222,8 @@ function OrbitingOrb({ phaseOffset, normalized, color }: OrbitingOrbProps) {
        * 프레임을 몇 개 건너뛰어도 위상이 제자리를 찾는다.
        */
       const time = state.clock.getElapsedTime();
-      mesh.position.y = Math.sin(time * BOB_SPEED + phaseOffset) * BOB_AMPLITUDE;
+      mesh.position.y =
+        Math.sin(time * BOB_SPEED + phaseOffset) * BOB_AMPLITUDE;
     } else {
       // 프레임마다 고정량을 누적한다. 프레임이 밀리면 위상도 함께 밀린다.
       framePhaseRef.current += BOB_SPEED / 60;
@@ -274,7 +285,13 @@ export function Scene() {
         회전 속도 차이를 읽기 쉽다.
         far/near = 40/0.5 = 80 으로 depth 정밀도는 여유롭다.
       */}
-      <PerspectiveCamera makeDefault fov={40} near={0.5} far={40} position={[0, 2.1, 9.2]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={40}
+        near={0.5}
+        far={40}
+        position={[0, 2.1, 9.2]}
+      />
 
       <Environment resolution={256} environmentIntensity={0.5}>
         <Lightformer
@@ -290,7 +307,11 @@ export function Scene() {
       <directionalLight position={[4, 6, 4]} intensity={2.1} castShadow />
 
       {/* 바닥. 부유 높이를 눈으로 가늠할 기준면이다. */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.1, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.1, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[24, 24]} />
         <meshStandardMaterial color="#161a21" roughness={0.95} />
       </mesh>

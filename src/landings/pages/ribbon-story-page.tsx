@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import { LandingShell, LandingSection, LandingCard } from "../landing-shell";
-import { findLanding } from "../registry";
-import { RibbonStoryScene } from "../scenes/ribbon-story-scene";
+import { LandingShell, LandingSection, LandingCard } from '../landing-shell';
+import { findLanding } from '../registry';
+import { RibbonStoryScene } from '../scenes/ribbon-story-scene';
 
 const STORY = [
   {
-    year: "2021",
-    body: "두 명이 카페에서 시작했습니다. \"메모가 흩어지지 않는 노트\"가 전부였습니다.",
+    year: '2021',
+    body: '두 명이 카페에서 시작했습니다. "메모가 흩어지지 않는 노트"가 전부였습니다.',
   },
   {
-    year: "2023",
-    body: "100만 개의 노트가 Fluxnote에 저장됐습니다. 동기화 엔진을 처음부터 다시 썼습니다.",
+    year: '2023',
+    body: '100만 개의 노트가 Fluxnote에 저장됐습니다. 동기화 엔진을 처음부터 다시 썼습니다.',
   },
   {
-    year: "2025",
-    body: "팀 협업을 출시했습니다. 이제 노트는 개인의 기억이자 팀의 문맥입니다.",
+    year: '2025',
+    body: '팀 협업을 출시했습니다. 이제 노트는 개인의 기억이자 팀의 문맥입니다.',
   },
 ];
 
 export function RibbonStoryPage() {
-  const entry = findLanding("ribbon-story")!;
+  const entry = findLanding('ribbon-story')!;
   return (
     <LandingShell
       entry={entry}

@@ -59,6 +59,7 @@ export const meta = {
 ```
 
 **이점:**
+
 - 35개 씬이 일관된 라이프사이클을 따름
 - 에러 발생해도 ErrorBoundary가 격리
 - 갤러리 성능 최적화 (각 씬 독립 로드)
@@ -103,15 +104,18 @@ src/
 ## 성능 최적화 3층 구조
 
 ### Layer 1: 프레임 개수 제어
+
 - 사용자 상호작용 없으면 `onDemandRendering` 활성화
 - 배터리·GPU 온도 절감
 
 ### Layer 2: 프레임 비용 절감
+
 - 드로우콜 줄이기 (`merge-draw-calls`)
 - LOD 거리에 따른 품질 단계 (`lod-and-frustum`)
 - 절두체 컬링 (화면 밖 오브젝트 스킵)
 
 ### Layer 3: 초기 로드 및 메모리
+
 - DRACO 압축 (GLB 파일 50~80% 축소)
 - 텍스처 해상도 최적화
 - 온디맨드 에셋 로드
@@ -120,32 +124,36 @@ src/
 
 ## 함정 문서화 (실무에서 시간을 아껴주는 것들)
 
-| 기법 | 함정 | 해결 |
-|------|------|------|
-| `shadow-setup` | 그림자 카메라와 prop을 동시에 설정하면 frustum 갱신 누락 | `useLayoutEffect`에서 한 번에 처리 |
-| `transmission-glass-material` | IBL 없으면 투과 재질이 검게 나옴 | `<Environment>` 필수 |
-| `asset-optimization` | HDR 다운샘플 후 타입 미설정하면 값이 48000배 뻥튀기 | `setDataType(THREE.FloatType)` 호출 |
-| `sdf-text-rendering` | Troika는 WOFF2를 못 읽음 (WOFF1만 지원) | 폰트 빌드 시 `targetFormat: "woff"` |
-| `depth-of-field-focus` | `focusDistance` [0,1] 범위가 직관적 아님 | Autofocus 훅으로 자동화 |
+| 기법                          | 함정                                                     | 해결                                |
+| ----------------------------- | -------------------------------------------------------- | ----------------------------------- |
+| `shadow-setup`                | 그림자 카메라와 prop을 동시에 설정하면 frustum 갱신 누락 | `useLayoutEffect`에서 한 번에 처리  |
+| `transmission-glass-material` | IBL 없으면 투과 재질이 검게 나옴                         | `<Environment>` 필수                |
+| `asset-optimization`          | HDR 다운샘플 후 타입 미설정하면 값이 48000배 뻥튀기      | `setDataType(THREE.FloatType)` 호출 |
+| `sdf-text-rendering`          | Troika는 WOFF2를 못 읽음 (WOFF1만 지원)                  | 폰트 빌드 시 `targetFormat: "woff"` |
+| `depth-of-field-focus`        | `focusDistance` [0,1] 범위가 직관적 아님                 | Autofocus 훅으로 자동화             |
 
 ## 기술 스택
 
 **프레임워크:**
+
 - Next.js 16.3 (React 19)
 - React Three Fiber v9
 - three.js 0.185
 
 **렌더링:**
+
 - drei (R3F 유틸리티 라이브러리)
 - @react-three/postprocessing (효과 체인)
 - @react-three/rapier (물리 엔진)
 
 **개발:**
+
 - TypeScript 5 (any 금지)
 - Tailwind CSS 4 (CSS 기반 설정)
 - ESLint 9 (강화 규칙)
 
 **도구:**
+
 - Bun 1.3.5 (패키지 관리)
 - DRACO (GLB 압축)
 - gltf-transform (에셋 최적화)
@@ -153,12 +161,14 @@ src/
 ## 코드 스타일 규칙
 
 ### 명명 규칙
+
 - **변수명·함수명:** `camelCase` (영어)
 - **클래스명·컴포넌트명:** `PascalCase`
 - **상수명:** `UPPER_SNAKE_CASE`
 - **파일명:** `kebab-case`
 
 ### 코드 품질
+
 - ✅ `any` 타입 금지 (타입 안전성)
 - ✅ DRY 원칙 준수 (중복 제거)
 - ✅ YAGNI 원칙 준수 (필요한 것만 작성)
@@ -166,6 +176,7 @@ src/
 - ✅ 기존 아키텍처·컴포넌트 재사용 우선
 
 ### 작성 원칙
+
 - 요청하지 않은 리팩토링 금지
 - 변경된 코드만 제안
 - 필요한 설명만 제공
@@ -183,6 +194,7 @@ src/
 ```
 
 **예시:**
+
 ```
 쇼케이스 추가: gesture-orbit-inertia 모바일 제스처 기법
 
@@ -201,14 +213,15 @@ touch-action: pan-y와 OrbitControls touches 설정을 통해
 
 ## 성능 측정 기준
 
-| 쇼케이스 | Avg FPS | GPU Memory | Load Time |
-|---------|---------|------------|-----------|
-| gesture-orbit-inertia (모바일 터치) | 58-60 | 45MB | 1.2s |
-| depth-of-field-rack (DoF 자동) | 45-55 | 87MB | 2.1s |
-| physics-block-tower (20개 강체) | 40-50 | 52MB | 1.8s |
-| color-grade-lookbook (LUT 체인) | 50-58 | 64MB | 1.5s |
+| 쇼케이스                            | Avg FPS | GPU Memory | Load Time |
+| ----------------------------------- | ------- | ---------- | --------- |
+| gesture-orbit-inertia (모바일 터치) | 58-60   | 45MB       | 1.2s      |
+| depth-of-field-rack (DoF 자동)      | 45-55   | 87MB       | 2.1s      |
+| physics-block-tower (20개 강체)     | 40-50   | 52MB       | 1.8s      |
+| color-grade-lookbook (LUT 체인)     | 50-58   | 64MB       | 1.5s      |
 
 **측정 방법:**
+
 1. Chrome DevTools → Performance 탭
 2. 30초 녹화 + 일반적인 상호작용
 3. Avg FPS는 DevTools 통계에서 읽음

@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { findLanding, LANDING_ENTRIES } from "@/landings/registry";
-import { LandingDomHeader } from "@/landings/landing-dom-header";
-import { LandingRenderer } from "./landing-renderer";
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { findLanding, LANDING_ENTRIES } from '@/landings/registry';
+import { LandingDomHeader } from '@/landings/landing-dom-header';
+import { LandingRenderer } from './landing-renderer';
 
 /**
  * 공통 헤더(breadcrumb·caveat·요구사항 패널)를 페이지 컴포넌트가 아니라
@@ -13,10 +13,10 @@ import { LandingRenderer } from "./landing-renderer";
  * - 나머지 `kind: "dom"` 페이지(gsap-lab에서 이관)는 여기서 씌운다.
  */
 const DOM_PAGES_NEEDING_HEADER = new Set([
-  "scroll-story",
-  "pricing-reveal",
-  "pointer-play",
-  "tab-transition",
+  'scroll-story',
+  'pricing-reveal',
+  'pointer-play',
+  'tab-transition',
 ]);
 
 export function generateStaticParams(): { slug: string }[] {
@@ -25,7 +25,7 @@ export function generateStaticParams(): { slug: string }[] {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/landings/[slug]">): Promise<Metadata> {
+}: PageProps<'/landings/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
   const entry = findLanding(slug);
   if (!entry) return {};
@@ -38,7 +38,7 @@ export async function generateMetadata({
 
 export default async function LandingDetailPage({
   params,
-}: PageProps<"/landings/[slug]">) {
+}: PageProps<'/landings/[slug]'>) {
   const { slug } = await params;
   const entry = findLanding(slug);
   if (!entry) notFound();

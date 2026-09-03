@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
 
 /** 계측 막대 개수. 최근 N초의 초당 렌더 수를 좌→우로 흘려보낸다. */
 const HISTORY_LENGTH = 24;
@@ -28,14 +28,14 @@ const TILE_SIZE = 0.7;
 const TILE_GAP = 0.85;
 
 /** 꺼진 타일 / 켜진 타일 색 */
-const TILE_OFF_COLOR = "#3b4252";
-const TILE_ON_COLOR = "#7bd88f";
+const TILE_OFF_COLOR = '#3b4252';
+const TILE_ON_COLOR = '#7bd88f';
 /** 켜진 타일이 올라가는 높이 */
 const TILE_LIFT = 0.28;
 
 /** 막대 색 — 낮은 FPS(=적게 렌더됨, 아낀 상태)와 높은 FPS(=계속 렌더 중) */
-const BAR_IDLE_COLOR = "#2f3b52";
-const BAR_BUSY_COLOR = "#ff8f5e";
+const BAR_IDLE_COLOR = '#2f3b52';
+const BAR_BUSY_COLOR = '#ff8f5e';
 
 /** 렌더 예산을 소진 중임을 알리는 기준 FPS. 이 위로는 막대가 경고색이 된다. */
 const BUSY_FPS_THRESHOLD = 5;
@@ -280,7 +280,12 @@ function SettleAnimation({ trigger }: SettleAnimationProps) {
   });
 
   return (
-    <mesh ref={ringRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]} visible={false}>
+    <mesh
+      ref={ringRef}
+      rotation={[-Math.PI / 2, 0, 0]}
+      position={[0, 0.02, 0]}
+      visible={false}
+    >
       <ringGeometry args={[0.9, 1.05, 48]} />
       <meshBasicMaterial
         ref={ringMaterialRef}
@@ -312,7 +317,13 @@ export function Scene() {
   return (
     <>
       {/* 초기 구도: 계측 막대와 타일 격자가 한 화면에 들어오는 높이. */}
-      <PerspectiveCamera makeDefault position={[0, 3.6, 6.6]} fov={44} near={0.1} far={50} />
+      <PerspectiveCamera
+        makeDefault
+        position={[0, 3.6, 6.6]}
+        fov={44}
+        near={0.1}
+        far={50}
+      />
 
       {/* 3점 조명. 어느 것도 애니메이션하지 않으므로 렌더를 유발하지 않는다. */}
       <ambientLight intensity={0.35} />
@@ -322,10 +333,18 @@ export function Scene() {
         castShadow
         shadow-mapSize={[1024, 1024]}
       />
-      <directionalLight position={[-5, 2, -3]} intensity={0.5} color="#8fb4ff" />
+      <directionalLight
+        position={[-5, 2, -3]}
+        intensity={0.5}
+        color="#8fb4ff"
+      />
 
       {/* 바닥 */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.13, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -0.13, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[14, 14]} />
         <meshStandardMaterial color="#151a25" roughness={0.95} />
       </mesh>

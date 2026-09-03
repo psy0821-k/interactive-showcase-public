@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { findShowcase } from "@/showcases/registry";
-import { ShowcaseCanvas } from "./showcase-canvas";
+import Link from 'next/link';
+import { findShowcase } from '@/showcases/registry';
+import { ShowcaseCanvas } from './showcase-canvas';
 
 interface Props {
   slug: string;

@@ -1,7 +1,7 @@
-import Link from "next/link";
-import type { ShowcaseEntry } from "@/domain/showcase";
-import { TECHNIQUE_CATEGORY_LABELS } from "@/domain/technique-category";
-import { ShowcaseThumbnail } from "./showcase-thumbnail";
+import Link from 'next/link';
+import type { ShowcaseEntry } from '@/domain/showcase';
+import { TECHNIQUE_CATEGORY_LABELS } from '@/domain/technique-category';
+import { ShowcaseThumbnail } from './showcase-thumbnail';
 
 interface Props {
   entry: ShowcaseEntry;
@@ -20,7 +20,7 @@ export function ShowcaseCard({ entry, eager = false }: Props) {
 
   // 클라이언트 필터가 대소문자 무시 부분일치로 검색하는 대상.
   const haystack = [meta.title, meta.description, ...meta.usedSkills]
-    .join(" ")
+    .join(' ')
     .toLowerCase();
 
   return (

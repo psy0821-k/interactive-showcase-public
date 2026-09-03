@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 
 /** `useMagnetic` 옵션. */
 export interface MagneticOptions {
@@ -39,52 +39,49 @@ export function useMagnetic(
     range = 70,
     strength = 0.5,
     followDuration = 0.4,
-    returnEase = "elastic.out(1, 0.35)",
+    returnEase = 'elastic.out(1, 0.35)',
   } = options;
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      const root = scope.current;
-      if (!root) return;
-      const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-      if (!mq.matches || reduced) return;
+  useGsapDom(({ gsap: g, reduced }) => {
+    const root = scope.current;
+    if (!root) return;
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    if (!mq.matches || reduced) return;
 
-      const items = root.querySelectorAll<HTMLElement>(target);
-      const cleanups: Array<() => void> = [];
+    const items = root.querySelectorAll<HTMLElement>(target);
+    const cleanups: Array<() => void> = [];
 
-      items.forEach((item) => {
-        const moveX = g.quickTo(item, "x", {
-          duration: followDuration,
-          ease: "power3",
-        });
-        const moveY = g.quickTo(item, "y", {
-          duration: followDuration,
-          ease: "power3",
-        });
-
-        const onMove = (e: PointerEvent) => {
-          const r = item.getBoundingClientRect();
-          const dx = e.clientX - (r.left + r.width / 2);
-          const dy = e.clientY - (r.top + r.height / 2);
-          if (Math.hypot(dx, dy) < range + r.width / 2) {
-            moveX(dx * strength);
-            moveY(dy * strength);
-          }
-        };
-        const onLeave = () => {
-          g.to(item, { x: 0, y: 0, duration: 0.9, ease: returnEase });
-        };
-
-        item.addEventListener("pointermove", onMove);
-        item.addEventListener("pointerleave", onLeave);
-        cleanups.push(() => {
-          item.removeEventListener("pointermove", onMove);
-          item.removeEventListener("pointerleave", onLeave);
-        });
+    items.forEach((item) => {
+      const moveX = g.quickTo(item, 'x', {
+        duration: followDuration,
+        ease: 'power3',
+      });
+      const moveY = g.quickTo(item, 'y', {
+        duration: followDuration,
+        ease: 'power3',
       });
 
-      return () => cleanups.forEach((fn) => fn());
-    },
-    scope,
-  );
+      const onMove = (e: PointerEvent) => {
+        const r = item.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        if (Math.hypot(dx, dy) < range + r.width / 2) {
+          moveX(dx * strength);
+          moveY(dy * strength);
+        }
+      };
+      const onLeave = () => {
+        g.to(item, { x: 0, y: 0, duration: 0.9, ease: returnEase });
+      };
+
+      item.addEventListener('pointermove', onMove);
+      item.addEventListener('pointerleave', onLeave);
+      cleanups.push(() => {
+        item.removeEventListener('pointermove', onMove);
+        item.removeEventListener('pointerleave', onLeave);
+      });
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+  }, scope);
 }

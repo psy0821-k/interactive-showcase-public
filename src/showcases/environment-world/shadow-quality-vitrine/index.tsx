@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
 import {
   useCallback,
@@ -10,11 +10,11 @@ import {
   useRef,
   useState,
   type RefObject,
-} from "react";
-import * as THREE from "three";
-import { type ThreeEvent } from "@react-three/fiber";
-import { PerspectiveCamera, useHelper } from "@react-three/drei";
-import { SceneLabel, SceneReadout } from "@/components/scene-label";
+} from 'react';
+import * as THREE from 'three';
+import { type ThreeEvent } from '@react-three/fiber';
+import { PerspectiveCamera, useHelper } from '@react-three/drei';
+import { SceneLabel, SceneReadout } from '@/components/scene-label';
 
 /** broken / fixed 두 세트의 그림자 파라미터. 화면에서 대조하는 대상이다. */
 interface ShadowPreset {
@@ -176,7 +176,7 @@ function Vitrine({ material }: { material: THREE.Material }) {
 }
 
 interface ToggleButtonProps {
-  mode: "broken" | "fixed";
+  mode: 'broken' | 'fixed';
   onToggle: () => void;
 }
 
@@ -195,7 +195,7 @@ function ToggleButton({ mode, onToggle }: ToggleButtonProps) {
       <mesh onClick={handleClick} castShadow receiveShadow>
         <boxGeometry args={[3.4, 0.5, 1.1]} />
         <meshStandardMaterial
-          color={mode === "fixed" ? "#7bd88f" : "#e0574a"}
+          color={mode === 'fixed' ? '#7bd88f' : '#e0574a'}
           roughness={0.5}
         />
       </mesh>
@@ -207,7 +207,7 @@ function ToggleButton({ mode, onToggle }: ToggleButtonProps) {
         anchorY="middle"
         outlineWidth={0}
       >
-        {mode === "fixed" ? "FIXED (클릭: broken)" : "BROKEN (클릭: fixed)"}
+        {mode === 'fixed' ? 'FIXED (클릭: broken)' : 'BROKEN (클릭: fixed)'}
       </SceneLabel>
     </group>
   );
@@ -215,7 +215,7 @@ function ToggleButton({ mode, onToggle }: ToggleButtonProps) {
 
 interface ShadowStatsProps {
   preset: ShadowPreset;
-  mode: "broken" | "fixed";
+  mode: 'broken' | 'fixed';
   lightRef: RefObject<THREE.DirectionalLight | null>;
 }
 
@@ -259,23 +259,23 @@ function ShadowStats({ preset, mode, lightRef }: ShadowStatsProps) {
 }
 
 export function Scene() {
-  const [mode, setMode] = useState<"broken" | "fixed">("broken");
-  const preset = mode === "fixed" ? FIXED_PRESET : BROKEN_PRESET;
+  const [mode, setMode] = useState<'broken' | 'fixed'>('broken');
+  const preset = mode === 'fixed' ? FIXED_PRESET : BROKEN_PRESET;
 
   // 조명 ref는 ShadowRig가 세팅하고 ShadowStats가 읽는다.
   const lightRef = useRef<THREE.DirectionalLight | null>(null);
 
   const handleToggle = useCallback(() => {
-    setMode((current) => (current === "broken" ? "fixed" : "broken"));
+    setMode((current) => (current === 'broken' ? 'fixed' : 'broken'));
   }, []);
 
   // 오브젝트 전체가 공유하는 무광 회색 머티리얼. acne는 재질색과 무관하게 보인다.
   const bodyMaterial = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: "#c2c7d0", roughness: 0.75 }),
+    () => new THREE.MeshStandardMaterial({ color: '#c2c7d0', roughness: 0.75 }),
     [],
   );
   const floorMaterial = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: "#3a3f4b", roughness: 0.95 }),
+    () => new THREE.MeshStandardMaterial({ color: '#3a3f4b', roughness: 0.95 }),
     [],
   );
 
@@ -300,7 +300,11 @@ export function Scene() {
 
       {/* fill 하나만. 그림자는 key(ShadowRig) 하나만 드리운다. */}
       <ambientLight intensity={0.28} />
-      <directionalLight position={[-6, 4, -4]} intensity={0.5} color="#8fb4ff" />
+      <directionalLight
+        position={[-6, 4, -4]}
+        intensity={0.5}
+        color="#8fb4ff"
+      />
 
       {/*
         key={mode} — broken↔fixed 전환 시 조명을 통째로 재마운트한다.
@@ -311,7 +315,7 @@ export function Scene() {
       <ShadowRig
         key={mode}
         preset={preset}
-        showHelper={mode === "fixed"}
+        showHelper={mode === 'fixed'}
         lightRef={lightRef}
       />
 

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useGSAP } from "@gsap/react";
-import { useThree } from "@react-three/fiber";
-import gsap from "gsap";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useGSAP } from '@gsap/react';
+import { useThree } from '@react-three/fiber';
+import gsap from 'gsap';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** useGsapScene 콜백이 받는 컨텍스트. */
 export interface GsapSceneContext {
@@ -53,7 +53,7 @@ export function useGsapScene(
         gsap,
         reduced,
         // useGSAP가 넘기는 contextSafe. 시그니처만 우리 타입으로 좁힌다.
-        contextSafe: contextSafe as GsapSceneContext["contextSafe"],
+        contextSafe: contextSafe as GsapSceneContext['contextSafe'],
       });
 
       // 전역 defaults를 원복해 다른 쇼케이스에 새지 않게 한다.

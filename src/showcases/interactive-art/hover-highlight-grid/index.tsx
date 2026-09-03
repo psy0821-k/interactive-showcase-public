@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useFrame, type ThreeEvent } from '@react-three/fiber';
+import { Environment, Lightformer, PerspectiveCamera } from '@react-three/drei';
 
 /** 격자 한 변의 개수. 총 큐브는 GRID_SIZE^2 개다. */
 const GRID_SIZE = 4;
@@ -15,8 +15,8 @@ const CUBE_SIZE = 0.62;
 const CELL_GAP = 1.05;
 
 /** 기본 색과 호버 색. THREE.Color 인스턴스를 공유하면 모든 큐브가 같은 색이 되므로 문자열로 둔다. */
-const BASE_COLOR = "#4a5568";
-const HOVER_COLOR = "#ffb347";
+const BASE_COLOR = '#4a5568';
+const HOVER_COLOR = '#ffb347';
 
 /** 호버 시 목표 스케일. 1.3을 넘으면 이웃 큐브와 겹쳐 판정이 꼬인다. */
 const HOVER_SCALE = 1.28;
@@ -26,7 +26,7 @@ const HOVER_LIFT = 0.3;
 const DAMP_RATE = 10;
 
 /** 앞줄 가림판의 색. 반투명이라 뒤 큐브가 비쳐 보인다. */
-const OCCLUDER_COLOR = "#7ecfff";
+const OCCLUDER_COLOR = '#7ecfff';
 
 /**
  * 프레임률과 무관한 지수 감쇠 보간 계수.
@@ -57,7 +57,13 @@ interface HoverCubeProps {
  * "동시에 하나만"이 구조적으로 보장되고, 부모가 어느 큐브인지 알아야
  * 좌표 라벨 같은 파생 표현을 붙일 수 있기 때문이다.
  */
-function HoverCube({ id, position, hovered, onHover, onUnhover }: HoverCubeProps) {
+function HoverCube({
+  id,
+  position,
+  hovered,
+  onHover,
+  onUnhover,
+}: HoverCubeProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
@@ -76,9 +82,7 @@ function HoverCube({ id, position, hovered, onHover, onUnhover }: HoverCubeProps
     const targetScale = hovered ? HOVER_SCALE : 1;
     const targetLift = hovered ? HOVER_LIFT : 0;
 
-    mesh.scale.setScalar(
-      mesh.scale.x + (targetScale - mesh.scale.x) * factor,
-    );
+    mesh.scale.setScalar(mesh.scale.x + (targetScale - mesh.scale.x) * factor);
     mesh.position.y += (position[1] + targetLift - mesh.position.y) * factor;
 
     material.color.lerp(hovered ? hoverColor : baseColor, factor);
@@ -221,9 +225,9 @@ export function Scene() {
   useEffect(() => {
     if (hoveredId === null) return;
 
-    document.body.style.cursor = "pointer";
+    document.body.style.cursor = 'pointer';
     return () => {
-      document.body.style.cursor = "auto";
+      document.body.style.cursor = 'auto';
     };
   }, [hoveredId]);
 
@@ -234,7 +238,13 @@ export function Scene() {
         비스듬히 내려다보는 구도가 필요해 기본 카메라(z=5, fov 75)를 교체한다.
         far/near = 40/0.5 = 80 으로 depth 정밀도는 여유롭다.
       */}
-      <PerspectiveCamera makeDefault fov={45} near={0.5} far={40} position={[0, 3.4, 6.2]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={45}
+        near={0.5}
+        far={40}
+        position={[0, 3.4, 6.2]}
+      />
 
       <Environment resolution={256} environmentIntensity={0.55}>
         <Lightformer

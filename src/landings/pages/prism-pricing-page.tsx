@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import { LandingShell, LandingSection, LandingCard } from "../landing-shell";
-import { findLanding } from "../registry";
-import { PrismPricingScene } from "../scenes/prism-pricing-scene";
+import { LandingShell, LandingSection, LandingCard } from '../landing-shell';
+import { findLanding } from '../registry';
+import { PrismPricingScene } from '../scenes/prism-pricing-scene';
 
 const PLANS = [
   {
-    name: "Free",
-    price: "₩0",
-    body: "개인용. 노트 무제한, 기기 2대, 7일 히스토리.",
+    name: 'Free',
+    price: '₩0',
+    body: '개인용. 노트 무제한, 기기 2대, 7일 히스토리.',
   },
   {
-    name: "Team",
-    price: "₩9,000",
-    body: "1인/월. 무제한 기기, 30일 히스토리, 문단 단위 권한.",
+    name: 'Team',
+    price: '₩9,000',
+    body: '1인/월. 무제한 기기, 30일 히스토리, 문단 단위 권한.',
   },
   {
-    name: "Enterprise",
-    price: "문의",
-    body: "SSO, 감사 로그, 온프레미스, 전담 지원.",
+    name: 'Enterprise',
+    price: '문의',
+    body: 'SSO, 감사 로그, 온프레미스, 전담 지원.',
   },
 ];
 
 export function PrismPricingPage() {
-  const entry = findLanding("prism-pricing")!;
+  const entry = findLanding('prism-pricing')!;
   return (
     <LandingShell
       entry={entry}

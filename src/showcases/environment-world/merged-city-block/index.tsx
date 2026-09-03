@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
-import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { useThree } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import { SceneLabel, SceneReadout } from "@/components/scene-label";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { useThree } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+import { SceneLabel, SceneReadout } from '@/components/scene-label';
 
 /** 블록 한 변에 놓는 건물 수. 총 개수는 이 값의 제곱이 아니라 아래 buildLots가 정한다. */
 const GRID_SIZE = 12;
@@ -26,27 +26,31 @@ const FOOTPRINT_MAX = 0.44;
 /** 계기판 갱신 주기(초). 매 프레임 문자열을 만들 이유가 없다. */
 const HUD_INTERVAL = 0.25;
 const HUD_FONT_SIZE = 0.3;
-const HUD_COLOR = "#cbd5f5";
-const HUD_HINT_COLOR = "#7c89ad";
+const HUD_COLOR = '#cbd5f5';
+const HUD_HINT_COLOR = '#7c89ad';
 
 /** 자동으로 다음 모드로 넘어가는 주기(초). 클릭하면 즉시 넘어간다. */
 const MODE_CYCLE_SECONDS = 4;
 
 /** 도시 바닥과 건물의 공통 색. 머티리얼을 공유해야 병합이 의미를 갖는다. */
-const BUILDING_COLOR = "#8fa3c8";
-const GROUND_COLOR = "#141a2a";
-const BACKGROUND_COLOR = "#080b14";
+const BUILDING_COLOR = '#8fa3c8';
+const GROUND_COLOR = '#141a2a';
+const BACKGROUND_COLOR = '#080b14';
 
 /** 렌더 방식. 세 값 모두 화면 결과는 같고 드로우콜만 다르다. */
-type RenderMode = "separate" | "instanced" | "merged";
+type RenderMode = 'separate' | 'instanced' | 'merged';
 
-const MODE_ORDER: readonly RenderMode[] = ["separate", "instanced", "merged"] as const;
+const MODE_ORDER: readonly RenderMode[] = [
+  'separate',
+  'instanced',
+  'merged',
+] as const;
 
 /** 계기판에 쓰는 한국어 표시명과 기대 드로우콜 설명. */
 const MODE_LABELS: Record<RenderMode, string> = {
-  separate: "개별 메시 (병합 전)",
-  instanced: "종류별 인스턴싱",
-  merged: "지오메트리 병합 (병합 후)",
+  separate: '개별 메시 (병합 전)',
+  instanced: '종류별 인스턴싱',
+  merged: '지오메트리 병합 (병합 후)',
 };
 
 /** 건물 한 동의 고정 배치 정보. 정적이므로 한 번 만들고 끝이다. */
@@ -86,15 +90,18 @@ function buildLots(): Lot[] {
       const offsetZ = (row - half) * LOT_SPACING;
 
       // 가운데 2x2는 광장으로 비워 도시처럼 읽히게 한다.
-      if (Math.abs(offsetX) < LOT_SPACING && Math.abs(offsetZ) < LOT_SPACING) continue;
+      if (Math.abs(offsetX) < LOT_SPACING && Math.abs(offsetZ) < LOT_SPACING)
+        continue;
 
       lots.push({
         kind: index % KIND_COUNT,
         x: offsetX,
         z: offsetZ,
         footprint:
-          FOOTPRINT_MIN + pseudoRandom(index, 1) * (FOOTPRINT_MAX - FOOTPRINT_MIN),
-        height: HEIGHT_MIN + pseudoRandom(index, 2) ** 2 * (HEIGHT_MAX - HEIGHT_MIN),
+          FOOTPRINT_MIN +
+          pseudoRandom(index, 1) * (FOOTPRINT_MAX - FOOTPRINT_MIN),
+        height:
+          HEIGHT_MIN + pseudoRandom(index, 2) ** 2 * (HEIGHT_MAX - HEIGHT_MIN),
         rotationY: pseudoRandom(index, 3) * Math.PI * 0.5,
       });
     }
@@ -135,7 +142,10 @@ function createPrototypes(): THREE.BufferGeometry[] {
 function composeLotMatrix(target: THREE.Matrix4, lot: Lot): THREE.Matrix4 {
   return target.compose(
     new THREE.Vector3(lot.x, 0, lot.z),
-    new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), lot.rotationY),
+    new THREE.Quaternion().setFromAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      lot.rotationY,
+    ),
     new THREE.Vector3(lot.footprint, lot.height, lot.footprint),
   );
 }
@@ -274,7 +284,9 @@ function MergedCity({
     // 위치·회전·크기를 applyMatrix4로 정점에 구워 넣어야 한다.
     // 이 단계를 빠뜨리면 모든 건물이 원점에 겹쳐 한 채처럼 보인다.
     const placed = lots.map((lot) =>
-      prototypes[lot.kind].clone().applyMatrix4(composeLotMatrix(scratchMatrix, lot)),
+      prototypes[lot.kind]
+        .clone()
+        .applyMatrix4(composeLotMatrix(scratchMatrix, lot)),
     );
 
     // useGroups는 기본값 false. false여야 그룹이 생기지 않아 드로우콜이 1이 된다.
@@ -291,7 +303,9 @@ function MergedCity({
   // 타입이 `BufferGeometry | null`이라 가드가 강제된다.
   if (!merged) return null;
 
-  return <mesh geometry={merged} material={material} castShadow receiveShadow />;
+  return (
+    <mesh geometry={merged} material={material} castShadow receiveShadow />
+  );
 }
 
 /**
@@ -305,14 +319,20 @@ function MergedCity({
  * 이 계기판 자신(텍스트 2줄 + 바닥)도 숫자에 포함된다. 건물만의 드로우콜을
  * 보려면 그 상수를 빼야 하므로, 표시에는 총계를 그대로 쓰고 라벨로 구분한다.
  */
-function RenderStats({ mode, buildingCount }: { mode: RenderMode; buildingCount: number }) {
+function RenderStats({
+  mode,
+  buildingCount,
+}: {
+  mode: RenderMode;
+  buildingCount: number;
+}) {
   const gl = useThree((state) => state.gl);
 
   const getText = useCallback(() => {
     const { calls, triangles } = gl.info.render;
     return (
       `${MODE_LABELS[mode]}  ·  건물 ${buildingCount}동\n` +
-      `드로우콜 ${calls}  ·  삼각형 ${triangles.toLocaleString("ko-KR")}`
+      `드로우콜 ${calls}  ·  삼각형 ${triangles.toLocaleString('ko-KR')}`
     );
   }, [gl, mode, buildingCount]);
 
@@ -340,7 +360,7 @@ function RenderStats({ mode, buildingCount }: { mode: RenderMode; buildingCount:
 }
 
 export function Scene() {
-  const [mode, setMode] = useState<RenderMode>("separate");
+  const [mode, setMode] = useState<RenderMode>('separate');
 
   const lots = useMemo(() => buildLots(), []);
   const prototypes = useMemo(() => createPrototypes(), []);
@@ -353,7 +373,11 @@ export function Scene() {
    * 개별 메시 방식도 같은 인스턴스를 넘겨 셋의 비교를 공정하게 만든다.
    */
   const material = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: BUILDING_COLOR, roughness: 0.62 }),
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: BUILDING_COLOR,
+        roughness: 0.62,
+      }),
     [],
   );
 
@@ -369,7 +393,10 @@ export function Scene() {
   // 조작 없이도 세 방식을 볼 수 있도록 주기적으로 순환시킨다.
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setMode((current) => MODE_ORDER[(MODE_ORDER.indexOf(current) + 1) % MODE_ORDER.length]);
+      setMode(
+        (current) =>
+          MODE_ORDER[(MODE_ORDER.indexOf(current) + 1) % MODE_ORDER.length],
+      );
     }, MODE_CYCLE_SECONDS * 1000);
 
     return () => window.clearInterval(timer);
@@ -377,13 +404,23 @@ export function Scene() {
 
   return (
     <>
-      <PerspectiveCamera makeDefault fov={42} near={0.5} far={60} position={[7.4, 5.9, 8.6]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={42}
+        near={0.5}
+        far={60}
+        position={[7.4, 5.9, 8.6]}
+      />
 
       <color attach="background" args={[BACKGROUND_COLOR]} />
 
       <ambientLight intensity={0.5} />
       <directionalLight position={[6, 9, 5]} intensity={2.2} castShadow />
-      <directionalLight position={[-6, 3, -5]} intensity={0.5} color="#6f8ff5" />
+      <directionalLight
+        position={[-6, 3, -5]}
+        intensity={0.5}
+        color="#6f8ff5"
+      />
 
       {/* 바닥. 클릭으로 방식을 바꾸는 판이기도 하다. */}
       <mesh
@@ -391,7 +428,8 @@ export function Scene() {
         receiveShadow
         onClick={() =>
           setMode(
-            (current) => MODE_ORDER[(MODE_ORDER.indexOf(current) + 1) % MODE_ORDER.length],
+            (current) =>
+              MODE_ORDER[(MODE_ORDER.indexOf(current) + 1) % MODE_ORDER.length],
           )
         }
       >
@@ -399,13 +437,21 @@ export function Scene() {
         <meshStandardMaterial color={GROUND_COLOR} roughness={0.9} />
       </mesh>
 
-      {mode === "separate" && (
-        <SeparateMeshes lots={lots} prototypes={prototypes} material={material} />
+      {mode === 'separate' && (
+        <SeparateMeshes
+          lots={lots}
+          prototypes={prototypes}
+          material={material}
+        />
       )}
-      {mode === "instanced" && (
-        <InstancedByKind lots={lots} prototypes={prototypes} material={material} />
+      {mode === 'instanced' && (
+        <InstancedByKind
+          lots={lots}
+          prototypes={prototypes}
+          material={material}
+        />
       )}
-      {mode === "merged" && (
+      {mode === 'merged' && (
         <MergedCity lots={lots} prototypes={prototypes} material={material} />
       )}
 

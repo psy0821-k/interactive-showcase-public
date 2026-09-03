@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import type { RefObject } from "react";
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import type { RefObject } from 'react';
 
 /**
  * 스크롤 진행률(0~1)을 지수 감쇠로 부드럽게 뒤따르는 값을 매 프레임 계산한다.

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useEffect, useRef, useState } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 
 interface TabDef {
   id: string;
@@ -13,38 +13,41 @@ interface TabDef {
 
 const TABS: TabDef[] = [
   {
-    id: "capture",
-    label: "빠른 캡처",
-    heading: "생각을 놓치기 전에",
-    body: "단축키 한 번으로 어디서든 노트를 띄웁니다. 저장은 자동입니다.",
-    background: "#7c2d12",
+    id: 'capture',
+    label: '빠른 캡처',
+    heading: '생각을 놓치기 전에',
+    body: '단축키 한 번으로 어디서든 노트를 띄웁니다. 저장은 자동입니다.',
+    background: '#7c2d12',
   },
   {
-    id: "organize",
-    label: "자동 정리",
-    heading: "폴더는 그만",
-    body: "백링크와 태그로 노트가 스스로 연결됩니다. AI가 관련 노트를 제안합니다.",
-    background: "#831843",
+    id: 'organize',
+    label: '자동 정리',
+    heading: '폴더는 그만',
+    body: '백링크와 태그로 노트가 스스로 연결됩니다. AI가 관련 노트를 제안합니다.',
+    background: '#831843',
   },
   {
-    id: "share",
-    label: "공유",
-    heading: "링크 하나면 끝",
-    body: "노트를 웹 페이지로 즉시 게시하거나, 팀 워크스페이스로 초대합니다.",
-    background: "#4c1d95",
+    id: 'share',
+    label: '공유',
+    heading: '링크 하나면 끝',
+    body: '노트를 웹 페이지로 즉시 게시하거나, 팀 워크스페이스로 초대합니다.',
+    background: '#4c1d95',
   },
 ];
 
 /** 제목을 글자 단위 <span>으로 쪼갠다. 공백은 pre로 보존. */
 function SplitHeading({ text }: { text: string }) {
   return (
-    <h2 className="panel-heading text-3xl font-semibold sm:text-4xl" aria-label={text}>
-      {text.split("").map((ch, index) => (
+    <h2
+      className="panel-heading text-3xl font-semibold sm:text-4xl"
+      aria-label={text}
+    >
+      {text.split('').map((ch, index) => (
         <span
           key={`${ch}-${index}`}
           aria-hidden
           className="char inline-block"
-          style={{ whiteSpace: "pre" }}
+          style={{ whiteSpace: 'pre' }}
         >
           {ch}
         </span>
@@ -83,39 +86,38 @@ export function TabTransitionLandingPage() {
   useGsapDom(
     ({ gsap: g, reduced }) => {
       if (reduced) {
-        g.set(".enter-overlay", { autoAlpha: 0 });
-        g.set([".panel-body", ".char"], { autoAlpha: 1, y: 0, yPercent: 0 });
+        g.set('.enter-overlay', { autoAlpha: 0 });
+        g.set(['.panel-body', '.char'], { autoAlpha: 1, y: 0, yPercent: 0 });
         return;
       }
 
-      const tl = g.timeline({ defaults: { ease: "power3.out" } });
+      const tl = g.timeline({ defaults: { ease: 'power3.out' } });
 
       // 최초 실행에만 진입 오버레이를 걷는다.
       if (isFirstRun.current) {
-        tl.to(".enter-overlay", {
+        tl.to('.enter-overlay', {
           yPercent: -100,
           duration: 0.7,
-          ease: "power4.inOut",
+          ease: 'power4.inOut',
         });
         isFirstRun.current = false;
       } else {
-        g.set(".enter-overlay", { autoAlpha: 0 });
+        g.set('.enter-overlay', { autoAlpha: 0 });
       }
 
       // 활성 패널 등장: 본문 페이드업 + 제목 글자 스태거.
       // `.panel-body`는 SSR 요소 + `.gsap-reveal`(opacity:0)이라 set + to로 짠다.
-      g.set(".panel-body", { autoAlpha: 0, y: 24 });
-      tl.to(".panel-body", { y: 0, autoAlpha: 1, duration: 0.5 }, ">-0.2")
-        .from(
-          ".char",
-          {
-            yPercent: 120,
-            autoAlpha: 0,
-            duration: 0.5,
-            stagger: { amount: 0.4 },
-          },
-          "<0.05",
-        );
+      g.set('.panel-body', { autoAlpha: 0, y: 24 });
+      tl.to('.panel-body', { y: 0, autoAlpha: 1, duration: 0.5 }, '>-0.2').from(
+        '.char',
+        {
+          yPercent: 120,
+          autoAlpha: 0,
+          duration: 0.5,
+          stagger: { amount: 0.4 },
+        },
+        '<0.05',
+      );
     },
     container,
     [activeId],
@@ -124,7 +126,10 @@ export function TabTransitionLandingPage() {
   const activeTab = TABS.find((tab) => tab.id === activeId) ?? TABS[0];
 
   return (
-    <div ref={container} className="relative min-h-screen overflow-hidden bg-neutral-950 text-neutral-100">
+    <div
+      ref={container}
+      className="relative min-h-screen overflow-hidden bg-neutral-950 text-neutral-100"
+    >
       {/* 진입 오버레이 */}
       <div
         className="enter-overlay pointer-events-none absolute inset-0 z-40 bg-neutral-900"
@@ -137,7 +142,11 @@ export function TabTransitionLandingPage() {
         </p>
 
         {/* 탭 목록 */}
-        <div role="tablist" aria-label="기능 탭" className="mt-6 flex flex-wrap gap-2">
+        <div
+          role="tablist"
+          aria-label="기능 탭"
+          className="mt-6 flex flex-wrap gap-2"
+        >
           {TABS.map((tab) => (
             <button
               key={tab.id}
@@ -152,8 +161,8 @@ export function TabTransitionLandingPage() {
               }}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 tab.id === activeId
-                  ? "bg-white text-neutral-900"
-                  : "bg-white/10 text-white/70 hover:bg-white/20"
+                  ? 'bg-white text-neutral-900'
+                  : 'bg-white/10 text-white/70 hover:bg-white/20'
               }`}
             >
               {tab.label}

@@ -42,18 +42,18 @@
  * subset-font 는 순수 JS(fontkit + fontverter)라 네이티브 빌드가 없어 CI 친화적이다.
  */
 
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import subsetFont from "subset-font";
+import subsetFont from 'subset-font';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(HERE, "..");
+const ROOT = path.resolve(HERE, '..');
 
-const SRC = path.join(ROOT, "public", "font", "PretendardVariable.woff2");
-const OUT_DIR = path.join(ROOT, "public", "fonts");
-const OUT = path.join(OUT_DIR, "pretendard-subset.woff");
+const SRC = path.join(ROOT, 'public', 'font', 'PretendardVariable.woff2');
+const OUT_DIR = path.join(ROOT, 'public', 'fonts');
+const OUT = path.join(OUT_DIR, 'pretendard-subset.woff');
 
 /** 바이트를 KB 문자열로. */
 function kb(bytes) {
@@ -68,12 +68,12 @@ function kb(bytes) {
  * 하드코딩된 2350자 리터럴을 두는 것보다 생성이 검증 가능하고 파일이 깔끔하다.
  */
 function ksx1001Hangul() {
-  const decoder = new TextDecoder("euc-kr");
-  let result = "";
+  const decoder = new TextDecoder('euc-kr');
+  let result = '';
   for (let hi = 0xb0; hi <= 0xc8; hi += 1) {
     for (let lo = 0xa1; lo <= 0xfe; lo += 1) {
       const char = decoder.decode(new Uint8Array([hi, lo]));
-      if (char && char !== "�") result += char;
+      if (char && char !== '�') result += char;
     }
   }
   return result;
@@ -81,8 +81,9 @@ function ksx1001Hangul() {
 
 /** 유니코드 범위 [start, end]를 문자열로 펼친다. */
 function range(start, end) {
-  let result = "";
-  for (let code = start; code <= end; code += 1) result += String.fromCodePoint(code);
+  let result = '';
+  for (let code = start; code <= end; code += 1)
+    result += String.fromCodePoint(code);
   return result;
 }
 
@@ -90,23 +91,31 @@ function buildCharacterSet() {
   const hangul = ksx1001Hangul();
   const jamo = range(0x3130, 0x318f); // 한글 호환 자모
   const latin = range(0x0020, 0x007e); // 기본 라틴(공백~틸드)
-  const latin1 = " °±·×÷–—"; // NBSP ° ± · × ÷ – —
-  const punct = "‘’“”•…※"; // ' ' " " • … ※
-  const arrows = "←→↔⇄"; // ← → ↔ ⇄
-  const math = "≈≠≤≥∞"; // ≈ ≠ ≤ ≥ ∞
+  const latin1 = ' °±·×÷–—'; // NBSP ° ± · × ÷ – —
+  const punct = '‘’“”•…※'; // ' ' " " • … ※
+  const arrows = '←→↔⇄'; // ← → ↔ ⇄
+  const math = '≈≠≤≥∞'; // ≈ ≠ ≤ ≥ ∞
 
   // Set으로 중복 제거 후 정렬 — 결정적 출력
   const unique = Array.from(
-    new Set([...hangul, ...jamo, ...latin, ...latin1, ...punct, ...arrows, ...math]),
+    new Set([
+      ...hangul,
+      ...jamo,
+      ...latin,
+      ...latin1,
+      ...punct,
+      ...arrows,
+      ...math,
+    ]),
   );
   unique.sort((a, b) => a.codePointAt(0) - b.codePointAt(0));
-  return unique.join("");
+  return unique.join('');
 }
 
 async function main() {
   if (!fs.existsSync(SRC)) {
     console.error(`[font] 원본 없음: ${path.relative(ROOT, SRC)}`);
-    console.error("       Pretendard Variable WOFF2를 public/font/ 에 두세요.");
+    console.error('       Pretendard Variable WOFF2를 public/font/ 에 두세요.');
     process.exit(1);
   }
 
@@ -115,7 +124,7 @@ async function main() {
   const beforeBytes = source.length;
 
   // targetFormat: "woff" — troika 파서가 읽는 포맷. woff2는 던진다(위 주석 참조).
-  const subset = await subsetFont(source, characters, { targetFormat: "woff" });
+  const subset = await subsetFont(source, characters, { targetFormat: 'woff' });
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
   fs.writeFileSync(OUT, subset);

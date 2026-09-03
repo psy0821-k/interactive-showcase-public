@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useGsapDom } from "@/hooks/use-gsap-dom";
-import { DemoShell } from "@/gsap-lab/demo-shell";
+import { useRef } from 'react';
+import { useGsapDom } from '@/hooks/use-gsap-dom';
+import { DemoShell } from '@/gsap-lab/demo-shell';
 
 const HIDDEN_ITEMS = Array.from({ length: 9 }, (_, i) => ({
   label: `기밀 항목 ${i + 1}`,
@@ -19,42 +19,39 @@ const HIDDEN_ITEMS = Array.from({ length: 9 }, (_, i) => ({
 export function CursorSpotlightPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      const stage = container.current?.querySelector<HTMLElement>(".spot-stage");
-      if (!stage) return;
+  useGsapDom(({ gsap: g, reduced }) => {
+    const stage = container.current?.querySelector<HTMLElement>('.spot-stage');
+    if (!stage) return;
 
-      const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-      if (!mq.matches || reduced) {
-        // 모션 축소·터치: 스포트라이트를 끄고 전체를 보이게 한다.
-        stage.style.setProperty("--spot", "9999px");
-        return;
-      }
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    if (!mq.matches || reduced) {
+      // 모션 축소·터치: 스포트라이트를 끄고 전체를 보이게 한다.
+      stage.style.setProperty('--spot', '9999px');
+      return;
+    }
 
-      const setX = g.quickSetter(stage, "--x", "px") as (v: number) => void;
-      const setY = g.quickSetter(stage, "--y", "px") as (v: number) => void;
-      const proxy = { x: 0, y: 0 };
-      const moveX = g.quickTo(proxy, "x", {
-        duration: 0.5,
-        ease: "power3",
-        onUpdate: () => setX(proxy.x),
-      });
-      const moveY = g.quickTo(proxy, "y", {
-        duration: 0.5,
-        ease: "power3",
-        onUpdate: () => setY(proxy.y),
-      });
+    const setX = g.quickSetter(stage, '--x', 'px') as (v: number) => void;
+    const setY = g.quickSetter(stage, '--y', 'px') as (v: number) => void;
+    const proxy = { x: 0, y: 0 };
+    const moveX = g.quickTo(proxy, 'x', {
+      duration: 0.5,
+      ease: 'power3',
+      onUpdate: () => setX(proxy.x),
+    });
+    const moveY = g.quickTo(proxy, 'y', {
+      duration: 0.5,
+      ease: 'power3',
+      onUpdate: () => setY(proxy.y),
+    });
 
-      const onMove = (e: PointerEvent) => {
-        const r = stage.getBoundingClientRect();
-        moveX(e.clientX - r.left);
-        moveY(e.clientY - r.top);
-      };
-      stage.addEventListener("pointermove", onMove);
-      return () => stage.removeEventListener("pointermove", onMove);
-    },
-    container,
-  );
+    const onMove = (e: PointerEvent) => {
+      const r = stage.getBoundingClientRect();
+      moveX(e.clientX - r.left);
+      moveY(e.clientY - r.top);
+    };
+    stage.addEventListener('pointermove', onMove);
+    return () => stage.removeEventListener('pointermove', onMove);
+  }, container);
 
   return (
     <DemoShell
@@ -66,9 +63,9 @@ export function CursorSpotlightPage() {
           className="spot-stage relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/10 p-8"
           style={
             {
-              "--x": "50%",
-              "--y": "50%",
-              "--spot": "180px",
+              '--x': '50%',
+              '--y': '50%',
+              '--spot': '180px',
             } as React.CSSProperties
           }
         >
@@ -89,9 +86,9 @@ export function CursorSpotlightPage() {
             className="pointer-events-none absolute inset-0 bg-neutral-950"
             style={{
               maskImage:
-                "radial-gradient(circle var(--spot) at var(--x) var(--y), transparent 0%, black 100%)",
+                'radial-gradient(circle var(--spot) at var(--x) var(--y), transparent 0%, black 100%)',
               WebkitMaskImage:
-                "radial-gradient(circle var(--spot) at var(--x) var(--y), transparent 0%, black 100%)",
+                'radial-gradient(circle var(--spot) at var(--x) var(--y), transparent 0%, black 100%)',
             }}
             aria-hidden
           />

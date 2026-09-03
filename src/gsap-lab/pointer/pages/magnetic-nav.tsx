@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useMagnetic } from "@/gsap-lab/primitives";
-import { DemoShell } from "@/gsap-lab/demo-shell";
+import { useRef } from 'react';
+import { useMagnetic } from '@/gsap-lab/primitives';
+import { DemoShell } from '@/gsap-lab/demo-shell';
 
-const NAV_ITEMS = ["제품", "요금", "고객사례", "블로그", "문의하기"];
+const NAV_ITEMS = ['제품', '요금', '고객사례', '블로그', '문의하기'];
 
 /**
  * `/gsap-lab/magnetic-nav` — 내비 항목이 커서에 끌린다.
@@ -15,7 +15,7 @@ const NAV_ITEMS = ["제품", "요금", "고객사례", "블로그", "문의하�
 export function MagneticNavPage() {
   const container = useRef<HTMLDivElement>(null);
 
-  useMagnetic(container, { target: ".mag-item", range: 70, strength: 0.5 });
+  useMagnetic(container, { target: '.mag-item', range: 70, strength: 0.5 });
 
   return (
     <DemoShell
@@ -32,7 +32,7 @@ export function MagneticNavPage() {
               key={label}
               type="button"
               className="mag-item rounded-full px-5 py-3 text-lg font-semibold text-white/90 hover:text-white"
-              style={{ background: "rgb(79 70 229 / 0.25)" }}
+              style={{ background: 'rgb(79 70 229 / 0.25)' }}
             >
               {label}
             </button>

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Component, type ErrorInfo, type ReactNode } from "react";
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -25,7 +25,7 @@ export class SceneErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    console.error("[showcase] Scene 렌더 실패", error, info.componentStack);
+    console.error('[showcase] Scene 렌더 실패', error, info.componentStack);
   }
 
   render(): ReactNode {

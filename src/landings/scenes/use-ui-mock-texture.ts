@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo } from "react";
-import * as THREE from "three";
+import { useEffect, useMemo } from 'react';
+import * as THREE from 'three';
 
 /** 목업 종류. */
-export type UiMockKind = "dashboard" | "note" | "chart";
+export type UiMockKind = 'dashboard' | 'note' | 'chart';
 
 interface UiMockOptions {
   /** 목업 종류. */
@@ -42,25 +42,25 @@ function paintDashboard(
   h: number,
   accent: string,
 ): void {
-  ctx.fillStyle = "#0f172a";
+  ctx.fillStyle = '#0f172a';
   ctx.fillRect(0, 0, w, h);
 
   // 좌측 사이드바
-  ctx.fillStyle = "#111c33";
+  ctx.fillStyle = '#111c33';
   ctx.fillRect(0, 0, w * 0.16, h);
   ctx.fillStyle = accent;
   roundRect(ctx, w * 0.03, h * 0.06, w * 0.1, h * 0.05, 8);
   ctx.fill();
-  ctx.fillStyle = "#25344d";
+  ctx.fillStyle = '#25344d';
   for (let i = 0; i < 5; i++) {
     roundRect(ctx, w * 0.03, h * (0.18 + i * 0.09), w * 0.1, h * 0.045, 6);
     ctx.fill();
   }
 
   // 상단 헤더
-  ctx.fillStyle = "#1e293b";
+  ctx.fillStyle = '#1e293b';
   ctx.fillRect(w * 0.16, 0, w * 0.84, h * 0.12);
-  ctx.fillStyle = "#334155";
+  ctx.fillStyle = '#334155';
   roundRect(ctx, w * 0.2, h * 0.04, w * 0.22, h * 0.045, 6);
   ctx.fill();
 
@@ -70,20 +70,20 @@ function paintDashboard(
   const cardH = h * 0.22;
   for (let i = 0; i < 3; i++) {
     const cx = w * 0.2 + i * (cardW + w * 0.03);
-    ctx.fillStyle = "#1b2a42";
+    ctx.fillStyle = '#1b2a42';
     roundRect(ctx, cx, cardY, cardW, cardH, 12);
     ctx.fill();
-    ctx.fillStyle = i === 0 ? accent : "#475569";
+    ctx.fillStyle = i === 0 ? accent : '#475569';
     roundRect(ctx, cx + 18, cardY + 18, cardW * 0.4, 14, 4);
     ctx.fill();
-    ctx.fillStyle = "#e2e8f0";
+    ctx.fillStyle = '#e2e8f0';
     ctx.font = `bold ${Math.round(h * 0.06)}px sans-serif`;
-    ctx.fillText(["48.2k", "1,204", "97%"][i], cx + 18, cardY + cardH * 0.7);
+    ctx.fillText(['48.2k', '1,204', '97%'][i], cx + 18, cardY + cardH * 0.7);
   }
 
   // 하단 큰 차트 영역
   const chY = cardY + cardH + h * 0.05;
-  ctx.fillStyle = "#1b2a42";
+  ctx.fillStyle = '#1b2a42';
   roundRect(ctx, w * 0.2, chY, w * 0.76, h - chY - h * 0.06, 12);
   ctx.fill();
   // 꺾은선
@@ -94,7 +94,8 @@ function paintDashboard(
   for (let i = 0; i <= n; i++) {
     const px = w * 0.23 + (i / n) * w * 0.7;
     const py =
-      chY + (h - chY - h * 0.06) * (0.7 - 0.45 * Math.sin(i * 0.5) * Math.random());
+      chY +
+      (h - chY - h * 0.06) * (0.7 - 0.45 * Math.sin(i * 0.5) * Math.random());
     if (i === 0) ctx.moveTo(px, py);
     else ctx.lineTo(px, py);
   }
@@ -108,14 +109,14 @@ function paintNote(
   h: number,
   accent: string,
 ): void {
-  ctx.fillStyle = "#0b1220";
+  ctx.fillStyle = '#0b1220';
   ctx.fillRect(0, 0, w, h);
   // 종이
-  ctx.fillStyle = "#f8fafc";
+  ctx.fillStyle = '#f8fafc';
   roundRect(ctx, w * 0.1, h * 0.08, w * 0.8, h * 0.84, 16);
   ctx.fill();
   // 제목
-  ctx.fillStyle = "#0f172a";
+  ctx.fillStyle = '#0f172a';
   roundRect(ctx, w * 0.16, h * 0.16, w * 0.5, h * 0.06, 6);
   ctx.fill();
   // 강조 블록
@@ -123,7 +124,7 @@ function paintNote(
   roundRect(ctx, w * 0.16, h * 0.28, w * 0.14, h * 0.04, 4);
   ctx.fill();
   // 본문 줄
-  ctx.fillStyle = "#cbd5e1";
+  ctx.fillStyle = '#cbd5e1';
   for (let i = 0; i < 9; i++) {
     const lw = i % 3 === 2 ? 0.4 : 0.68;
     roundRect(ctx, w * 0.16, h * (0.37 + i * 0.06), w * lw, h * 0.028, 4);
@@ -145,9 +146,9 @@ function paintChart(
   h: number,
   accent: string,
 ): void {
-  ctx.fillStyle = "#0f172a";
+  ctx.fillStyle = '#0f172a';
   ctx.fillRect(0, 0, w, h);
-  ctx.fillStyle = "#1b2a42";
+  ctx.fillStyle = '#1b2a42';
   roundRect(ctx, w * 0.06, h * 0.08, w * 0.88, h * 0.84, 14);
   ctx.fill();
   const base = h * 0.82;
@@ -156,7 +157,7 @@ function paintChart(
   for (let i = 0; i < count; i++) {
     const bx = w * 0.1 + i * gap;
     const bh = h * (0.12 + 0.55 * Math.abs(Math.sin(i * 1.3)));
-    ctx.fillStyle = i === count - 2 ? accent : "#3b5170";
+    ctx.fillStyle = i === count - 2 ? accent : '#3b5170';
     roundRect(ctx, bx, base - bh, gap * 0.55, bh, 4);
     ctx.fill();
   }
@@ -172,16 +173,16 @@ export function useUiMockTexture({
   kind,
   width = 1024,
   height = 640,
-  accent = "#38bdf8",
+  accent = '#38bdf8',
 }: UiMockOptions): THREE.CanvasTexture {
   const texture = useMemo(() => {
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (ctx) {
-      if (kind === "dashboard") paintDashboard(ctx, width, height, accent);
-      else if (kind === "note") paintNote(ctx, width, height, accent);
+      if (kind === 'dashboard') paintDashboard(ctx, width, height, accent);
+      else if (kind === 'note') paintNote(ctx, width, height, accent);
       else paintChart(ctx, width, height, accent);
     }
     const tex = new THREE.CanvasTexture(canvas);

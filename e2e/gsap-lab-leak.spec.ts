@@ -42,7 +42,10 @@ async function readCounters(page: Page): Promise<Counters> {
         };
       }
     ).__gsapLab;
-    return { tweens: lab.liveTweenCount(), scrollTriggers: lab.scrollTriggers() };
+    return {
+      tweens: lab.liveTweenCount(),
+      scrollTriggers: lab.scrollTriggers(),
+    };
   });
 }
 

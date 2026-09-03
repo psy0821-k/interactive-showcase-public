@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useCallback, useEffect, useMemo } from "react";
-import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
-import { Detailed, PerspectiveCamera } from "@react-three/drei";
-import { SceneReadout } from "@/components/scene-label";
+import { useCallback, useEffect, useMemo } from 'react';
+import * as THREE from 'three';
+import { useThree } from '@react-three/fiber';
+import { Detailed, PerspectiveCamera } from '@react-three/drei';
+import { SceneReadout } from '@/components/scene-label';
 
 /** 필드 한 변의 기둥 개수. 총 기둥은 FIELD_SIZE^2 개다. */
 const FIELD_SIZE = 8;
@@ -43,7 +43,7 @@ const LEVEL_DISTANCES = [0, 22, 46];
  * 단계별 색. 실무에서는 단계가 티나지 않게 만드는 것이 목표지만,
  * 이 쇼케이스는 전환이 언제 일어나는지 보여야 하므로 일부러 다르게 둔다.
  */
-const LEVEL_COLORS = ["#ff8f5e", "#7bd88f", "#5e8bff"] as const;
+const LEVEL_COLORS = ['#ff8f5e', '#7bd88f', '#5e8bff'] as const;
 
 /**
  * 히스테리시스. 전환 거리의 비율(0.1 = 10%)만큼 되돌아와야 이전 단계로 복귀한다.
@@ -53,13 +53,13 @@ const LEVEL_HYSTERESIS = 0.12;
 
 /** 계기 텍스트 크기와 색 */
 const HUD_FONT_SIZE = 0.44;
-const HUD_COLOR = "#e8edf5";
+const HUD_COLOR = '#e8edf5';
 
 /** 계기 갱신 주기(초). 매 프레임 갱신하면 숫자가 읽히지 않는다. */
 const HUD_INTERVAL = 0.25;
 
 /** 바닥 색 */
-const GROUND_COLOR = "#141821";
+const GROUND_COLOR = '#141821';
 
 interface PillarCell {
   id: number;
@@ -76,11 +76,16 @@ function buildField(): PillarCell[] {
     for (let ix = 0; ix < FIELD_SIZE; ix += 1) {
       // 사인 두 개를 곱해 높이에 완만한 기복을 준다. 난수가 아니라 재현 가능하다.
       const height =
-        PILLAR_BASE_HEIGHT * (1 + 0.5 * Math.sin(ix * 0.9) * Math.cos(iz * 0.7));
+        PILLAR_BASE_HEIGHT *
+        (1 + 0.5 * Math.sin(ix * 0.9) * Math.cos(iz * 0.7));
 
       cells.push({
         id: iz * FIELD_SIZE + ix,
-        position: [ix * FIELD_GAP - offset, height / 2, iz * FIELD_GAP - offset],
+        position: [
+          ix * FIELD_GAP - offset,
+          height / 2,
+          iz * FIELD_GAP - offset,
+        ],
         height,
       });
     }
@@ -91,7 +96,11 @@ function buildField(): PillarCell[] {
 
 /** 단계별 머티리얼 하나를 만든다. 색만 다르고 나머지 속성은 공통이다. */
 function createLevelMaterial(color: string): THREE.MeshStandardMaterial {
-  return new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.15 });
+  return new THREE.MeshStandardMaterial({
+    color,
+    roughness: 0.5,
+    metalness: 0.15,
+  });
 }
 
 interface LodPillarProps {
@@ -119,8 +128,15 @@ function LodPillar({ position, height, material }: LodPillarProps) {
       hysteresis={LEVEL_HYSTERESIS}
     >
       {LEVEL_SEGMENTS.map((segments, index) => (
-        <mesh key={segments} material={material[index]} castShadow receiveShadow>
-          <cylinderGeometry args={[PILLAR_RADIUS, PILLAR_RADIUS, height, segments]} />
+        <mesh
+          key={segments}
+          material={material[index]}
+          castShadow
+          receiveShadow
+        >
+          <cylinderGeometry
+            args={[PILLAR_RADIUS, PILLAR_RADIUS, height, segments]}
+          />
         </mesh>
       ))}
     </Detailed>
@@ -160,7 +176,7 @@ function RenderStats() {
     return (
       `거리 ${distance.toFixed(1)}  ·  ` +
       `드로우콜 ${calls}  ·  ` +
-      `삼각형 ${triangles.toLocaleString("ko-KR")}`
+      `삼각형 ${triangles.toLocaleString('ko-KR')}`
     );
   }, [gl, camera]);
 
@@ -209,11 +225,21 @@ export function Scene() {
         near는 0.5로 둬 far/near = 240 — depth 정밀도에 문제가 없는 범위다.
         초기 위치를 가깝게 둬야 줌아웃하며 단계가 바뀌는 것을 볼 수 있다.
       */}
-      <PerspectiveCamera makeDefault fov={50} near={0.5} far={120} position={[0, 6, 12]} />
+      <PerspectiveCamera
+        makeDefault
+        fov={50}
+        near={0.5}
+        far={120}
+        position={[0, 6, 12]}
+      />
 
       <ambientLight intensity={0.35} />
       <directionalLight position={[8, 14, 6]} intensity={2.1} castShadow />
-      <directionalLight position={[-6, 4, -8]} intensity={0.6} color="#8fb4ff" />
+      <directionalLight
+        position={[-6, 4, -8]}
+        intensity={0.6}
+        color="#8fb4ff"
+      />
 
       {/*
         바닥은 하나뿐이고 항상 화면을 채우므로 컬링 이득이 없다.

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useRevealOnScroll } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { useRevealOnScroll } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 /** 마스크 뒤에서 올라올 텍스트 줄들. 실제 서비스에선 문단을 줄 단위로 쪼갠다. */
 const LINES = [
-  "생각은 흘러가고,",
-  "메모는 남는다.",
-  "Fluxnote는 그 사이의 마찰을",
-  "0에 가깝게 줄입니다.",
+  '생각은 흘러가고,',
+  '메모는 남는다.',
+  'Fluxnote는 그 사이의 마찰을',
+  '0에 가깝게 줄입니다.',
 ];
 
 /**
@@ -25,9 +25,9 @@ export function LineMaskTextPage() {
   // 안쪽 <span>을 줄 아래(yPercent 100)에서 0으로. `overflow: hidden` 래퍼가
   // 삐져나온 부분을 잘라준다.
   useRevealOnScroll(container, {
-    target: ".mask-line-inner",
-    trigger: ".mask-text-block",
-    start: "top 70%",
+    target: '.mask-line-inner',
+    trigger: '.mask-text-block',
+    start: 'top 70%',
     from: { yPercent: 100 },
     duration: 0.9,
     stagger: 0.12,
@@ -42,10 +42,7 @@ export function LineMaskTextPage() {
         <section className="mask-text-block mx-auto max-w-3xl px-6 py-40">
           <h2 className="text-3xl font-semibold leading-tight sm:text-5xl">
             {LINES.map((line, index) => (
-              <span
-                key={index}
-                className="block overflow-hidden py-1"
-              >
+              <span key={index} className="block overflow-hidden py-1">
                 <span className="mask-line-inner inline-block">{line}</span>
               </span>
             ))}

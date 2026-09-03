@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { usePinnedTimeline } from "@/gsap-lab/primitives";
-import { ScrollDemoShell } from "@/gsap-lab/scroll/scroll-demo-shell";
+import { useRef } from 'react';
+import { usePinnedTimeline } from '@/gsap-lab/primitives';
+import { ScrollDemoShell } from '@/gsap-lab/scroll/scroll-demo-shell';
 
 /**
  * 3개 세로 컬럼. 컬럼마다 시작 위치와 스크롤 이동량이 다르다.
@@ -30,18 +30,18 @@ export function ParallaxImageGridPage() {
   // 핀 고정 + 컬럼별 y 스크럽. 배경이 멈춰 컬럼 간 속도차만 보인다.
   usePinnedTimeline(
     container,
-    { trigger: ".pg-stage", length: [2.4, 1.6] },
+    { trigger: '.pg-stage', length: [2.4, 1.6] },
     ({ tl }) => {
       COLUMNS.forEach((col, index) => {
         tl.fromTo(
           `.pg-column[data-index="${index}"]`,
           { y: col.startY },
-          { y: col.startY + col.travel, ease: "none" },
+          { y: col.startY + col.travel, ease: 'none' },
           0,
         );
       });
     },
-    (g) => g.set(".pg-column", { y: 0 }),
+    (g) => g.set('.pg-column', { y: 0 }),
   );
 
   return (

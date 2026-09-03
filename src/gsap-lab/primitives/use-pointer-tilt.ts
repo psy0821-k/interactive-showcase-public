@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useGsapDom } from "@/hooks/use-gsap-dom";
+import { useGsapDom } from '@/hooks/use-gsap-dom';
 
 /** `usePointerTilt` 옵션. */
 export interface PointerTiltOptions {
@@ -36,66 +36,67 @@ export function usePointerTilt(
 ): void {
   const { target, glare, maxTilt = 18, hoverScale } = options;
 
-  useGsapDom(
-    ({ gsap: g, reduced }) => {
-      const root = scope.current;
-      if (!root) return;
-      const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-      if (!mq.matches || reduced) return;
+  useGsapDom(({ gsap: g, reduced }) => {
+    const root = scope.current;
+    if (!root) return;
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    if (!mq.matches || reduced) return;
 
-      const cards = root.querySelectorAll<HTMLElement>(target);
-      const cleanups: Array<() => void> = [];
+    const cards = root.querySelectorAll<HTMLElement>(target);
+    const cleanups: Array<() => void> = [];
 
-      cards.forEach((card) => {
-        const glareEl = glare
-          ? card.querySelector<HTMLElement>(glare)
-          : null;
-        const rotX = g.quickTo(card, "rotationX", { duration: 0.4, ease: "power2" });
-        const rotY = g.quickTo(card, "rotationY", { duration: 0.4, ease: "power2" });
-
-        const onEnter = () => {
-          if (hoverScale) {
-            g.to(card, { scale: hoverScale, duration: 0.35, ease: "power2.out" });
-          }
-        };
-        const onMove = (e: PointerEvent) => {
-          const r = card.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
-          rotY(px * maxTilt);
-          rotX(-py * maxTilt);
-          if (glareEl) {
-            g.to(glareEl, {
-              xPercent: px * 60,
-              yPercent: py * 60,
-              autoAlpha: 0.35,
-              duration: 0.4,
-            });
-          }
-        };
-        const onLeave = () => {
-          g.to(card, {
-            rotationX: 0,
-            rotationY: 0,
-            ...(hoverScale ? { scale: 1 } : {}),
-            duration: 0.6,
-            ease: "power3.out",
-          });
-          if (glareEl) g.to(glareEl, { autoAlpha: 0, duration: 0.4 });
-        };
-
-        card.addEventListener("pointerenter", onEnter);
-        card.addEventListener("pointermove", onMove);
-        card.addEventListener("pointerleave", onLeave);
-        cleanups.push(() => {
-          card.removeEventListener("pointerenter", onEnter);
-          card.removeEventListener("pointermove", onMove);
-          card.removeEventListener("pointerleave", onLeave);
-        });
+    cards.forEach((card) => {
+      const glareEl = glare ? card.querySelector<HTMLElement>(glare) : null;
+      const rotX = g.quickTo(card, 'rotationX', {
+        duration: 0.4,
+        ease: 'power2',
+      });
+      const rotY = g.quickTo(card, 'rotationY', {
+        duration: 0.4,
+        ease: 'power2',
       });
 
-      return () => cleanups.forEach((fn) => fn());
-    },
-    scope,
-  );
+      const onEnter = () => {
+        if (hoverScale) {
+          g.to(card, { scale: hoverScale, duration: 0.35, ease: 'power2.out' });
+        }
+      };
+      const onMove = (e: PointerEvent) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        rotY(px * maxTilt);
+        rotX(-py * maxTilt);
+        if (glareEl) {
+          g.to(glareEl, {
+            xPercent: px * 60,
+            yPercent: py * 60,
+            autoAlpha: 0.35,
+            duration: 0.4,
+          });
+        }
+      };
+      const onLeave = () => {
+        g.to(card, {
+          rotationX: 0,
+          rotationY: 0,
+          ...(hoverScale ? { scale: 1 } : {}),
+          duration: 0.6,
+          ease: 'power3.out',
+        });
+        if (glareEl) g.to(glareEl, { autoAlpha: 0, duration: 0.4 });
+      };
+
+      card.addEventListener('pointerenter', onEnter);
+      card.addEventListener('pointermove', onMove);
+      card.addEventListener('pointerleave', onLeave);
+      cleanups.push(() => {
+        card.removeEventListener('pointerenter', onEnter);
+        card.removeEventListener('pointermove', onMove);
+        card.removeEventListener('pointerleave', onLeave);
+      });
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+  }, scope);
 }

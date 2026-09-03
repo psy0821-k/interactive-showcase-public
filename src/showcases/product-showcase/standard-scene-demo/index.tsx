@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-export { meta } from "./meta";
+export { meta } from './meta';
 
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import type { Mesh } from "three";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import type { Mesh } from 'three';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 /** 회전 속도(라디안/초). prefers-reduced-motion이면 정지한다. */
 const ROTATION_SPEED = 0.4;
@@ -33,11 +33,19 @@ export function Scene() {
 
       <mesh ref={meshRef} castShadow receiveShadow>
         <boxGeometry args={[1.4, 1.4, 1.4]} />
-        <meshStandardMaterial color="#c9c9c9" metalness={0.1} roughness={0.35} />
+        <meshStandardMaterial
+          color="#c9c9c9"
+          metalness={0.1}
+          roughness={0.35}
+        />
       </mesh>
 
       {/* 그림자를 받을 면이 없으면 castShadow를 켜도 그림자가 보이지 않는다. */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.2, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.2, 0]}
+        receiveShadow
+      >
         <planeGeometry args={[20, 20]} />
         <meshStandardMaterial color="#1a1a1a" />
       </mesh>

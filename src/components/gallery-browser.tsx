@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   TECHNIQUE_CATEGORIES,
   TECHNIQUE_CATEGORY_LABELS,
-} from "@/domain/technique-category";
+} from '@/domain/technique-category';
 
-const ALL = "all";
+const ALL = 'all';
 
 /** 필터 chip 하나. `value`는 카드의 `data-category`와 대조된다. */
 export interface GalleryCategoryOption {
@@ -36,7 +36,7 @@ const TECHNIQUE_CATEGORY_OPTIONS: GalleryCategoryOption[] =
  */
 export function GalleryBrowser({
   children,
-  basePath = "/",
+  basePath = '/',
   categories = TECHNIQUE_CATEGORY_OPTIONS,
 }: {
   children: ReactNode;
@@ -47,8 +47,8 @@ export function GalleryBrowser({
   const searchParams = useSearchParams();
   const listRef = useRef<HTMLDivElement>(null);
 
-  const category = searchParams.get("category") ?? ALL;
-  const query = searchParams.get("q") ?? "";
+  const category = searchParams.get('category') ?? ALL;
+  const query = searchParams.get('q') ?? '';
 
   const [visibleCount, setVisibleCount] = useState<number | null>(null);
 
@@ -61,10 +61,12 @@ export function GalleryBrowser({
     const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
     let shown = 0;
 
-    for (const li of root.querySelectorAll<HTMLLIElement>("li[data-haystack]")) {
+    for (const li of root.querySelectorAll<HTMLLIElement>(
+      'li[data-haystack]',
+    )) {
       const categoryMatched =
         category === ALL || li.dataset.category === category;
-      const haystack = li.dataset.haystack ?? "";
+      const haystack = li.dataset.haystack ?? '';
       const queryMatched = tokens.every((token) => haystack.includes(token));
       const visible = categoryMatched && queryMatched;
 
@@ -103,7 +105,7 @@ export function GalleryBrowser({
           <input
             type="search"
             defaultValue={query}
-            onChange={(event) => updateParam("q", event.target.value)}
+            onChange={(event) => updateParam('q', event.target.value)}
             placeholder="제목, 설명, 사용한 skill"
             className="w-full max-w-md rounded-md border border-neutral-300 px-3 py-2 dark:border-neutral-700 dark:bg-neutral-900"
           />
@@ -113,14 +115,14 @@ export function GalleryBrowser({
           <FilterChip
             label="전체"
             active={category === ALL}
-            onClick={() => updateParam("category", ALL)}
+            onClick={() => updateParam('category', ALL)}
           />
           {categories.map((option) => (
             <FilterChip
               key={option.value}
               label={option.label}
               active={category === option.value}
-              onClick={() => updateParam("category", option.value)}
+              onClick={() => updateParam('category', option.value)}
             />
           ))}
         </div>
@@ -168,8 +170,8 @@ function FilterChip({
       aria-pressed={active}
       className={`rounded-full border px-3 py-1 text-sm transition-colors ${
         active
-          ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
-          : "border-neutral-300 hover:border-neutral-500 dark:border-neutral-700"
+          ? 'border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900'
+          : 'border-neutral-300 hover:border-neutral-500 dark:border-neutral-700'
       }`}
     >
       {label}

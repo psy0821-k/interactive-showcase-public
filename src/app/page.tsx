@@ -1,4 +1,4 @@
-import { GalleryPage } from "@/components/gallery-page";
+import { GalleryPage } from '@/components/gallery-page';
 
 export default function HomePage() {
   return (
