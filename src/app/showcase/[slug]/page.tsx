@@ -7,6 +7,7 @@ import {
   findShowcaseOnServer,
   getShowcaseEntries,
 } from "@/showcases/server-registry";
+import { CopyButton } from "@/components/copy-button";
 import { ShowcaseDetail } from "@/components/showcase-detail";
 import { SITE_URL } from "@/lib/site";
 
@@ -134,6 +135,52 @@ export default async function ShowcasePage({
       />
 
       <ShowcaseDetail slug={slug} title={meta.title} />
+
+      {/*
+        스킬 활용 & 프롬프트 — 이 쇼케이스를 만들 때 각 skill을 어떻게 썼는지,
+        그리고 Claude Code로 재현한다면 던질 법한 자연어 요청. 텍스트는 서버에서
+        렌더하고 복사 버튼만 클라이언트 컴포넌트다. 두 필드는 선택이라 하나라도
+        있을 때만 섹션을 그린다.
+      */}
+      {(meta.skillUsage || meta.promptExample) && (
+        <section className="mt-12 flex flex-col gap-6">
+          <h2 className="text-lg font-semibold">스킬 활용 &amp; 프롬프트</h2>
+
+          {meta.skillUsage && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-sm font-medium text-neutral-500">
+                  스킬을 어떻게 썼나
+                </h3>
+                <CopyButton
+                  text={meta.skillUsage}
+                  label="스킬 활용 설명 복사"
+                />
+              </div>
+              <p className="whitespace-pre-wrap rounded-lg bg-neutral-50 p-4 text-sm leading-relaxed text-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
+                {meta.skillUsage}
+              </p>
+            </div>
+          )}
+
+          {meta.promptExample && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-sm font-medium text-neutral-500">
+                  프롬프트 예시
+                </h3>
+                <CopyButton
+                  text={meta.promptExample}
+                  label="프롬프트 예시 복사"
+                />
+              </div>
+              <p className="whitespace-pre-wrap rounded-lg border border-neutral-200 bg-white p-4 font-mono text-sm leading-relaxed text-neutral-700 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-300">
+                {meta.promptExample}
+              </p>
+            </div>
+          )}
+        </section>
+      )}
     </main>
   );
 }
