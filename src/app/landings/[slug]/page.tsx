@@ -5,7 +5,7 @@ import { LandingDomHeader } from "@/landings/landing-dom-header";
 import { LandingRenderer } from "./landing-renderer";
 
 /**
- * 공통 헤더(breadcrumb·caveat·프롬프트 패널)를 페이지 컴포넌트가 아니라
+ * 공통 헤더(breadcrumb·caveat·요구사항 패널)를 페이지 컴포넌트가 아니라
  * 이 래퍼가 제공하는 slug 목록.
  *
  * - `kind: "r3f"` 페이지는 `LandingShell`이 내부에서 `LandingDomHeader`를 렌더한다.

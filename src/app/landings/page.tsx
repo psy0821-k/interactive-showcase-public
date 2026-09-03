@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  LANDING_ENTRIES,
-  type LandingAuthoring,
-  type LandingEntry,
-} from "@/landings/registry";
+import { LANDING_ENTRIES, type LandingEntry } from "@/landings/registry";
 
 export const metadata: Metadata = {
   title: "Landings",
   description:
-    "스크롤 연동 랜딩페이지 예시 모음. R3F Canvas + GSAP ScrollTrigger 접합과 " +
-    "순수 DOM GSAP 두 방식으로, 가상 SaaS Fluxnote를 소재로 시연한다. 사람이 " +
-    "코드를 다듬은 페이지와 프롬프트만으로 생성한 페이지를 나눠 담는다.",
+    "스크롤 연동 랜딩페이지 예시 모음. R3F Canvas에 GSAP ScrollTrigger를 물린 " +
+    "방식과 순수 DOM GSAP 방식을 나눠, 가상 SaaS Fluxnote를 소재로 시연한다.",
   alternates: { canonical: "/landings" },
   openGraph: {
     type: "website",
@@ -21,28 +16,28 @@ export const metadata: Metadata = {
   },
 };
 
-/** 저작 방식별 섹션 메타. 표시 순서는 이 배열 순서를 따른다. */
+/** 렌더링 방식별 섹션 메타. 표시 순서는 이 배열 순서를 따른다. */
 const SECTIONS: {
-  authoring: LandingAuthoring;
+  kind: "r3f" | "dom";
   heading: string;
   description: string;
   badge: string;
 }[] = [
   {
-    authoring: "paired",
-    heading: "사람이 함께 다듬은 페이지",
+    kind: "r3f",
+    heading: "3D 히어로 + 스크롤",
     description:
-      "AI가 만든 초안에 개발자가 직접 코드를 수정·조율했습니다. 레이아웃 미세 " +
-      "조정, 접근성 보강, 연출 타이밍 손질이 사람 손을 거쳤습니다.",
-    badge: "사람 + AI",
+      "자체 <Canvas>와 스크롤 컨테이너에 GSAP ScrollTrigger를 직접 접합했습니다. " +
+      "스크롤 진행률이 카메라·오브젝트 상태를 몹니다.",
+    badge: "R3F",
   },
   {
-    authoring: "ai",
-    heading: "프롬프트만으로 생성한 페이지",
+    kind: "dom",
+    heading: "순수 DOM + GSAP",
     description:
-      "예시 프롬프트 하나로 AI가 생성했고, 이후 사람의 코드 수정이 없습니다. " +
-      "각 페이지 상단의 '예시 프롬프트'가 실제 입력입니다.",
-    badge: "AI",
+      "R3F 없이 DOM 요소만 GSAP ScrollTrigger로 움직입니다. 패럴랙스, 핀, " +
+      "키네틱 타이포를 마크업과 CSS transform으로 구성했습니다.",
+    badge: "DOM",
   },
 ];
 
@@ -94,22 +89,21 @@ export default function LandingsIndexPage() {
         <h1 className="text-3xl font-semibold tracking-tight">Landings</h1>
         <p className="mt-3 max-w-2xl text-neutral-600 dark:text-neutral-400">
           스크롤에 반응하는 완성형 랜딩페이지 예시입니다. R3F 3D 히어로에 GSAP
-          ScrollTrigger를 물린 것과 <strong>R3F 없이 순수 DOM + GSAP</strong>으로만
-          만든 것이 섞여 있습니다. 쇼케이스 셸을 거치지 않고 <strong>독립 라우트</strong>
-          에서 직접 구성하며, 소재는 가상 SaaS <strong>Fluxnote</strong>입니다. 각
-          페이지 상단에는 그 페이지를 만들 때 쓴 <strong>예시 프롬프트</strong>가
-          함께 있습니다.
+          ScrollTrigger를 물린 것과 R3F 없이 순수 DOM + GSAP으로만 만든 것으로
+          나눴습니다. 쇼케이스 셸을 거치지 않고 독립 라우트에서 직접 구성하며,
+          소재는 가상 SaaS Fluxnote입니다. 각 상세 페이지에는 그 페이지를 만들 때
+          정의한 요구사항이 결과물과 나란히 있습니다.
         </p>
       </header>
 
       {SECTIONS.map((section) => {
         const entries = LANDING_ENTRIES.filter(
-          (entry) => entry.authoring === section.authoring,
+          (entry) => (entry.kind ?? "r3f") === section.kind,
         );
         if (entries.length === 0) return null;
 
         return (
-          <section key={section.authoring} className="mb-16">
+          <section key={section.kind} className="mb-16">
             <h2 className="text-xl font-semibold">{section.heading}</h2>
             <p className="mt-1 mb-6 max-w-2xl text-sm text-neutral-600 dark:text-neutral-400">
               {section.description}

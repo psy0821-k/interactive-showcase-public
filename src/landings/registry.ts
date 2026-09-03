@@ -12,28 +12,14 @@
  * 소재는 `/gsap-lab`과 같은 가상 SaaS "Fluxnote". 이미지가 필요한 자리는
  * 배경색만 다른 블록으로 대체한다.
  *
- * 각 항목은 이 페이지를 만들 때 쓸 법한 **예시 프롬프트**(`prompt`)를 함께 담는다 —
- * "이런 요청을 하면 이런 페이지가 나온다"를 보여주는 것이 이 트랙의 목적이다.
- * `authoring`으로 사람이 코드를 다듬은 것(`"paired"`)과 프롬프트만으로 생성한
- * 것(`"ai"`)을 나눠, 목록에서 별도 섹션으로 보여준다.
+ * 각 항목은 이 페이지를 만들 때 정의한 요구사항(`prompt`)을 함께 담아, 상세
+ * 페이지에서 결과물과 나란히 보여준다. 목록은 렌더링 방식(`kind`)으로 나눈다.
  */
-
-/**
- * 이 페이지가 만들어진 방식.
- *
- * - `"paired"`: AI 초안에 개발자가 직접 코드를 수정·조율한 결과.
- * - `"ai"`: 프롬프트 하나로 AI가 생성했고, 이후 사람의 코드 수정이 없다.
- *
- * 목록 페이지가 이 값으로 섹션을 나눈다.
- */
-export type LandingAuthoring = "paired" | "ai";
 
 /** 랜딩 항목 하나. */
 export interface LandingEntry {
   /** URL 세그먼트 (`/landings/{slug}`) */
   slug: string;
-  /** 이 페이지가 만들어진 방식. 목록 섹션 분리 기준. */
-  authoring: LandingAuthoring;
   /** 카드·상세 제목 */
   title: string;
   /** 한 줄 태그 — 이 페이지가 보여주는 3D + 스크롤 연출 */
@@ -45,8 +31,8 @@ export interface LandingEntry {
   /** 카드 썸네일 배경 (이미지 대신) */
   accent: string;
   /**
-   * 이 페이지를 만들 때 개발자가 Claude Code에 줄 법한 예시 프롬프트.
-   * 상세 페이지 상단 "예시 프롬프트" 패널에 그대로 노출된다.
+   * 이 페이지를 만들 때 정의한 요구사항 명세. 상세 페이지의 "요구사항" 패널에
+   * 결과물과 나란히 노출된다.
    */
   prompt: string;
   /** 3D 에셋·기법의 실무 적용 한계 한 줄. 있으면 상세 상단에 노출. */
@@ -62,7 +48,6 @@ export interface LandingEntry {
 export const LANDING_ENTRIES: LandingEntry[] = [
   {
     slug: "forest",
-    authoring: "paired",
     kind: "dom",
     title: "FOREST — 흩어졌다 모이는 제목",
     tag: "DOM 패럴랙스 히어로 + 비디오 스토리 + 키네틱 타이포",
@@ -124,7 +109,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "cloud-sync",
-    authoring: "ai",
     title: "Fluxnote Cloud — 스크롤로 갈라지는 구름",
     tag: "glTF 모델 히어로 + 스크롤 카메라 전진",
     description:
@@ -151,7 +135,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "orbit-launch",
-    authoring: "ai",
     title: "Fluxnote Launch — 궤도를 도는 별자리",
     tag: "procedural 별자리 + 스크롤 궤도 회전",
     description:
@@ -174,7 +157,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "prism-pricing",
-    authoring: "ai",
     title: "Fluxnote Pricing — 빛을 가르는 프리즘",
     tag: "procedural 프리즘 + 스크롤 분광 회전",
     description:
@@ -196,7 +178,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "grid-metrics",
-    authoring: "ai",
     title: "Fluxnote Analytics — 자라나는 지표 필드",
     tag: "instanced 막대 필드 + 스크롤 성장",
     description:
@@ -222,7 +203,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "ribbon-story",
-    authoring: "ai",
     title: "Fluxnote Story — 흐르는 리본을 따라",
     tag: "procedural TubeGeometry + 스크롤 경로 카메라",
     description:
@@ -245,7 +225,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "crystal-features",
-    authoring: "ai",
     title: "Fluxnote Features — 피어나는 결정",
     tag: "procedural 결정 클러스터 + 스크롤 개화",
     description:
@@ -271,7 +250,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   // ─── 순수 DOM + GSAP (원래 /gsap-lab landing 카테고리) ────────────
   {
     slug: "scroll-story",
-    authoring: "ai",
     kind: "dom",
     title: "Fluxnote — 스크롤 스토리",
     tag: "DOM 히어로 핀 + 패럴랙스 + 진행 인디케이터",
@@ -295,7 +273,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "pricing-reveal",
-    authoring: "ai",
     kind: "dom",
     title: "Fluxnote — 요금제 공개",
     tag: "DOM 마스터 타임라인 + stagger 시퀀스",
@@ -318,7 +295,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "pointer-play",
-    authoring: "ai",
     kind: "dom",
     title: "Fluxnote — 포인터 플레이",
     tag: "DOM 마그네틱 CTA + 틸트 그리드 + 커스텀 커서",
@@ -341,7 +317,6 @@ export const LANDING_ENTRIES: LandingEntry[] = [
   },
   {
     slug: "tab-transition",
-    authoring: "ai",
     kind: "dom",
     title: "Fluxnote — 탭 전환",
     tag: "DOM 진입 오버레이 + 글자 stagger + 탭 크로스페이드",

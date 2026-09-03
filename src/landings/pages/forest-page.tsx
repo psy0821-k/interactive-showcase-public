@@ -336,14 +336,15 @@ export function ForestPage() {
         <SplitKineticLine text={KINETIC_TEXT2} line={1} />
       </section>
 
-      {/* ── 4. 이 페이지를 만든 프롬프트 ───────────────────────── */}
+      {/* ── 4. 이 페이지를 만들 때 정의한 요구사항 ───────────────── */}
       <section aria-labelledby="prompt-heading" className="mx-auto max-w-3xl px-6 py-24 text-center">
         <h2 id="prompt-heading" className="text-2xl font-semibold sm:text-3xl">
-          이 페이지를 만든 프롬프트
+          이 페이지를 만들 때 정의한 요구사항
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-neutral-600">
-          아래처럼 <strong>섹션별로 원하는 연출과 제약(모바일·접근성)을 명시</strong>하고, 참고할{' '}
-          <code className="rounded bg-neutral-100 px-1.5 py-0.5 text-sm">/gsap-lab</code> 쇼케이스를 지정하면 지금 화면과 같은 결과가 나옵니다.
+          섹션별 연출과 제약(모바일 레이아웃, 접근성, 스크롤 트리거 안정성)을 아래처럼
+          명세로 정리하고, 참고할{' '}
+          <code className="rounded bg-neutral-100 px-1.5 py-0.5 text-sm">/gsap-lab</code> 데모를 지정해 지금 화면을 구현했습니다.
         </p>
         <pre className="mt-8 overflow-x-auto whitespace-pre-wrap rounded-xl bg-neutral-100 p-6 text-left text-xs leading-relaxed text-neutral-800">
           {entry.prompt}

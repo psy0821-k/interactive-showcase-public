@@ -23,7 +23,7 @@ const TILT_CARDS = [
  * - 호버 틸트 그리드 → `usePointerTilt`
  * - 커스텀 커서 팔로워 → 이 데모 고유(window 레벨 pointermove) → 인라인
  *
- * breadcrumb·caveat·프롬프트 패널은 `landings/[slug]/page.tsx`가
+ * breadcrumb·caveat·요구사항 패널은 `landings/[slug]/page.tsx`가
  * `LandingDomHeader`로 씌운다. 이 컴포넌트는 콘텐츠만 렌더한다.
  */
 export function PointerPlayLandingPage() {

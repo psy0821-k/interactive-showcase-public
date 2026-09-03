@@ -32,7 +32,7 @@ interface LandingShellProps {
  * 문제가 있어, `/gsap-lab` 랜딩과 동일하게 문서 스크롤로 통일한다.
  *
  * 구조:
- * - breadcrumb + "예시 프롬프트" 패널 (일반 문서 흐름)
+ * - breadcrumb + "요구사항" 패널 (일반 문서 흐름)
  * - 스크롤 트랙(`trackRef`) 안에:
  *   - `position: sticky` 캔버스 (스크롤 내내 화면에 고정)
  *   - 그 위를 흐르는 본문 섹션(`children`)

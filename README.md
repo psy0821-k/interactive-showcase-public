@@ -1,23 +1,27 @@
-# 3D Skill — 웹 개발자를 위한 3D 기법 라이브러리
+# 3D Skill — R3F 3D 웹 기법 쇼케이스
 
-> AI와의 협업으로 작성된 **재사용 가능한 3D 구현 가이드 모음**. 마케팅 페이지, 제품 뷰어, 스크롤 스토리텔링 같은 웹 프로젝트에서 Claude Code의 SKILL.md로 즉시 활용 가능합니다.
+> R3F로 3D 웹을 만들 때 반복해서 마주치는 함정("왜 그림자가 사라졌지", "모바일에서 스크롤이 막히네")을 직접 디버깅해서, 회피법과 함께 정리한 라이브 쇼케이스 모음입니다. 초안 생성은 AI, 구현 검증·함정 추적·접근성·성능 최적화는 직접 했습니다.
 
 [![CI](https://github.com/psy0821-k/interactive-showcase-public/actions/workflows/ci.yml/badge.svg)](https://github.com/psy0821-k/interactive-showcase-public/actions/workflows/ci.yml)
 
-**[갤러리 보기 →](https://interactive-showcase-public.vercel.app/) · [기술 문서](docs/TECHNICAL-HIGHLIGHTS.md) · [접근성 문서](docs/ACCESSIBILITY.md) · [성능 문서](docs/PERFORMANCE.md)**
+[갤러리 보기 →](https://interactive-showcase-public.vercel.app/) · [기술 문서](docs/TECHNICAL-HIGHLIGHTS.md) · [접근성 문서](docs/ACCESSIBILITY.md) · [성능 문서](docs/PERFORMANCE.md)
 
 ---
 
-## 이 프로젝트는 무엇인가
+## 이 프로젝트로 보여주려는 것
 
-**개발자 포트폴리오이자 실무용 가이드입니다.**
+| 축 | 내용 |
+| --- | --- |
+| 기술 깊이 | GPGPU 파티클 시뮬레이션(FBO 핑퐁), 커스텀 셰이더 후처리 패스, rapier 물리, 포스트프로세싱 체인 순서 |
+| 엔지니어링 규율 | 39개 쇼케이스를 관통하는 셸 Contract, 홈 번들 4.6MB→603KB 분리, 온디맨드 렌더링, CI(build·lint·spell·unit·e2e·a11y) |
+| 접근성·성능 | axe 전수 스캔 71개 페이지 violations 0, `prefers-reduced-motion` 전대응, LCP·드로우콜 계측 후 최적화 |
 
-3D 웹 작업에서 자주 마주치는 "왜 갑자기 그림자가 사라졌지?", "모바일에서 스크롤이 안 되네?" 같은 문제를 **"함정 우선"** 철학으로 다룹니다. 각 기법마다:
+3D 웹 작업에서 자주 마주치는 "왜 갑자기 그림자가 사라졌지", "모바일에서 스크롤이 안 되네" 같은 문제를 각 쇼케이스가 하나씩 재현하고, 원인과 회피법을 코드 주석·문서에 남기는 "함정 우선" 방식으로 정리했습니다.
 
-- **"이렇게 하면 조용히 깨진다"** (실제로 마주친 버그)
-- **최신 기술 스택 검증** (Next.js 16 + R3F v9 + three.js 0.185)
-- **실무 패턴** (에러 처리, 성능 최적화, 접근성)
-- **라이브 쇼케이스** (R3F 39개 + GSAP Lab 30개 + 랜딩 11개, 직접 상호작용 가능)
+- 이렇게 하면 조용히 깨진다 (실제로 디버깅한 버그)
+- 최신 스택 검증 (Next.js 16 + R3F v9 + three.js 0.185)
+- 실무 패턴 (에러 격리, 성능 최적화, 접근성)
+- 라이브 쇼케이스 (R3F 39개 + GSAP Lab 30개 + 랜딩 11개, 직접 상호작용 가능)
 
 ---
 

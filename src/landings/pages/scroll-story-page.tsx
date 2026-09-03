@@ -32,7 +32,7 @@ const FEATURE_BLOCKS = [
  * - 스크롤 진행 인디케이터(상단 바 `scaleX` 스크럽 — transform이라 리플로우 없음)
  * - 기능 블록 뷰포트 진입 시 1회 재생(`toggleActions`)
  *
- * breadcrumb·caveat·프롬프트 패널은 `landings/[slug]/page.tsx`가
+ * breadcrumb·caveat·요구사항 패널은 `landings/[slug]/page.tsx`가
  * `LandingDomHeader`로 씌운다. 이 컴포넌트는 콘텐츠만 렌더한다.
  */
 export function ScrollStoryLandingPage() {

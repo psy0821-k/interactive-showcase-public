@@ -60,7 +60,7 @@ const FAQS = [
  * - `stagger: { amount }`로 항목 수와 무관하게 전체 시간 고정
  * - `reduced`에서 타임라인 대신 `gsap.set`으로 최종 상태만
  *
- * breadcrumb·caveat·프롬프트 패널은 `landings/[slug]/page.tsx`가
+ * breadcrumb·caveat·요구사항 패널은 `landings/[slug]/page.tsx`가
  * `LandingDomHeader`로 씌운다. 이 컴포넌트는 콘텐츠만 렌더한다.
  */
 export function PricingRevealLandingPage() {

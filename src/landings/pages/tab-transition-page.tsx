@@ -62,7 +62,7 @@ function SplitHeading({ text }: { text: string }) {
  * - 탭 전환 시 패널 크로스페이드(이전 패널 out → 새 패널 in)
  * - 탭 상태는 state, 애니메이션은 `useGsapDom` deps로 재실행
  *
- * breadcrumb·caveat·프롬프트 패널은 `landings/[slug]/page.tsx`가
+ * breadcrumb·caveat·요구사항 패널은 `landings/[slug]/page.tsx`가
  * `LandingDomHeader`로 씌운다. 이 컴포넌트는 콘텐츠만 렌더한다.
  */
 export function TabTransitionLandingPage() {
