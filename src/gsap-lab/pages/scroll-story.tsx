@@ -115,7 +115,7 @@ export function ScrollStoryPage() {
   );
 
   return (
-    <div ref={container} className="bg-neutral-950 text-neutral-100">
+    <main ref={container} className="bg-neutral-950 text-neutral-100">
       {/* 스크롤 진행 인디케이터 — 바는 scaleX(왼쪽 기준)로 채워진다 */}
       <div className="fixed left-0 top-0 z-50 h-1 w-full bg-white/10">
         <div className="progress-bar h-full w-full origin-left scale-x-0 bg-white" />
@@ -181,6 +181,6 @@ export function ScrollStoryPage() {
       <footer className="bg-neutral-950 px-6 py-20 text-center text-sm text-neutral-400">
         Fluxnote — 스크롤 스토리 데모 · 모든 이미지 자리는 색 블록으로 대체
       </footer>
-    </div>
+    </main>
   );
 }

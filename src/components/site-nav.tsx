@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/", label: "3D" },
   { href: "/gsap", label: "GSAP" },
   { href: "/gsap-lab", label: "GSAP Lab" },
+  { href: "/landings", label: "Landings" },
 ] as const;
 
 /**

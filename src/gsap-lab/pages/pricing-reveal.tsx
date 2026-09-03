@@ -113,7 +113,7 @@ export function PricingRevealPage() {
   );
 
   return (
-    <div ref={container} className="bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+    <main ref={container} className="bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
       {/* 히어로 */}
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
         <p className="hero-eyebrow gsap-reveal text-sm font-medium uppercase tracking-[0.2em] text-teal-700 dark:text-teal-400">
@@ -181,6 +181,6 @@ export function PricingRevealPage() {
           ))}
         </dl>
       </section>
-    </div>
+    </main>
   );
 }

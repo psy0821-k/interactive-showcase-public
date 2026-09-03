@@ -121,7 +121,7 @@ export function TabTransitionPage() {
   const activeTab = TABS.find((tab) => tab.id === activeId) ?? TABS[0];
 
   return (
-    <div ref={container} className="relative min-h-screen overflow-hidden bg-neutral-950 text-neutral-100">
+    <main ref={container} className="relative min-h-screen overflow-hidden bg-neutral-950 text-neutral-100">
       {/* 진입 오버레이 */}
       <div
         className="enter-overlay pointer-events-none absolute inset-0 z-40 bg-neutral-900"
@@ -179,6 +179,6 @@ export function TabTransitionPage() {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

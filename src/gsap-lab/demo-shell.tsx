@@ -27,7 +27,7 @@ export function DemoShell({ title, summary, children }: DemoShellProps) {
         </div>
       </header>
 
-      {children}
+      <main>{children}</main>
 
       <footer className="bg-neutral-950 px-6 py-16 text-center text-sm text-neutral-400">
         GSAP Lab · 모든 이미지 자리는 색 블록으로 대체

@@ -64,7 +64,7 @@ export function PointerPlayPage() {
   );
 
   return (
-    <div
+    <main
       ref={container}
       className="relative min-h-screen bg-neutral-950 text-neutral-100"
       style={{ perspective: "1000px" }}
@@ -112,6 +112,6 @@ export function PointerPlayPage() {
           </article>
         ))}
       </section>
-    </div>
+    </main>
   );
 }

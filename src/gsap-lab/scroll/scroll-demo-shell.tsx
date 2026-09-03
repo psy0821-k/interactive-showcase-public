@@ -52,16 +52,18 @@ export function ScrollDemoShell({
         </div>
       </header>
 
-      {/* 스크롤 유도 안내. 뒤 콘텐츠가 뷰포트 밖에 있도록 한 화면 높이를 채운다. */}
-      <section className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
-        <p className="text-lg text-white/70">{scrollHint}</p>
-        <span
-          className="scroll-cue block h-10 w-6 rounded-full border-2 border-white/40"
-          aria-hidden
-        />
-      </section>
+      <main>
+        {/* 스크롤 유도 안내. 뒤 콘텐츠가 뷰포트 밖에 있도록 한 화면 높이를 채운다. */}
+        <section className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
+          <p className="text-lg text-white/70">{scrollHint}</p>
+          <span
+            className="scroll-cue block h-10 w-6 rounded-full border-2 border-white/40"
+            aria-hidden
+          />
+        </section>
 
-      {children}
+        {children}
+      </main>
 
       <footer className="bg-neutral-950 px-6 py-24 text-center text-sm text-neutral-400">
         GSAP Lab · 스크롤 효과 데모 · 모든 이미지 자리는 색 블록으로 대체
