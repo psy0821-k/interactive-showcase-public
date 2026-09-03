@@ -125,18 +125,22 @@ export default async function LabDetailPage({
             <span className="font-semibold">적용 한계</span> · {entry.caveat}
           </p>
         )}
+      </div>
 
-        {/*
-          스킬 활용 & 프롬프트 — 이 데모를 만들 때 skill을 어떻게 썼는지와
-          Claude Code로 재현할 때 던질 자연어 요청. <details>로 접어 두고,
-          펼치면 복사 버튼과 함께 보인다. 복사 버튼만 클라이언트 컴포넌트다.
-        */}
-        {(entry.skillUsage || entry.promptExample) && (
-          <details className="mx-auto mt-2 max-w-6xl text-sm">
-            <summary className="cursor-pointer text-neutral-600 dark:text-neutral-400">
+      <PageComponent />
+
+      {/*
+        스킬 활용 & 프롬프트 — 이 데모를 만들 때 skill을 어떻게 썼는지와
+        Claude Code로 재현할 때 던질 자연어 요청. 데모 콘텐츠 아래에 두고,
+        <details>로 접어 둔다. 복사 버튼만 클라이언트 컴포넌트다.
+      */}
+      {(entry.skillUsage || entry.promptExample) && (
+        <div className="border-t border-neutral-200 bg-neutral-50 px-6 py-6 text-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <details className="mx-auto max-w-6xl">
+            <summary className="cursor-pointer font-medium text-neutral-700 dark:text-neutral-300">
               스킬 활용 &amp; 프롬프트
             </summary>
-            <div className="mt-3 flex flex-col gap-4">
+            <div className="mt-4 flex flex-col gap-4">
               {entry.skillUsage && (
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between gap-3">
@@ -171,9 +175,8 @@ export default async function LabDetailPage({
               )}
             </div>
           </details>
-        )}
-      </div>
-      <PageComponent />
+        </div>
+      )}
     </div>
   );
 }
