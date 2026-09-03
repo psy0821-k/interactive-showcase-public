@@ -7,9 +7,14 @@ import {
   findShowcaseOnServer,
   getShowcaseEntries,
 } from "@/showcases/server-registry";
+import { resolveTrack } from "@/domain/showcase";
+import { BackButton } from "@/components/back-button";
 import { CopyButton } from "@/components/copy-button";
 import { ShowcaseDetail } from "@/components/showcase-detail";
 import { SITE_URL } from "@/lib/site";
+
+/** 트랙별 갤러리 경로. 직접 URL 진입 시 뒤로가기 폴백에 쓴다. */
+const GALLERY_PATH = { "3d": "/", gsap: "/gsap" } as const;
 
 /** 38개 상세 페이지를 빌드 타임에 정적 생성한다. */
 export async function generateStaticParams() {
@@ -60,6 +65,7 @@ export default async function ShowcasePage({
 
   const { meta } = entry;
   const categoryLabel = TECHNIQUE_CATEGORY_LABELS[meta.category];
+  const galleryPath = GALLERY_PATH[resolveTrack(meta)];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -120,6 +126,15 @@ export default async function ShowcasePage({
       </header>
 
       {/*
+        뒤로가기 — 미리보기 이미지 위에 둔다. 갤러리에서 진입했으면
+        router.back()이 스크롤 위치까지 복원하고, 직접 URL이면 트랙에 맞는
+        갤러리로 폴백한다. router를 쓰므로 클라이언트 컴포넌트다.
+      */}
+      <div className="mt-6">
+        <BackButton fallbackHref={galleryPath} />
+      </div>
+
+      {/*
         캔버스 로드 전 프리뷰이자 이미지 검색 대상인 정적 썸네일.
         크롤러·JS 비활성 환경에서 이 씬이 무엇인지 보여주는 유일한 시각 자료다.
         eslint-disable: 정적 800x450 webp라 next/image 리사이징 이득이 없다.
@@ -131,7 +146,7 @@ export default async function ShowcasePage({
         width={800}
         height={450}
         fetchPriority="high"
-        className="mt-6 aspect-video w-full rounded-lg bg-neutral-100 object-cover dark:bg-neutral-900"
+        className="mt-3 aspect-video w-full rounded-lg bg-neutral-100 object-cover dark:bg-neutral-900"
       />
 
       <ShowcaseDetail slug={slug} title={meta.title} />
