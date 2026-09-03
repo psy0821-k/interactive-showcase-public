@@ -152,6 +152,22 @@ export default async function ShowcasePage({
       <ShowcaseDetail slug={slug} title={meta.title} />
 
       {/*
+        AI 초안에서 고친 것 — 실무에서 자주 나오는 유형의 쇼케이스에만 있다.
+        "AI가 이렇게 짰다 → 이런 문제 → 이렇게 고쳤다" 서사. 스킬 활용 위에 둔다.
+      */}
+      {meta.refinement && (
+        <section className="mt-12 flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold">AI 초안에서 고친 것</h2>
+            <CopyButton text={meta.refinement} label="수정 내역 복사" />
+          </div>
+          <p className="whitespace-pre-wrap rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-relaxed text-neutral-800 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-neutral-200">
+            {meta.refinement}
+          </p>
+        </section>
+      )}
+
+      {/*
         스킬 활용 & 프롬프트 — 이 쇼케이스를 만들 때 각 skill을 어떻게 썼는지,
         그리고 Claude Code로 재현한다면 던질 법한 자연어 요청. 텍스트는 서버에서
         렌더하고 복사 버튼만 클라이언트 컴포넌트다. 두 필드는 선택이라 하나라도
